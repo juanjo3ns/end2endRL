@@ -6,9 +6,9 @@ RUN apt update -y; apt install -y \
 	libxrender-dev \
 	python3 \
 	python3-pip
-	
+
 RUN python3 -m pip install --upgrade pip
 
-ADD docker/requirements.txt .
+ADD ./requirements.txt .
 RUN pip3 install -r requirements.txt
 RUN pip3 install tqdm

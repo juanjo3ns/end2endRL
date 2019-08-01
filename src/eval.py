@@ -1,8 +1,8 @@
 import numpy as np
 import argparse
 from IPython import embed
-from src.newGeneral.Environment import Environment
-from src.newGeneral.Seed import setSeed
+from src.General.Environment import Environment
+from src.General.Seed import setSeed
 from src.utils.utils import str2bool
 
 parser = argparse.ArgumentParser()

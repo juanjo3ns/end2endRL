@@ -1,0 +1,16 @@
+import pygame
+pygame.init()
+
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 50, 50)
+YELLOW = (255, 255, 0)
+GREEN = (0, 255, 50)
+BLUE = (50, 50, 255)
+GREY = (200, 200, 200)
+ORANGE = (200, 100, 50)
+CYAN = (0, 255, 255)
+MAGENTA = (255, 0, 255)
+COLOR_INACTIVE = pygame.Color('lightskyblue3')
+COLOR_ACTIVE = pygame.Color('dodgerblue2')
+TRANS = (1, 1, 1)
