@@ -1,0 +1,28 @@
+version: '2.3'
+
+services:
+
+  algorithmsrl:
+    image: algorithmsrl
+    container_name: algorithmsrl
+    working_dir: /data
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    environment:
+      - PYTHONPATH=/data
+    volumes:
+      - ../:/data
+      - ../../GAMES_GIFS/:/gifs
+
+    runtime: nvidia
+    command: tail /dev/null -f
+  tensorboard1:
+    image: tensorflow/tensorflow
+    container_name: tensorboard1
+    working_dir: /logs
+    ports:
+     - "6007:6006"
+    volumes:
+      - ../src/tensorboard:/logs
+    command: tensorboard --logdir /logs
