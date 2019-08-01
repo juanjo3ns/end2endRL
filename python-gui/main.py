@@ -6,6 +6,8 @@ import pygame, math, sys, os
 from IPython import embed
 import Colors as c
 from Config import Config
+from random import random
+import src.bridge as bdg
 pygame.init()
 
 X = 1200  # screen width
@@ -38,7 +40,6 @@ def loadEnv(env):
     for box in input_boxes:
         box.txt_surface = box.font.render(box.text, True, box.color)
 
-
 def drawEnvironment():
     env_x = 900
     env_y = 50
@@ -47,7 +48,7 @@ def drawEnvironment():
     screen.blit(tenv, (env_x, env_y))
 
 def showForm():
-    string1 = ["Version", "Iterations","Tensorboard", "Padding", "Visible Radius", "Save weights", "Save freq.", "Normal reward",
+    string1 = ["Version", "Iterations", "Tensorboard", "Num. Walls", "Visible Radius", "Save weights", "Save freq.", "Normal reward",
     "Min wall", "Max wall"]
     string2 = ["Done reward", "Edge value", "Num. Agents", "Eps. max", "Eps. min", "Health", "Batch Size", "Variance",
     "% of Selection", "Partial Observability"]
@@ -62,7 +63,6 @@ def showForm():
     for i,s in enumerate(string2):
         text2.append(font.render(s, True, (255, 255, 255)))
         screen.blit(text2[i], (220, step*i + 200))
-
 
 
 
@@ -98,6 +98,8 @@ def generalActions(args):
                 env_buttons.append(Button(screen, config.version, (env_x_files + 64, step_files*(counter_files+1) + env_y_files), loadEnv, size=(200,32), font_size=25))
             counter_files += 1
     elif args == 'TRAIN':
+        conf = config.getJSONData()
+        bdg.train(conf)
         return 0
     elif args == 'EVAL':
         return 0
@@ -107,7 +109,6 @@ def generalActions(args):
                 config.removeEnvironment()
                 env_buttons.remove(e)
     return 0
-
 
 def updateAlg(alg):
     version.text = alg + '.' + version.text.split('.')[1] + '.' + version.text.split('.')[2]
@@ -133,7 +134,7 @@ algorithms = [dqn,ga, rwb, a2c]
 dqn.hit = True
 
 env_buttons = []
-files = os.listdir('./envs')
+files = os.listdir('../envs')
 env_x_files = 930
 env_y_files = 75
 step_files = 32
@@ -152,13 +153,13 @@ step = 33
 xcol1 = 120
 version = InputBox(screen, xcol1, step*0 + 200, 50, step-10, "DQN.0.0")
 iterations = InputBox(screen, xcol1, step*1 + 200, 50, step-10, "10000")
+numwalls = InputBox(screen, xcol1, step*3 + 200, 50, step-10, "15")
 visibleRad = InputBox(screen, xcol1, step*4 + 200, 50, step-10, "1")
 savefreq = InputBox(screen, xcol1, step*6 + 200, 50, step-10, "1000")
 normal_reward = InputBox(screen, xcol1, step*7 + 200, 50, step-10, "-0.04")
 min_wall = InputBox(screen, xcol1, step*8 + 200, 50, step-10, "-1")
 max_wall = InputBox(screen, xcol1, step*9 + 200, 50, step-10, "0")
 tensorboard = CheckBox(screen, (xcol1+20, step*2+205))
-padding = CheckBox(screen, (xcol1+20, step*3+205))
 saveweights = CheckBox(screen, (xcol1+20, step*5+205))
 
 xcol2 = 320
@@ -173,14 +174,15 @@ variance = InputBox(screen, xcol2, step*7 + 200, 50, step-10, "0.03")
 posel = InputBox(screen, xcol2, step*8 + 200, 50, step-10, "0.05")
 po = CheckBox(screen, (xcol2+30, step*9+205))
 
-input_boxes = [version, iterations, visibleRad, savefreq, normal_reward, min_wall, max_wall,
+input_boxes = [version, iterations, numwalls, visibleRad, savefreq, normal_reward, min_wall, max_wall,
     done_reward, edge_value, numAgents, epsmax, epsmin, health, batch_size, variance, posel]
 
-checkboxes = [tensorboard, padding, saveweights, po]
+checkboxes = [tensorboard, saveweights, po]
 
 walls = []
 initstate = []
 finalstate = []
+walls_values = []
 
 
 # SAVE TRAIN EVAL BUTTONS
@@ -214,7 +216,9 @@ def updateCells(x,y):
 
     if x_ < maze_x.val and y_ < maze_y.val and x_ >= 0 and y_ >= 0:
         if [x_,y_] in walls:
+            index = walls.index([x_,y_])
             walls.remove([x_,y_])
+            del walls_values[index]
         elif [x_,y_] == finalstate:
             finalstate = []
         elif [x_,y_] == initstate:
@@ -223,6 +227,7 @@ def updateCells(x,y):
             for button in cells:
                 if button.hit and button.txt == "Walls":
                     walls.append([x_,y_])
+                    walls_values.append(random()*(float(config.max_wall)-float(config.min_wall)) + float(config.min_wall))
                 elif button.hit and button.txt == "Init State":
                     initstate = [x_,y_]
                 elif button.hit and button.txt == "Final State":
@@ -230,8 +235,8 @@ def updateCells(x,y):
 
 # When we want to copy values from the Config to the GUI we'll make use of this function
 def guiCopyValues():
-    global version, tensorboard, padding, saveweights, po, iterations, savefreq, batch_size
-    global health, done_reward, visibleRad, min_wall, max_wall, edge_value, normal_reward
+    global version, tensorboard, numwalls, saveweights, po, iterations, savefreq, batch_size
+    global health, done_reward, visibleRad, min_wall, max_wall, edge_value, normal_reward, walls_values
     global numAgents, maze_x, maze_y, epsmax, epsmin, variance, posel, walls, finalstate, initstate
 
     for a in algorithms:
@@ -242,11 +247,11 @@ def guiCopyValues():
 
     version.text = config.version
     tensorboard.hit = config.tensorboard
-    padding.hit = config.padding
     saveweights.hit = config.saveweights
     po.hit = config.po
 
     iterations.text = config.iterations
+    numwalls.text = config.numwalls
     savefreq.text = config.savefreq
     batch_size.text = config.batch_size
     health.text = config.health
@@ -270,6 +275,7 @@ def guiCopyValues():
     walls = config.walls
     finalstate = config.finalstate
     initstate = config.initstate
+    walls_values = config.walls_values
 
 # When we want to update the values of Config with the custom values from the GUI
 # we'll make use of this function
@@ -280,11 +286,11 @@ def copyValues():
             config.alg = a.txt
             break
     config.tensorboard = tensorboard.hit
-    config.padding = padding.hit
     config.saveweights = saveweights.hit
     config.po = po.hit
 
     config.iterations = iterations.text
+    config.numwalls = numwalls.text
     config.savefreq = savefreq.text
     config.batch_size = batch_size.text
     config.health = health.text
@@ -307,6 +313,7 @@ def copyValues():
     config.walls = walls
     config.finalstate = finalstate
     config.initstate = initstate
+    config.walls_values = walls_values
 
 
 config = Config()

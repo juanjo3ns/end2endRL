@@ -1,7 +1,5 @@
 import json
 import os
-import tkinter as tk
-from tkinter import messagebox
 
 
 
@@ -19,6 +17,7 @@ class Config():
         self.savefreq = "1000"
         self.batch_size = "1000"
         self.health = "20"
+        self.numwalls = "15"
         self.done_reward = "10"
         self.visibleRad = "1"
         self.min_wall = "-1"
@@ -36,65 +35,53 @@ class Config():
         self.pos = "0.05"
 
         self.walls = list()
+        self.walls_values = []
         self.finalstate = []
         self.initstate = []
-
-        self.root = tk.Tk()
 
 
     def correctValues(self):
         if self.version == '':
-            messagebox.showinfo('Introduce valid version', 'OK')
             return False
         if not self.alg == 'GA' and int(self.numAgents) > 1:
-            print(self.numAgents, self.alg)
-            messagebox.showinfo('MultiAgent not implemented in this algorithm', 'OK')
             return False
         if len(self.finalstate)==0 or len(self.initstate)==0:
-            messagebox.showinfo('Configure valid final state and initial state', 'OK')
             return False
         if float(self.epsmax) > 1 or float(self.epsmax) < 0 or float(self.epsmin) > 1 or float(self.epsmin) < 0:
-            messagebox.showinfo('Epsilon values in range [0,1]', 'OK')
             return False
         if float(self.pos) > 1 or float(self.pos) < 0:
-            messagebox.showinfo('Percentage of selection in range [0,1]', 'OK')
             return False
         if int(self.health) < 0 or self.health == '':
-            messagebox.showinfo('Health value has to be positive', 'OK')
             return False
         if int(self.iterations) < 0 or self.iterations == '':
-            messagebox.showinfo('Iterations value has to be positive', 'OK')
             return False
         if int(self.batch_size) < 0 or self.batch_size == '':
-            messagebox.showinfo('Batch size value has to be positive', 'OK')
             return False
         if int(self.savefreq) < 0 or self.savefreq == '':
-            messagebox.showinfo('Save frequency value has to be positive', 'OK')
             return False
         return True
 
     def saveEnvironment(self):
         if self.correctValues():
             data = self.getJSONData()
-            with open(os.path.join('./envs', self.version + '.json'), 'w') as f:
+            with open(os.path.join('../envs', self.version + '.json'), 'w') as f:
                 json.dump(data, f)
             return True
         return False
 
     def loadEnvironment(self, version):
-        with open(os.path.join('./envs', version + '.json'), 'r') as f:
+        with open(os.path.join('../envs', version + '.json'), 'r') as f:
             data = json.load(f)
         self.loadJSONData(data)
 
     def removeEnvironment(self):
-        os.remove(os.path.join('./envs', self.version + '.json'))
+        os.remove(os.path.join('../envs', self.version + '.json'))
 
     def getJSONData(self):
         data = {}
         data['version'] = self.version
         data['alg'] = self.alg
         data['tensorboard'] = self.tensorboard
-        data['padding'] = self.padding
         data['saveweights'] = self.saveweights
         data['po'] = self.po
         data['iterations'] = int(self.iterations)
@@ -113,6 +100,8 @@ class Config():
         data['variance'] = float(self.variance)
         data['pos'] = float(self.pos)
         data['walls'] = self.walls
+        data['numwalls'] = self.numwalls
+        data['walls_values'] = self.walls_values
         data['finalstate'] = self.finalstate
         data['initstate'] = self.initstate
         data['height'] = self.height
@@ -124,7 +113,6 @@ class Config():
         self.version = data['version']
         self.alg = data['alg']
         self.tensorboard = data['tensorboard']
-        self.padding = data['padding']
         self.saveweights = data['saveweights']
         self.po = data['po']
         self.iterations = str(data['iterations'])
@@ -143,6 +131,8 @@ class Config():
         self.variance = str(data['variance'])
         self.pos = str(data['pos'])
         self.walls = data['walls']
+        self.walls_values = data['walls_values']
+        self.numwalls = data['numwalls']
         self.finalstate = data['finalstate']
         self.initstate = data['initstate']
         self.height = data['height']

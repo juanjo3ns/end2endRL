@@ -11,9 +11,10 @@ services:
       dockerfile: ./Dockerfile
     environment:
       - PYTHONPATH=/data
+      - DISPLAY=unix$DISPLAY
     volumes:
       - ../:/data
-
+      - /tmp/.X11-unix:/tmp/.X11-unix
     runtime: nvidia
     command: tail /dev/null -f
   tensorboard:

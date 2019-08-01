@@ -11,3 +11,4 @@ tensorboard-logger
 imageio
 pandas
 tensorboardX
+pygame

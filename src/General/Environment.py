@@ -23,7 +23,7 @@ from tensorboardX import SummaryWriter
 
 class Environment:
 	def __init__(self,
-				 eps=0,
+				 grid,
 				 eps_scheduled=0,
 				 height=10,
 				 width=3,
@@ -33,13 +33,12 @@ class Environment:
 				 visibleRad=1,
 				 alg="DQN",
 				 tbX=False,
-				 onnx=False,
 				 save=False,
 				 save_freq=10,
 				 batch_size=1000,
-				 env=6,
 				 iterations=4000,
 				 sigma=0.02,
+				 pos=0.05,
 				 version='0.0.0'):
 
 		# GLOBAL PARAMETERS
@@ -50,29 +49,24 @@ class Environment:
 		# CUSTOMIZABLE PARAMETERS
 		# - TENSORBOARD AND WEIGHTS PARAMETERS
 		self.tbX = tbX
-		self.onnx = onnx
 		self.version = version
 		self.save = save
 		self.save_freq = save_freq
 		# - ENVIRONMENT PARAMETERS
-		self.env = env
 		self.po = po
 		self.visibleRad= visibleRad
-		self.eps = eps
 		self.alg = alg
 		self.eps_scheduled=eps_scheduled
 		self.numAgents = numAgents
 		self.height = height
 		self.width = width
 		self.sigma = sigma
+		self.pos = pos
 
 
 		# ENVIRONMENT
-		self.grid = Grid(self.height,
-						self.width,
-						self.env,
-						self.po,
-						self.visibleRad)
+		self.grid = grid
+
 		self.agents = defaultdict(
 						lambda: Agent(height = self.height,
 									 width = self.width,
@@ -85,15 +79,14 @@ class Environment:
 
 		# TENSORBOARD X
 		if self.tbX:
-			self.writer = SummaryWriter(os.path.join("tensorboard",self.alg,self.version))
-
+			self.writer = SummaryWriter(os.path.join("../src/tensorboard",self.alg,self.version))
 		# INITIALIZE AGENTS
-		self.initAgents(False)
+		self.initAgents()
 
 		# ALGORITHMS SCRIPTS
 		self.reinforce = Reinforce()
 		self.ddqn = DDQN()
-		self.ga = GA(self.agents, self.sigma)
+		self.ga = GA(self.agents, self.sigma, self.pos)
 		self.a2c = ActorCritic()
 
 		# CSV WRITERS
@@ -103,8 +96,6 @@ class Environment:
 		# PATHS
 		self.weights_path = '/data/src/weights/'
 
-		# MAPPING ENVS TO DIFFICULTY
-		self.envs = {6:"medium", 7: "medium", 8: "medium"}
 
 	def addFigs(self, it, agent, freq):
 		if it%freq==0:
@@ -166,29 +157,28 @@ class Environment:
 		if it%self.save_freq==0 and self.save:
 			if self.alg=="GA":
 				for i,e in enumerate(self.ga.elite):
-					self.agents[e].saveModel(self.onnx,self.version, i, int(it/self.save_freq), self.grid.saved_walls, self.grid.saved_values)
+					self.agents[e].saveModel(self.version, i, int(it/self.save_freq))
 
 			else:
 				for n in range(self.numAgents):
-					self.agents[n].saveModel(self.onnx,self.version, n, int(it/self.save_freq), self.grid.saved_walls, self.grid.saved_values)
+					self.agents[n].saveModel(self.version, n, int(it/self.save_freq))
 
 	# RESET COMMON STUFF LIKE AGENTS OR GRID
-	def reset(self, random=False):
-		self.initAgents(random)
+	def reset(self):
+		self.initAgents()
 		self.grid.reset()
 		self.newGeneralMovements = 0
 		self.ga.reset()
 
 	# RESET EACH AGENT
-	def initAgents(self, random):
+	def initAgents(self):
 		for n in range(self.numAgents):
-			self.agents[n].reset(self.grid.getInitState(random))
+			self.agents[n].reset(self.grid.initstate)
 
 	# RETURN EPSILON DEPENDING ON ITERATION
 	def getEps(self,it):
 		return self.eps_scheduled(it)
-		# if self.alg=="DQN":
-		# return self.eps
+
 
 	# SELECT ACTION FOR DQN AND GA
 	def selectAction(self,output,it, agent):
@@ -297,13 +287,9 @@ class Environment:
 		elif lost: reward = -1
 		else:
 			reward = value
-			# if value == 0:
-			# 	reward = self.grid.normal_reward
-		# if agent.movements > (self.grid.padded_x+self.grid.padded_x):
-		# 	agent.done = True
-		# 	agent.won = False
-		# 	agent.health = -10
-		# 	reward = -2
+			if value == 0 and not self.alg=="PGM" and not self.alg=="A2C":
+				reward = self.grid.normal_reward
+
 		agent.totalreward += reward
 		return reward
 
@@ -400,7 +386,7 @@ class Environment:
 		self.csv_info.write(self.grid.saved_values) # walls values
 		self.csv_info.write([numAgents]) # number of agents
 		self.csv_info.write([epochs]) # number of epochs
-		self.csv_info.write([self.grid.visibleRad]) # number of epochs
+		self.csv_info.write([self.grid.visibleRad]) # Agent's visible radius and padding
 		self.csv_info.close()
 
 	def eval(self):
@@ -412,8 +398,8 @@ class Environment:
 			path = os.path.join(self.weights_path, self.alg, self.version, str(n))
 			epochs = self.loadEpochs(path)
 			for i,e in enumerate(epochs):
-				self.csv_coords = CSV(self.alg, self.envs[self.env], str(n), "coords", str(i))
-				self.csv_info = CSV(self.alg, self.envs[self.env], str(n), "info", str(i))
+				self.csv_coords = CSV(self.alg, self.version, str(n), "coords", str(i))
+				self.csv_info = CSV(self.alg, self.version, str(n), "info", str(i))
 
 				model = torch.load(e)
 				agent.loadWeights(model["state_dict"])

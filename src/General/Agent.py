@@ -148,15 +148,12 @@ class Agent:
 		return self.nn
 
 	# Save model and weights
-	def saveModel(self, onnx, version, n, epoch, walls, values):
+	def saveModel(self, version, n, epoch):
 		base_path = os.path.join(self.path_out, self.alg)
 		version_path = os.path.join(base_path, version)
 		agent_path = os.path.join(version_path, str(n))
 
-		if onnx:
-			epoch_path = os.path.join(agent_path, '{}.onnx'.format(epoch))
-		else:
-			epoch_path = os.path.join(agent_path, '{}.pt'.format(epoch))
+		epoch_path = os.path.join(agent_path, '{}.pt'.format(epoch))
 
 		if not os.path.isdir(base_path):
 			os.mkdir(base_path)
@@ -165,15 +162,8 @@ class Agent:
 		if not os.path.isdir(agent_path):
 			os.mkdir(agent_path)
 
-		if onnx:
-			torch.onnx.export(self.nn,
-			torch.randn(1, self.channels, self.height, self.width, device='cuda'),
-			epoch_path, verbose=False, input_names=["data"], output_names=["q_values"])
-		else:
-			torch.save({
-				'agent': n,
-				'walls': walls,
-				'values': values,
-				'state_dict': self.nn.state_dict(),
-				'optimizer': self.optim},
-				epoch_path)
+		torch.save({
+			'agent': n,
+			'state_dict': self.nn.state_dict(),
+			'optimizer': self.optim},
+			epoch_path)

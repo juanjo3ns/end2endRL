@@ -9,9 +9,10 @@ from collections import defaultdict
 class GA:
 	def __init__(self,
 		agents,
-		sigma=0.02):
+		sigma=0.02,
+		pos=0.05):
 
-		self.pos = 0.05 # Percentage Of Selection
+		self.pos = pos # Percentage Of Selection
 		self.galpha = 0.5 # Decrement variance
 		self.balpha = 0.0025 # Increment variance
 		self.mutation = 0
