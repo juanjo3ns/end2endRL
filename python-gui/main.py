@@ -8,6 +8,7 @@ import Colors as c
 from Config import Config
 from random import random
 import src.bridge as bdg
+import copy
 pygame.init()
 
 X = 1200  # screen width
@@ -51,7 +52,7 @@ def showForm():
     string1 = ["Version", "Iterations", "Tensorboard", "Num. Walls", "Visible Radius", "Save weights", "Save freq.", "Normal reward",
     "Min wall", "Max wall"]
     string2 = ["Done reward", "Edge value", "Num. Agents", "Eps. max", "Eps. min", "Health", "Batch Size", "Variance",
-    "% of Selection", "Partial Observability"]
+    "% of Selection", "Partial Observability", "Seed"]
 
     text1=[]
     text2=[]
@@ -99,7 +100,8 @@ def generalActions(args):
             counter_files += 1
     elif args == 'TRAIN':
         conf = config.getJSONData()
-        bdg.train(conf)
+        new_dict = copy.deepcopy(conf)
+        bdg.train(new_dict)
         return 0
     elif args == 'EVAL':
         return 0
@@ -173,9 +175,11 @@ batch_size = InputBox(screen, xcol2, step*6 + 200, 50, step-10, "1000")
 variance = InputBox(screen, xcol2, step*7 + 200, 50, step-10, "0.03")
 posel = InputBox(screen, xcol2, step*8 + 200, 50, step-10, "0.05")
 po = CheckBox(screen, (xcol2+30, step*9+205))
+seed = InputBox(screen, xcol2, step*10 + 200, 50, step-10, "0")
+
 
 input_boxes = [version, iterations, numwalls, visibleRad, savefreq, normal_reward, min_wall, max_wall,
-    done_reward, edge_value, numAgents, epsmax, epsmin, health, batch_size, variance, posel]
+    done_reward, edge_value, numAgents, epsmax, epsmin, health, batch_size, variance, posel, seed]
 
 checkboxes = [tensorboard, saveweights, po]
 
@@ -215,27 +219,27 @@ def updateCells(x,y):
     y_ = int((y-60)/20)
 
     if x_ < maze_x.val and y_ < maze_y.val and x_ >= 0 and y_ >= 0:
-        if [x_,y_] in walls:
-            index = walls.index([x_,y_])
-            walls.remove([x_,y_])
+        if [y_,x_] in walls:
+            index = walls.index([y_,x_])
+            walls.remove([y_,x_])
             del walls_values[index]
-        elif [x_,y_] == finalstate:
+        elif [y_,x_] == finalstate:
             finalstate = []
-        elif [x_,y_] == initstate:
+        elif [y_,x_] == initstate:
             initstate = []
         else:
             for button in cells:
                 if button.hit and button.txt == "Walls":
-                    walls.append([x_,y_])
+                    walls.append([y_,x_])
                     walls_values.append(random()*(float(config.max_wall)-float(config.min_wall)) + float(config.min_wall))
                 elif button.hit and button.txt == "Init State":
-                    initstate = [x_,y_]
+                    initstate = [y_,x_]
                 elif button.hit and button.txt == "Final State":
-                    finalstate = [x_,y_]
+                    finalstate = [y_,x_]
 
 # When we want to copy values from the Config to the GUI we'll make use of this function
 def guiCopyValues():
-    global version, tensorboard, numwalls, saveweights, po, iterations, savefreq, batch_size
+    global version, tensorboard, numwalls, saveweights, po, iterations, savefreq, batch_size, seed
     global health, done_reward, visibleRad, min_wall, max_wall, edge_value, normal_reward, walls_values
     global numAgents, maze_x, maze_y, epsmax, epsmin, variance, posel, walls, finalstate, initstate
 
@@ -276,6 +280,7 @@ def guiCopyValues():
     finalstate = config.finalstate
     initstate = config.initstate
     walls_values = config.walls_values
+    seed.text = config.seed
 
 # When we want to update the values of Config with the custom values from the GUI
 # we'll make use of this function
@@ -314,6 +319,7 @@ def copyValues():
     config.finalstate = finalstate
     config.initstate = initstate
     config.walls_values = walls_values
+    config.seed = seed.text
 
 
 config = Config()

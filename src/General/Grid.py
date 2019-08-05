@@ -27,11 +27,21 @@ class Grid:
 		self.padded_y = self.width +2*self.visibleRad
 		self.grid = np.zeros((self.padded_x, self.padded_y))
 
-		self.walls = data['walls']
-		self.finalstate = data['finalstate']
-		self.initstate = data['initstate']
+		self.walls = self.formatWalls(data['walls'])
+		self.finalstate = self.formatStates(data['finalstate'])
+		self.initstate = self.formatStates(data['initstate'])
 		self.walls_values = data['walls_values']
 
+
+	def formatWalls(self, walls):
+		for w in walls:
+			w[0]+=self.visibleRad
+			w[1]+=self.visibleRad
+		return walls
+	def formatStates(self, state):
+		state[0]+=self.visibleRad
+		state[1]+=self.visibleRad
+		return state
 	def reset(self):
 		self.grid = np.zeros((self.padded_x, self.padded_y))
 		if not self.visibleRad==0:
@@ -50,6 +60,7 @@ class Grid:
 				(self.padded_x-self.visibleRad-1, self.visibleRad),
 				(self.padded_x-self.visibleRad-1,self.padded_y-self.visibleRad-1)])
 			self.finalstate = finalstate
+		self.grid[self.finalstate[0],self.finalstate[1]] = self.done_reward
 
 	def setWalls(self):
 		if self.alg == 'PGM' or self.alg == 'A2C':
@@ -71,7 +82,7 @@ class Grid:
 			finalState = np.zeros_like(self.grid)
 			agent = np.zeros_like(self.grid)
 			agent[x,y]=1
-			index = np.where(self.grid==10)
+			index = np.where(self.grid==self.done_reward)
 			for i in range(len(index[0])):
 				finalState[index[0][i], index[1][i]] = 1
 				walls[index[0][i], index[1][i]] = 0

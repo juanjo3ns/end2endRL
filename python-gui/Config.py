@@ -27,6 +27,7 @@ class Config():
         self.numAgents = "1"
         self.height = 10
         self.width = 10
+        self.seed = "0"
 
         self.epsmax = "0.6"
         self.epsmin = "0.0001"
@@ -106,6 +107,7 @@ class Config():
         data['initstate'] = self.initstate
         data['height'] = self.height
         data['width'] = self.width
+        data['seed'] = int(self.seed)
         return data
 
 
@@ -137,3 +139,4 @@ class Config():
         self.initstate = data['initstate']
         self.height = data['height']
         self.width = data['width']
+        self.seed = str(data['seed'])

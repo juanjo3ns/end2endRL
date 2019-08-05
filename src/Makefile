@@ -1,6 +1,6 @@
 #DOUBLE DQN
 dqn:
-	python3 main.py --version final.2.0 --seed 0 --iterations 15000 --batch_size 1000 --health 30 --env 6 --h 20 --w 10 --numAgents 1 --alg DQN --tbX True --show False --save True --onnx False --save_freq 1000 --po False --visibleRad 1
+	python3 main.py --version dqn.comp.1 --seed 0 --iterations 8000 --batch_size 1000 --health 20 --env 6 --h 20 --w 10 --numAgents 1 --alg DQN --tbX True --show False --save True --onnx False --save_freq 1000 --po False --visibleRad 1
 	# python3 main.py --version final.0.3 --seed 3 --iterations 25000 --batch_size 1000 --health 40 --env 6 --h 10 --w 3 --numAgents 1 --alg DQN --tbX True --show False --save True --onnx False --save_freq 1000 --po False --visibleRad 1
 	# python3 main.py --version final.1.0 --seed 0 --iterations 30000 --batch_size 1000 --health 50 --env 6 --h 10 --w 10 --numAgents 1 --alg DQN --tbX True --show False --save False --onnx False --save_freq 1000 --po False --visibleRad 1
 	# python3 main.py --version final.2.0 --seed 0 --iterations 35000 --batch_size 1000 --health 60 --env 6 --h 20 --w 10 --numAgents 1 --alg DQN --tbX True --show False --save False --onnx False --save_freq 1000 --po False --visibleRad 1

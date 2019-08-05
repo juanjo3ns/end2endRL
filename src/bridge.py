@@ -4,8 +4,12 @@ from tqdm import tqdm
 from time import sleep
 from IPython import embed
 from src.General.Environment import Environment
+from src.General.Seed import setSeed
 from src.General.Grid import Grid
 
+DQN = "DQN"
+GA = "GA"
+PGM = "PGM"
 
 def initializeEnv(data):
     grid = Grid(data)
@@ -32,6 +36,7 @@ def initializeEnv(data):
 
 
 def train(data):
+    setSeed(data['seed'])
     env = initializeEnv(data)
     for it in tqdm(range(data['iterations'])):
     	env.reset()
@@ -39,13 +44,13 @@ def train(data):
     		env.step(it)
     		env.newGeneralMovements += 1
 
-    	if data['alg']=="DQN":
+    	if data['alg']==DQN:
     		env.env_dqn(it)
 
-    	elif data['alg']=="GA":
+    	elif data['alg']==GA:
     		env.env_geneticalgorithms(it)
 
-    	elif data['alg']=="PGM":
+    	elif data['alg']==PGM:
     		rewards, won = env.env_reinforce()
 
     	env.logs(it)
