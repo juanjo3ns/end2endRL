@@ -1,6 +1,6 @@
-var ctemul = 4;
-var maxHealth = 0;
+var maxHealth = 4;
 var prevHealth = 0;
+var scale_ = 1;
 var health;
 
 function createLife() {
@@ -35,10 +35,10 @@ function lifeColor(value){
 }
 
 function reduceLife(health){
+  health = health/scale_*maxHealth;
   if (health < 0){
     removeHealthIndicators();
   }else{
-    health = health * ctemul;
     if (health > maxHealth){
       health = maxHealth;
     }
@@ -51,7 +51,7 @@ function reduceLife(health){
 }
 
 function setMaxHealth(value){
-  maxHealth = value*ctemul;
+  scale_ = value;
   prevHealth = maxHealth;
 }
 

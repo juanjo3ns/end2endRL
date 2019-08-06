@@ -18,8 +18,8 @@ class Grid:
 			self.edge_value = -10*data['health']
 
 		# GRID
-		self.height = data['height']
-		self.width = data['width']
+		self.height = data['width']
+		self.width = data['height']
 		self.numwalls = data['numwalls']
 
 		self.visibleRad = data['visibleRad']
@@ -42,7 +42,7 @@ class Grid:
 		state[0]+=self.visibleRad
 		state[1]+=self.visibleRad
 		return state
-		
+
 	def reset(self):
 		self.grid = np.zeros((self.padded_x, self.padded_y))
 		if not self.visibleRad==0:
