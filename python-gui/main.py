@@ -126,6 +126,10 @@ def generalActions(args):
 			if e.txt == config.version and e.hit:
 				config.removeEnvironment()
 				env_buttons.remove(e)
+				counter_files -= 1
+				for i, e in enumerate(env_buttons):
+					e.rect = e.surface.get_rect(center=(env_x_files + 64, step_files*(i+1) + env_y_files))
+				clearGrid(args)
 
 	elif args == '3D':
 		if os.path.exists(os.path.join(data_path, config.alg, 'current')):
@@ -219,9 +223,9 @@ font_size = 25
 save = Button(screen, "SAVE", (initx + step, inity), generalActions, size=(80,50), font_size=font_size)
 train = Button(screen, "TRAIN", (initx + 2*step, inity), generalActions,size=(80,50), font_size=font_size)
 eval = Button(screen, "EVAL", (initx + 3*step, inity), generalActions,size=(80,50), font_size=font_size)
-delete = Button(screen, "DEL", (initx + 4*step, inity), generalActions,size=(80,50), font_size=font_size)
-threed = Button(screen, "3D", (initx + 5*step, inity), generalActions,size=(80,50), font_size=font_size)
-actions = [save, train, eval, delete, threed]
+threed = Button(screen, "3D", (initx + 4*step, inity), generalActions,size=(80,50), font_size=font_size)
+delete = Button(screen, "DEL", (initx + 5*step, inity), generalActions,size=(80,50), font_size=font_size)
+actions = [save, train, eval, threed, delete]
 
 # Function to handle button clicks for groups of buttons where only one
 # at the same time can be selected
