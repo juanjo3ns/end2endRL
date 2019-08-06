@@ -60,6 +60,7 @@ def train(data):
 
 def eval(data):
     setSeed(data['seed'])
-    data['health'] = data['health']/10
+    if data['alg']=="DQN":
+        data['health'] = data['health']/10
     env = initializeEnv(data)
     env.eval()

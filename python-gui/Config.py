@@ -8,9 +8,8 @@ class Config():
 
         self.version = 'DQN.0.0'
         self.alg = 'DQN'
-        self.tensorboard = False
-        self.padding = False
-        self.saveweights = False
+        self.tensorboard = True
+        self.saveweights = True
         self.po = False
 
         self.iterations = "10000"

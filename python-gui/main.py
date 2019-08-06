@@ -138,9 +138,27 @@ def generalActions(args):
 		print("Files generated!")
 		print("Open {} in your host browser.".format(os.path.join(host_path, 'demo', config.alg, 'index.html')))
 
+
+def setDefaults(iters, savf, maxwall, nagents, h):
+	global iterations, savefreq, max_wall, numAgents, health
+	iterations.text = str(iters)
+	savefreq.text = str(savf)
+	max_wall.text = str(maxwall)
+	numAgents.text = str(nagents)
+	health.text = str(h)
+	for t in [iterations, savefreq, max_wall, numAgents, health]:
+		t.txt_surface = t.font.render(t.text, True, t.color)
+
+
 def updateAlg(alg):
 	version.text = alg + '.' + version.text.split('.')[1] + '.' + version.text.split('.')[2]
 	version.txt_surface = version.font.render(version.text, True, version.color)
+	if alg == "DQN":
+		setDefaults(config.height*config.width*100, config.height*config.width*10, -1, 1, config.height*config.width/5)
+	elif alg == "GA":
+		setDefaults(config.height*config.width*5, 20, -1, 100, 1)
+	elif alg == "PGM" or alg == "A2C":
+		setDefaults(300000, 10000, 0, 1, 1)
 
 
 initx = 490
@@ -189,7 +207,8 @@ min_wall = InputBox(screen, xcol1, step*8 + 200, 50, step-10, "-1")
 max_wall = InputBox(screen, xcol1, step*9 + 200, 50, step-10, "0")
 tensorboard = CheckBox(screen, (xcol1+20, step*2+205))
 saveweights = CheckBox(screen, (xcol1+20, step*5+205))
-
+tensorboard.hit = True
+saveweights.hit = True
 xcol2 = 320
 done_reward = InputBox(screen, xcol2, step*0 + 200, 50, step-10, "10")
 edge_value = InputBox(screen, xcol2, step*1 + 200, 50, step-10, "-1")

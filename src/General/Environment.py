@@ -286,7 +286,7 @@ class Environment:
 		elif lost: reward = -1
 		else:
 			reward = value
-			if value == 0 and not self.alg=="RWB" and not self.alg=="A2C":
+			if value == 0 and not self.alg=="PGM" and not self.alg=="A2C":
 				reward = self.grid.normal_reward
 
 		agent.totalreward += reward
