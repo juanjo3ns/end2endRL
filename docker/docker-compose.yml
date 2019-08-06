@@ -12,6 +12,7 @@ services:
     environment:
       - PYTHONPATH=/data
       - DISPLAY=unix$DISPLAY
+      - HOST_PATH=$PWD
     volumes:
       - ../:/data
       - /tmp/.X11-unix:/tmp/.X11-unix

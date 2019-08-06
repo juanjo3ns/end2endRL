@@ -60,6 +60,6 @@ def train(data):
 
 def eval(data):
     setSeed(data['seed'])
+    data['health'] = 1
     env = initializeEnv(data)
-    print("starting eval...")
     env.eval()

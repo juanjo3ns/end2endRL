@@ -3,7 +3,6 @@ var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
 var root;
 var algorithm = "DQN";
-var environment;
 var laststep;
 var intervalID;
 var counter = 0;
@@ -57,7 +56,6 @@ function init() {
   // OBJECTS
   loadEnvironment();
   createAgent();
-  scene.add(gparent);
 
   generateBoard();
   stringVelocity();
@@ -87,7 +85,8 @@ function resetEnvironment(){
 
 }
 
-function startExperiment(){
+async function startExperiment(){
+  await sleep(1000);
   epoch = 0;
   agent_orientation=1;
   scene.getObjectByName("agent").visible = true;

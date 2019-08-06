@@ -381,8 +381,8 @@ class Environment:
 		self.csv_info.write([self.grid.padded_x, self.grid.padded_y]) # dimensions
 		self.csv_info.write(self.getStates(self.grid.grid, self.grid.edge_value)) # padding states
 		self.csv_info.write(self.getStates(self.grid.grid, self.grid.done_reward)) # final states
-		self.csv_info.write(list(np.array(self.grid.saved_walls).flatten())) # walls
-		self.csv_info.write(self.grid.saved_values) # walls values
+		self.csv_info.write(list(np.array(self.grid.walls).flatten())) # walls
+		self.csv_info.write(self.grid.walls_values) # walls values
 		self.csv_info.write([numAgents]) # number of agents
 		self.csv_info.write([epochs]) # number of epochs
 		self.csv_info.write([self.grid.visibleRad]) # Agent's visible radius and padding
@@ -408,6 +408,7 @@ class Environment:
 				self.csv_coords.close()
 				self.csv_info.close()
 				print("Evaluated agent {} in mutation {}. ".format(n,i), end='\r')
+		print("\nEvaluation finished")
 
 	def stats_eval(self):
 		agents = self.numAgents

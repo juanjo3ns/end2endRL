@@ -17,6 +17,7 @@ Y = 600  # screen height
 data_path = '/data/demo/csvdata/'
 weights_path = '/data/src/weights/'
 tensor_path = '/data/src/tensorboard/'
+host_path = os.environ['HOST_PATH']
 
 def drawGrid():
 	size=20
@@ -85,8 +86,9 @@ y_alg = 175
 algorithm = "DQN"
 
 def clearGrid(args):
-	global walls, initstate, finalstate
+	global walls, initstate, finalstate, walls_values
 	walls.clear()
+	walls_values.clear()
 	initstate = []
 	finalstate = []
 
@@ -103,22 +105,22 @@ def generalActions(args):
 				env_buttons.append(Button(screen, config.version, (env_x_files + 64, step_files*(counter_files+1) + env_y_files), loadEnv, size=(200,32), font_size=25))
 			counter_files += 1
 	elif args == 'TRAIN':
-        if config.saveweights and os.exists(os.path.join(weights_path, config.alg, config.version)):
-            print("Weights already exist for this experiment.")
-        elif config.tensorboard and os.exists(os.path.join(tensor_path, config.alg, config.version)):
-            print("Tensorboard logs already exist for this experiment.")
-        else:
-    		conf = config.getJSONData()
-    		new_dict = copy.deepcopy(conf)
-    		bdg.train(new_dict)
+		if config.saveweights and os.path.exists(os.path.join(weights_path, config.alg, config.version)):
+			print("Weights already exist for this experiment.")
+		elif config.tensorboard and os.path.exists(os.path.join(tensor_path, config.alg, config.version)):
+			print("Tensorboard logs already exist for this experiment.")
+		else:
+			print("Open {} to check tensorboard logs in your browser.".format("https://localhost:6006"))
+			conf = config.getJSONData()
+			new_dict = copy.deepcopy(conf)
+			bdg.train(new_dict)
 	elif args == 'EVAL':
-        if os.exists(os.path.join(data_path, config.alg, config.version)):
-            print("CSV files already exist for this experiment.")
-        else:
-    		conf = config.getJSONData()
-    		new_dict = copy.deepcopy(conf)
-    		print(new_dict)
-    		bdg.eval(new_dict)
+		if os.path.exists(os.path.join(data_path, config.alg, config.version)):
+			print("CSV files already exist for this experiment.")
+		else:
+			conf = config.getJSONData()
+			new_dict = copy.deepcopy(conf)
+			bdg.eval(new_dict)
 	elif args == 'DEL':
 		for e in env_buttons:
 			if e.txt == config.version and e.hit:
@@ -126,11 +128,11 @@ def generalActions(args):
 				env_buttons.remove(e)
 
 	elif args == '3D':
-		if os.exists(os.path.join(data_path, self.alg, 'current')):
-			shutil.rmtree(os.path.join(data_path, self.alg, 'current'))
-		os.mkdir(os.path.join(data_path, self.alg, env))
-		shutil.copytree(os.path.join(data_path, self.alg, self.version), os.path.join(data_path, self.alg, 'current'))
-
+		if os.path.exists(os.path.join(data_path, config.alg, 'current')):
+			shutil.rmtree(os.path.join(data_path, config.alg, 'current'))
+		shutil.copytree(os.path.join(data_path, config.alg, config.version), os.path.join(data_path, config.alg, 'current'))
+		print("Files generated!")
+		print("Open {} in your host browser.".format(os.path.join(host_path, 'demo', config.alg, 'index.html')))
 
 def updateAlg(alg):
 	version.text = alg + '.' + version.text.split('.')[1] + '.' + version.text.split('.')[2]

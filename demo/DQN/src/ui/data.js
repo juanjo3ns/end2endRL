@@ -1,12 +1,12 @@
 function changeCSV(epoch) {
 	clearInterval(intervalID);
-	csvfile = getURL(algorithm, environment,"0", "coords", epoch);
+	csvfile = getURL(algorithm, "current","0", "coords", epoch);
 	csvData = getData(csvfile);
 	intervalID = setInterval(runEvaluations, velocity, csvData, epoch);
 }
 
 function getURL(algorithm, environment, agent, type, epoch) {
-	base = "demo/csvdata/".concat(algorithm).concat('/').concat(environment).concat('/');
+	base = "../../demo/csvdata/".concat(algorithm).concat('/').concat(environment).concat('/');
 	return base.concat(agent).concat('/').concat(type).concat('/').concat(epoch).concat('.csv');
 }
 
