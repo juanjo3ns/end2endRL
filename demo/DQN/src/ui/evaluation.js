@@ -8,20 +8,6 @@ function trC(coord, hw) {
 	}
 
 }
-function colourSurroundings(x,y){
-	resetColours();
-	for(var i=(x-env["visibleRad"]);i<(x+1+env["visibleRad"]);i++){
-		for(var j=(y-env["visibleRad"]);j<(y+1+env["visibleRad"]);j++){
-			if ((-1<i)&&(i<env["height"])&&(-1<j)&&(j<env["width"])){
-				if (env["paddingStates"].indexOf(JSON.stringify([i,j]))!= -1){
-					scene.getObjectByName("cells").getObjectByName("padding").getObjectByName(i.toString()+'-'+j.toString()).material.color = new THREE.Color(0xff0000);
-				}else{
-					scene.getObjectByName("cells").getObjectByName("surface").getObjectByName(i.toString()+'-'+j.toString()).material.color = new THREE.Color(0xff0000);
-				}
-			}
-		}
-	}
-}
 
 function checkAgentOrientation(state, prevstate){
 	var new_orientation = -1;
@@ -56,13 +42,12 @@ function runEvaluations(csvData, epoch) {
 	// console.log("run evaluation");
 
 	if (counter >= csvData.length - 1) {
+		removeHealthIndicators();
 		iterations();
 	}else{
 		state = [parseInt(csvData[counter][0]), parseInt(csvData[counter][1])];
 		if (counter == 0 ){
-			if (scene.getObjectByName("life")){
-				removeHealthIndicators();
-			}
+			setMaxHealth(parseInt(csvData[counter][2]));
 			createLife();
 			laststep=state;
 			scene.getObjectByName("agent").rotation.y = 0;
@@ -92,7 +77,6 @@ function runEvaluations(csvData, epoch) {
 			}
 		}else{
 			moveAgent(trC(state[0],0), 5.5,trC(state[1],1), velocity,0);
-			colourSurroundings(state[0],state[1]);
 		}
 		if(scene.getObjectByName("health")){
 			moveLife(trC(state[0],0), 5.5,trC(state[1],1), velocity,0);
@@ -108,7 +92,6 @@ function iterations() {
 		if (scene.getObjectByName("cells")) {
 			scene.remove(scene.getObjectByName("cells"));
 		}
-		loadEnvironment(algorithm, environment, epoch);
 		showBoard();
 		changeCSV(epoch.toString());
 	}else{

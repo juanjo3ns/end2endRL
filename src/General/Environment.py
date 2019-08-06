@@ -195,7 +195,6 @@ class Environment:
 			if not agent.done:
 				env = self.grid.getEnvironment(agent.state).astype(np.float32)
 				output = agent.forward(env,it)
-
 				# DOUBLE DQN
 				if self.alg=="DQN":
 					action = self.selectAction(output, it, agent)
@@ -287,7 +286,7 @@ class Environment:
 		elif lost: reward = -1
 		else:
 			reward = value
-			if value == 0 and not self.alg=="PGM" and not self.alg=="A2C":
+			if value == 0 and not self.alg=="RWB" and not self.alg=="A2C":
 				reward = self.grid.normal_reward
 
 		agent.totalreward += reward
@@ -403,9 +402,6 @@ class Environment:
 
 				model = torch.load(e)
 				agent.loadWeights(model["state_dict"])
-				if not self.alg=="PGM" or self.alg=="A2C":
-					self.grid.saved_walls = model["walls"]
-					self.grid.saved_values = model["values"]
 				self.reset()
 				self.writeInfo(agents, len(epochs))
 				self.evalEpisode(agent)
@@ -424,10 +420,6 @@ class Environment:
 			for i,e in enumerate(epochs):
 				model = torch.load(e)
 				agent.loadWeights(model["state_dict"])
-				if not self.alg=="PGM" or self.alg=="A2C":
-					self.grid.saved_walls = model["walls"]
-					self.grid.saved_values = model["values"]
-
 				avgHealth=[]
 				avgMvments=[]
 				avgReward=[]

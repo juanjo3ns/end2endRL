@@ -1,4 +1,5 @@
-var maxHealth = 4;
+var ctemul = 4;
+var maxHealth = 0;
 var prevHealth = 0;
 var health;
 
@@ -35,10 +36,9 @@ function lifeColor(value){
 
 function reduceLife(health){
   if (health < 0){
-    prevHealth = maxHealth;
     removeHealthIndicators();
   }else{
-    health = health * maxHealth;
+    health = health * ctemul;
     if (health > maxHealth){
       health = maxHealth;
     }
@@ -50,8 +50,11 @@ function reduceLife(health){
   }
 }
 
+function setMaxHealth(value){
+  maxHealth = value*ctemul;
+  prevHealth = maxHealth;
+}
 
 function removeHealthIndicators(){
-  prevHealth = maxHealth;
   scene.remove(scene.getObjectByName("health"));
 }

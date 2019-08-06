@@ -59,5 +59,7 @@ def train(data):
     	env.writer.close()
 
 def eval(data):
+    setSeed(data['seed'])
     env = initializeEnv(data)
+    print("starting eval...")
     env.eval()

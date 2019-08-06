@@ -22,18 +22,17 @@ function moveWall(y, time, wall) {
 		.start();
 
 }
-function moveCursor(direction) {
-	x_ = scene.getObjectByName("cursor").position.x + direction*VEL_JUMP;
-	new TWEEN.Tween(scene.getObjectByName("cursor").position)
-		.to({ x: x_ }, 200)
+function moveCamera(x, y, z, time) {
+	new TWEEN.Tween(scene.getObjectByName("camera").position)
+		.to(scene.getObjectByName("camera").position.clone().set(x, y, z), time)
 		.easing(TWEEN.Easing.Quadratic.Out)
 		.start();
 
 }
-
-function moveCamera(x, y, z, time) {
-	new TWEEN.Tween(scene.getObjectByName("camera").position)
-		.to(scene.getObjectByName("camera").position.clone().set(x, y, z), time)
+function moveCursor(direction) {
+	x_ = scene.getObjectByName("cursor").position.x + direction*VEL_JUMP;
+	new TWEEN.Tween(scene.getObjectByName("cursor").position)
+		.to({ x: x_ }, 200)
 		.easing(TWEEN.Easing.Quadratic.Out)
 		.start();
 
@@ -56,21 +55,6 @@ function rotateAgent(x, y, z, time) {
 
 }
 
-function rotateObject(x, y, z, object, time) {
-	x_ = (scene.getObjectByName(object).rotation.x + x)
-	y_ = (scene.getObjectByName(object).rotation.y + y)
-	z_ = (scene.getObjectByName(object).rotation.z + z)
-	new TWEEN.Tween(scene.getObjectByName(object).rotation)
-		.to({ x: x_, y: y_, z: z_ }, time)
-		.easing(TWEEN.Easing.Quadratic.Out)
-		.onComplete(function () {
-			if (pushed==-1){
-				startExperiment();
-			}
-		})
-		.start();
-
-}
 
 function flushReward(wall){
 	wall = 'l'+wall;

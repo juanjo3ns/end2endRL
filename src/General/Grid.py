@@ -42,6 +42,7 @@ class Grid:
 		state[0]+=self.visibleRad
 		state[1]+=self.visibleRad
 		return state
+		
 	def reset(self):
 		self.grid = np.zeros((self.padded_x, self.padded_y))
 		if not self.visibleRad==0:
@@ -84,6 +85,6 @@ class Grid:
 			agent[x,y]=1
 			index = np.where(self.grid==self.done_reward)
 			for i in range(len(index[0])):
-				finalState[index[0][i], index[1][i]] = 1
+				finalState[index[0][i], index[1][i]] = self.done_reward
 				walls[index[0][i], index[1][i]] = 0
 			return np.stack((walls, finalState, agent))

@@ -1,8 +1,7 @@
 
 var velocity = 200;
 var barvel = 0;
-var bary = -45;
-var barz = 110
+var bary = -25;
 var MINVELOCITY = 300;
 var MAXVELOCITY = 100;
 var VEL_JUMP = 25;
@@ -30,7 +29,7 @@ function stringVelocity(){
 		var tm = new THREE.Mesh(t, fontMaterial);
 		tm.position.x = -7;
 		tm.position.y = bary+12;
-		tm.position.z = barz+13;
+		tm.position.z = 53;
     tm.name = 'stringVelocity';
 		scene.add(tm);
 	});
@@ -45,7 +44,7 @@ function createVelocityBar(){
     transparent: true,
     opacity: 0.7} );
   var cylinder = new THREE.Mesh( geometry, material );
-  cylinder.position.set(0,bary,barz+10);
+  cylinder.position.set(0,bary,53);
   cylinder.rotation.z = Math.PI/2;
   cylinder.name = 'vbar'
   scene.add( cylinder );
@@ -54,7 +53,7 @@ function createVelocityBar(){
   var geometry1 = new THREE.CylinderGeometry( 8, 8, 3, 32 );
   var material1 = new THREE.MeshBasicMaterial( {color: 'gray'} );
   var cursor = new THREE.Mesh( geometry1, material1 );
-  cursor.position.set(0,bary,barz+10);
+  cursor.position.set(0,bary,53);
   cursor.rotation.z = Math.PI/2;
   cursor.name = 'cursor';
   scene.add( cursor );

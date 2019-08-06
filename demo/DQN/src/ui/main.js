@@ -1,24 +1,20 @@
 var renderer, scene, camera;
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
-var gparent = new THREE.Object3D();
 var root;
-var algorithm = "PGM";
+var algorithm = "DQN";
 var environment;
 var laststep;
 var intervalID;
 var counter = 0;
-var controls;
 var env = {};
-
 var agent_orientation = 1;
-gparent.name = "text_parent";
-gparent.position.z = 50;
 var hist = new Array();
-
+var cells;
+var cell_dimension = 10;
+var ini_x,ini_z, height, width;
 
 var env_set = false;
-var pushed = 1; //Means that text_parent is at -Math.PI/6
 var epoch;
 
 
@@ -30,13 +26,6 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
-function resetColor(array) {
-
-  for (var i = 0; i < array.length; i++) {
-    scene.getObjectByName("text_parent").getObjectByName(array[i]).material.color = new THREE.Color(0x9A9A9A);
-  }
-}
 
 
 
@@ -53,7 +42,7 @@ function init() {
 
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(55, width / height, 1, 10000);
-  camera.position.set(0, 85, 270);
+  camera.position.set(0, 85, 250);
   camera.name = "camera";
   scene.add(camera)
 
@@ -66,16 +55,17 @@ function init() {
   scene.add(light, light_two, lightAmbient);
 
   // OBJECTS
+  loadEnvironment();
   createAgent();
   scene.add(gparent);
-  showMenu();
+
+  generateBoard();
   stringVelocity();
   createVelocityBar();
-
+  startExperiment();
 
   document.addEventListener('click', onDocumentMouseDown, false);
   controls = new THREE.OrbitControls(camera, renderer.domElement);
-
   window.addEventListener('resize', onWindowResize, false);
 }
 
@@ -94,20 +84,15 @@ function resetEnvironment(){
   removeHealthIndicators();
   scene.getObjectByName("agent").rotation.y = 0;
   scene.getObjectByName("agent").visible = false;
-  scene.getObjectByName("switch").position.z += 3;
-  scene.getObjectByName("text_parent").visible = true;
-  rotateObject(pushed * 2 * Math.PI / 3, 0, 0, "text_parent", 1000);
-  pushed *= -1;
+
 }
 
 function startExperiment(){
   epoch = 0;
   agent_orientation=1;
-  scene.getObjectByName("text_parent").visible = false;
   scene.getObjectByName("agent").visible = true;
   iterations();
 }
-
 
 function animate() {
   requestAnimationFrame(animate);

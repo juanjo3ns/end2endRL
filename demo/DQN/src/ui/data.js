@@ -6,7 +6,7 @@ function changeCSV(epoch) {
 }
 
 function getURL(algorithm, environment, agent, type, epoch) {
-	base = "src/csvdata/".concat(algorithm).concat('/').concat(environment).concat('/');
+	base = "demo/csvdata/".concat(algorithm).concat('/').concat(environment).concat('/');
 	return base.concat(agent).concat('/').concat(type).concat('/').concat(epoch).concat('.csv');
 }
 
@@ -39,8 +39,8 @@ function loadValues(array){
 	return new Array(array);
 }
 
-function loadEnvironment(algorithm = "GA", environment="medium", counter) {
-	csvfile = getURL(algorithm, environment,"0", "info", counter.toString());
+function loadEnvironment(algorithm = "DQN", environment="current") {
+	csvfile = getURL(algorithm, environment,"0", "info", "0");
 	csvData = getData(csvfile);
 	env["height"] = csvData[1][0];
 	env["width"] = csvData[1][1];
@@ -50,7 +50,6 @@ function loadEnvironment(algorithm = "GA", environment="medium", counter) {
 	env["wallValues"] = csvData[5].map(parseFloat);
 	env["numAgents"] = parseInt(csvData[6][0]);
 	env["epochs"] = parseInt(csvData[7][0]);
-	env["visibleRad"] = parseInt(csvData[8][0]);
 
 
 }
