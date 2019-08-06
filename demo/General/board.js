@@ -131,7 +131,7 @@ function showBoard() {
             }
             if (env["wallStates"].indexOf(JSON.stringify([i, j])) != -1) {
               walls.add(addWall(i,j,wall_index));
-                wall_index+=1;
+              wall_index+=1;
             } else if (env["finalStates"].indexOf(JSON.stringify([i, j])) != -1) {
               finalStates.add(addFinalState(i,j));
             } else if (env["paddingStates"].indexOf(JSON.stringify([i, j])) != -1){
@@ -147,6 +147,5 @@ function showBoard() {
 }
 
 function generateBoard(algorithm, environment) {
-    loadEnvironment(algorithm, environment, 0);
     showBoard();
 }

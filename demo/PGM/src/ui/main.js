@@ -2,16 +2,17 @@ var renderer, scene, camera;
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
 var root;
-var algorithm = "DQN";
+var algorithm = "PGM";
+var environment;
 var laststep;
 var intervalID;
 var counter = 0;
+var controls;
 var env = {};
+
 var agent_orientation = 1;
 var hist = new Array();
-var cells;
-var cell_dimension = 10;
-var ini_x,ini_z, height, width;
+
 
 var env_set = false;
 var epoch;
@@ -24,7 +25,6 @@ animate();
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-
 
 
 
@@ -41,7 +41,7 @@ function init() {
 
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(55, width / height, 1, 10000);
-  camera.position.set(0, 85, 250);
+  camera.position.set(0, 85, 270);
   camera.name = "camera";
   scene.add(camera)
 
@@ -56,14 +56,15 @@ function init() {
   // OBJECTS
   loadEnvironment(algorithm, "current", counter);
   createAgent();
-
   generateBoard();
   stringVelocity();
   createVelocityBar();
   startExperiment();
 
+
   document.addEventListener('click', onDocumentMouseDown, false);
   controls = new THREE.OrbitControls(camera, renderer.domElement);
+
   window.addEventListener('resize', onWindowResize, false);
 }
 
@@ -82,7 +83,6 @@ function resetEnvironment(){
   removeHealthIndicators();
   scene.getObjectByName("agent").rotation.y = 0;
   scene.getObjectByName("agent").visible = false;
-
 }
 
 async function startExperiment(){
@@ -92,6 +92,7 @@ async function startExperiment(){
   scene.getObjectByName("agent").visible = true;
   iterations();
 }
+
 
 function animate() {
   requestAnimationFrame(animate);

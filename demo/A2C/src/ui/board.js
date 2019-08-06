@@ -1,8 +1,27 @@
+var cells;
+var surface;
+var padding;
+var walls;
+var finalStates;
+var cell_dimension = 10;
+var ini_x,ini_z, height, width;
+
 function colorTransform(value){
   var min = -1;
-  var unit = 1.2;
+  var unit = 1.5;
   var norm = (value - min)/unit;
   return [1-norm, norm]
+}
+
+function resetColours(){
+  surf_children = scene.getObjectByName("cells").getObjectByName("surface").children;
+  padd_children = scene.getObjectByName("cells").getObjectByName("padding").children;
+  for(var i=0;i<surf_children.length;i++){
+    scene.getObjectByName("cells").getObjectByName("surface").children[i].material.color = new THREE.Color(0x000000);
+  }
+  for(var i=0;i<padd_children.length;i++){
+    scene.getObjectByName("cells").getObjectByName("padding").children[i].material.color = new THREE.Color("rgb(0, 26, 26)");
+  }
 }
 
 function getWallMaterial(index) {
@@ -41,6 +60,7 @@ function addSurface(i,j){
     color: 'black'
   }));
   var board = new THREE.Mesh(boardCell, boardMaterial);
+  board.name = i.toString()+'-'+j.toString();
   board.position.x = ini_x + i * cell_dimension;
   board.position.y = 0;
   board.position.z = ini_z + j * cell_dimension;
@@ -58,6 +78,7 @@ function addPadding(i,j){
     color: 'black'
   }));
   var board = new THREE.Mesh(boardCell, boardMaterial);
+  board.name = i.toString()+'-'+j.toString();
   board.position.x = ini_x + i * cell_dimension;
   board.position.y = 0;
   board.position.z = ini_z + j * cell_dimension;
@@ -77,7 +98,7 @@ function addFinalState(i,j){
   var b = new THREE.Mesh(cell, material);
   b.name = 'f'+(j + i * (width-1)).toString();
   b.position.x = ini_x + i * cell_dimension;
-  b.position.y = 3;
+  b.position.y = 1;
   b.position.z = ini_z + j * cell_dimension;
   b.add(line);
   return b;
@@ -85,28 +106,43 @@ function addFinalState(i,j){
 
 
 function showBoard() {
+    if (scene.getObjectByName("cells")){
+      scene.remove(scene.getObjectByName("cells"));
+    }
     var wall_index = 0;
     height = env["height"];
     width = env["width"];
     cells = new THREE.Object3D();
+    surface = new THREE.Object3D();
+    finalStates = new THREE.Object3D();
+    padding = new THREE.Object3D();
+    walls = new THREE.Object3D();
     cells.name = 'cells';
+    surface.name ='surface';
+    walls.name = 'walls';
+    padding.name ='padding';
+
     ini_x = -height*cell_dimension/2 + cell_dimension/2;
     ini_z = -width*cell_dimension/2 + cell_dimension/2;
     for (var i = 0; i < height; i++) {
         for (var j = 0; j < width; j++) {
             if ((i!=0 && i!=height-1) && (j!=0 && j!=width-1)){
-              cells.add(addSurface(i,j));
+              surface.add(addSurface(i,j));
             }
             if (env["wallStates"].indexOf(JSON.stringify([i, j])) != -1) {
-                cells.add(addWall(i,j,wall_index));
+              walls.add(addWall(i,j,wall_index));
                 wall_index+=1;
             } else if (env["finalStates"].indexOf(JSON.stringify([i, j])) != -1) {
-                cells.add(addFinalState(i,j));
+              finalStates.add(addFinalState(i,j));
             } else if (env["paddingStates"].indexOf(JSON.stringify([i, j])) != -1){
-                cells.add(addPadding(i,j));
+              padding.add(addPadding(i,j));
             }
         }
     }
+    cells.add(surface);
+    cells.add(walls);
+    cells.add(finalStates);
+    cells.add(padding);
     scene.add(cells);
 }
 

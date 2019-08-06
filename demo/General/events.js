@@ -1,3 +1,4 @@
+
 function onDocumentMouseDown(event) {
   event.preventDefault();
   mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;

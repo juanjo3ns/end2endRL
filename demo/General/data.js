@@ -1,12 +1,12 @@
 function changeCSV(epoch) {
 	clearInterval(intervalID);
-	csvfile = getURL(algorithm, environment,"0", "coords", epoch);
+	csvfile = getURL(algorithm, "current","0", "coords", epoch);
 	csvData = getData(csvfile);
 	intervalID = setInterval(runEvaluations, velocity, csvData, epoch);
 }
 
 function getURL(algorithm, environment, agent, type, epoch) {
-	base = "src/csvdata/".concat(algorithm).concat('/').concat(environment).concat('/');
+	base = "../csvdata/".concat(algorithm).concat('/').concat(environment).concat('/');
 	return base.concat(agent).concat('/').concat(type).concat('/').concat(epoch).concat('.csv');
 }
 
@@ -39,7 +39,7 @@ function loadValues(array){
 	return new Array(array);
 }
 
-function loadEnvironment(algorithm = "GA", environment="medium", counter) {
+function loadEnvironment(algorithm, environment="current", counter) {
 	csvfile = getURL(algorithm, environment,"0", "info", counter.toString());
 	csvData = getData(csvfile);
 	env["height"] = csvData[1][0];
@@ -51,6 +51,4 @@ function loadEnvironment(algorithm = "GA", environment="medium", counter) {
 	env["numAgents"] = parseInt(csvData[6][0]);
 	env["epochs"] = parseInt(csvData[7][0]);
 	env["visibleRad"] = parseInt(csvData[8][0]);
-
-
 }

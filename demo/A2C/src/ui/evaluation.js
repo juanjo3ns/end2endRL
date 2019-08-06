@@ -56,13 +56,12 @@ function runEvaluations(csvData, epoch) {
 	// console.log("run evaluation");
 
 	if (counter >= csvData.length - 1) {
+		removeHealthIndicators();
 		iterations();
 	}else{
 		state = [parseInt(csvData[counter][0]), parseInt(csvData[counter][1])];
 		if (counter == 0 ){
-			if (scene.getObjectByName("life")){
-				removeHealthIndicators();
-			}
+			setMaxHealth(parseInt(csvData[counter][2]));
 			createLife();
 			laststep=state;
 			scene.getObjectByName("agent").rotation.y = 0;
@@ -108,7 +107,7 @@ function iterations() {
 		if (scene.getObjectByName("cells")) {
 			scene.remove(scene.getObjectByName("cells"));
 		}
-		loadEnvironment(algorithm, environment, epoch);
+		loadEnvironment(algorithm, "current", epoch);
 		showBoard();
 		changeCSV(epoch.toString());
 	}else{
