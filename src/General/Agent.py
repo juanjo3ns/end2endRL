@@ -154,7 +154,8 @@ class Agent:
 		agent_path = os.path.join(version_path, str(n))
 
 		epoch_path = os.path.join(agent_path, '{}.pt'.format(epoch))
-
+		if not os.path.isdir(self.path_out):
+			os.mkdir(self.path_out)
 		if not os.path.isdir(base_path):
 			os.mkdir(base_path)
 		if not os.path.isdir(version_path):

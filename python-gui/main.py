@@ -110,7 +110,7 @@ def generalActions(args):
 		elif config.tensorboard and os.path.exists(os.path.join(tensor_path, config.alg, config.version)):
 			print("Tensorboard logs already exist for this experiment.")
 		else:
-			print("Open {} to check tensorboard logs in your browser.".format("https://localhost:6006"))
+			print("Open {} to check tensorboard logs in your browser.".format("localhost:6006"))
 			conf = config.getJSONData()
 			new_dict = copy.deepcopy(conf)
 			bdg.train(new_dict)
