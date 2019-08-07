@@ -386,6 +386,7 @@ class Environment:
 		self.csv_info.write([numAgents]) # number of agents
 		self.csv_info.write([epochs]) # number of epochs
 		self.csv_info.write([self.grid.visibleRad]) # Agent's visible radius and padding
+		self.csv_info.write([self.grid.min_wall, self.grid.max_wall]) # Min and Max values of walls
 		self.csv_info.close()
 
 	def eval(self):

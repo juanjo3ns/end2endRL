@@ -13,7 +13,7 @@ import shutil
 pygame.init()
 
 X = 1200  # screen width
-Y = 600  # screen height
+Y = 800  # screen height
 data_path = '/data/demo/csvdata/'
 weights_path = '/data/src/weights/'
 tensor_path = '/data/src/tensorboard/'
@@ -69,6 +69,19 @@ def showForm():
 	for i,s in enumerate(string2):
 		text2.append(font.render(s, True, (255, 255, 255)))
 		screen.blit(text2[i], (220, step*i + 200))
+
+# SURFACE TO PRINT ALL THE LOGS
+	# Allow 4 lines maximum
+logs=["Welcome to End2EndRL", "Do not forget to first select an algorithm!"]
+def showLog():
+	rows = 4
+	if len(logs)>4:
+		del logs[0]
+	font = pygame.font.SysFont("Arial", 20)
+	step = 25
+	for i,s in enumerate(logs):
+		a = font.render(s, True, (255, 255, 255))
+		screen.blit(a, (25, step*i + 620))
 
 
 
@@ -138,7 +151,6 @@ def generalActions(args):
 		print("Files generated!")
 		print("Open {} in your host browser.".format(os.path.join(host_path, 'demo', config.alg, 'index.html')))
 
-
 def setDefaults(iters, savf, maxwall, nagents, h):
 	global iterations, savefreq, max_wall, numAgents, health
 	iterations.text = str(iters)
@@ -149,16 +161,24 @@ def setDefaults(iters, savf, maxwall, nagents, h):
 	for t in [iterations, savefreq, max_wall, numAgents, health]:
 		t.txt_surface = t.font.render(t.text, True, t.color)
 
-
 def updateAlg(alg):
 	version.text = alg + '.' + version.text.split('.')[1] + '.' + version.text.split('.')[2]
 	version.txt_surface = version.font.render(version.text, True, version.color)
 	if alg == "DQN":
 		setDefaults(config.height*config.width*100, config.height*config.width*10, -1, 1, config.height*config.width/5)
+		logs.clear()
+		logs.append("Default values set! Feel free to customize the environment and parameters.")
 	elif alg == "GA":
 		setDefaults(config.height*config.width*5, 20, -1, 100, 1)
+		logs.clear()
+		logs.append("Do not forget to customize the number of agents, the percentage of selection and the variance.")
 	elif alg == "PGM" or alg == "A2C":
 		setDefaults(300000, 10000, 0, 1, 1)
+		logs.append("With this algorithm you cannot select the values neither the positions of the walls!")
+		logs.append("It is possible to teach an agent to perform in any environment.")
+		logs.append("The init state is in the middle of the grid and the final state is in a random corner.")
+		logs.append("But take into account that it takes a LOT of episodes to train this algorithm.")
+
 
 
 initx = 490
@@ -232,7 +252,6 @@ walls = []
 initstate = []
 finalstate = []
 walls_values = []
-
 
 # SAVE TRAIN EVAL BUTTONS
 initx = 400
@@ -327,6 +346,7 @@ def guiCopyValues():
 	initstate = config.initstate
 	walls_values = config.walls_values
 	seed.text = config.seed
+	logs = config.logs
 
 # When we want to update the values of Config with the custom values from the GUI
 # we'll make use of this function
@@ -366,6 +386,7 @@ def copyValues():
 	config.initstate = initstate
 	config.walls_values = walls_values
 	config.seed = seed.text
+	config.logs = logs
 
 
 config = Config()
@@ -409,8 +430,10 @@ while True:
 	for obj in [slides, actions, checkboxes, cells, algorithms, env_buttons, input_boxes]:
 		for t in obj:
 			t.draw()
+
 	drawGrid()
 	showForm()
+	showLog()
 	drawEnvironment()
 	reset.draw()
 	copyValues()

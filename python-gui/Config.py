@@ -2,7 +2,6 @@ import json
 import os
 
 
-
 class Config():
     def __init__(self):
 
@@ -38,28 +37,37 @@ class Config():
         self.walls_values = []
         self.finalstate = []
         self.initstate = []
-
+        self.logs=["Welcome to End2EndRL", "Do not forget to first select an algorithm!"]
 
     def correctValues(self):
-        if self.version == '':
-            return False
-        if not self.alg == 'GA' and int(self.numAgents) > 1:
-            return False
-        if len(self.finalstate)==0 or len(self.initstate)==0:
-            return False
-        if float(self.epsmax) > 1 or float(self.epsmax) < 0 or float(self.epsmin) > 1 or float(self.epsmin) < 0:
-            return False
-        if float(self.pos) > 1 or float(self.pos) < 0:
-            return False
-        if int(self.health) < 0 or self.health == '':
-            return False
-        if int(self.iterations) < 0 or self.iterations == '':
-            return False
-        if int(self.batch_size) < 0 or self.batch_size == '':
-            return False
-        if int(self.savefreq) < 0 or self.savefreq == '':
-            return False
-        return True
+    	if self.version == '':
+    		self.logs.append("Insert version [ALGORITHM].[DESCR].[VERSION]")
+    		return False
+    	if self.alg == 'GA' and not int(self.numAgents) > 1:
+    		self.logs.append("Make sure to select a higher number of agents.")
+    		return False
+    	if (len(self.finalstate)==0 or len(self.initstate)==0) and (self.alg=="DQN" or self.alg=="GA"):
+    		self.logs.append("Select a final and initial state!")
+    		return False
+    	if float(self.epsmax) > 1 or float(self.epsmax) < 0 or float(self.epsmin) > 1 or float(self.epsmin) < 0:
+    		self.logs.append("Keep epsmax and epsmin between 0 and 1.")
+    		return False
+    	if float(self.pos) > 1 or float(self.pos) < 0:
+    		self.logs.append("Keep percentage of selection (pos) between 0 and 1.")
+    		return False
+    	if int(self.health) < 0 or self.health == '':
+    		self.logs.append("Health must be positive.")
+    		return False
+    	if int(self.iterations) < 0 or self.iterations == '':
+    		self.logs.append("Iterations must be positive")
+    		return False
+    	if int(self.batch_size) < 0 or self.batch_size == '':
+    		self.logs.append("Batch size must be positive")
+    		return False
+    	if int(self.savefreq) < 0 or self.savefreq == '':
+    		self.logs.append("Frequency number must be positive")
+    		return False
+    	return True
 
     def saveEnvironment(self):
         if self.correctValues():

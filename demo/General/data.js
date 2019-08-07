@@ -51,4 +51,6 @@ function loadEnvironment(algorithm, environment="current", counter) {
 	env["numAgents"] = parseInt(csvData[6][0]);
 	env["epochs"] = parseInt(csvData[7][0]);
 	env["visibleRad"] = parseInt(csvData[8][0]);
+	env["min_wall"] = parseInt(csvData[9][0]);
+	env["max_wall"] = parseInt(csvData[9][1]);
 }

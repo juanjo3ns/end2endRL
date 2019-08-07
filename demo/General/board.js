@@ -7,9 +7,11 @@ var cell_dimension = 10;
 var ini_x,ini_z, height, width;
 
 function colorTransform(value){
-  var min = -1;
-  var unit = 1.5;
-  var norm = (value - min)/unit;
+  var norm = 0;
+  var unit = env["max_wall"]-env["min_wall"];
+  if (unit!==0){
+    norm = (value - env["min_wall"])/unit;
+  }
   return [1-norm, norm]
 }
 

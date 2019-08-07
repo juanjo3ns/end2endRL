@@ -6,6 +6,7 @@ class InputBox:
 
     def __init__(self, screen, x, y, w, h, text=''):
         self.screen = screen
+        self.pos = x,y
         self.rect = pygame.Rect(x, y, w, h)
         self.color = c.COLOR_INACTIVE
         self.text = text
