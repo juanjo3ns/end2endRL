@@ -12,3 +12,4 @@ imageio
 pandas
 tensorboardX
 pygame
+clipboard

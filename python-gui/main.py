@@ -10,7 +10,9 @@ from random import random
 import src.bridge as bdg
 import copy
 import shutil
+import clipboard
 pygame.init()
+pygame.display.set_caption('End2EndRL')
 
 X = 1200  # screen width
 Y = 800  # screen height
@@ -114,42 +116,62 @@ def generalActions(args):
 			for e in env_buttons:
 				if e.txt == config.version:
 					exists = True
+					logs.append("Environment updated!")
 			if not exists:
 				env_buttons.append(Button(screen, config.version, (env_x_files + 64, step_files*(counter_files+1) + env_y_files), loadEnv, size=(200,32), font_size=25))
 			counter_files += 1
 	elif args == 'TRAIN':
 		if config.saveweights and os.path.exists(os.path.join(weights_path, config.alg, config.version)):
-			print("Weights already exist for this experiment.")
+			logs.append("Weights already exist for this experiment.")
 		elif config.tensorboard and os.path.exists(os.path.join(tensor_path, config.alg, config.version)):
-			print("Tensorboard logs already exist for this experiment.")
+			logs.append("Tensorboard logs already exist for this experiment.")
 		else:
-			print("Open {} to check tensorboard logs in your browser.".format("localhost:6006"))
+			logs.append("Copied {} to clipboard. Paste it in the browser to see the logs.".format("localhost:6006"))
+			clipboard.copy("localhost:6006")
 			conf = config.getJSONData()
 			new_dict = copy.deepcopy(conf)
 			bdg.train(new_dict)
 	elif args == 'EVAL':
 		if os.path.exists(os.path.join(data_path, config.alg, config.version)):
-			print("CSV files already exist for this experiment.")
+			logs.append("CSV files already exist for this experiment.")
+		elif not os.path.exists(os.path.join(weights_path, config.alg, config.version)):
+			logs.append("There are no weights for this version! Make sure to save environment with save weights CheckBox and then train it.")
 		else:
 			conf = config.getJSONData()
 			new_dict = copy.deepcopy(conf)
 			bdg.eval(new_dict)
+			logs.append("Generated csv files.")
+			shutil.rmtree(os.path.join(weights_path, config.alg, config.version))
+			logs.append("Deleted weights to free up disk space.")
+
 	elif args == 'DEL':
 		for e in env_buttons:
 			if e.txt == config.version and e.hit:
 				config.removeEnvironment()
+				logs.append("Deleted json file.")
 				env_buttons.remove(e)
 				counter_files -= 1
 				for i, e in enumerate(env_buttons):
 					e.rect = e.surface.get_rect(center=(env_x_files + 64, step_files*(i+1) + env_y_files))
 				clearGrid(args)
+				for path in [weights_path, tensor_path, data_path]:
+					if os.path.exists(os.path.join(path, config.alg, config.version)):
+						shutil.rmtree(os.path.join(path, config.alg, config.version))
+						logs.append("Deleted {}.".format(path.split('/')[3]))
+
 
 	elif args == '3D':
-		if os.path.exists(os.path.join(data_path, config.alg, 'current')):
-			shutil.rmtree(os.path.join(data_path, config.alg, 'current'))
-		shutil.copytree(os.path.join(data_path, config.alg, config.version), os.path.join(data_path, config.alg, 'current'))
-		print("Files generated!")
-		print("Open {} in your host browser.".format(os.path.join(host_path, 'demo', config.alg, 'index.html')))
+		if not os.path.exists(os.path.join(data_path, config.alg, config.version)):
+			logs.append("There are no CSV files stored. Make sure to evaluate the environment.")
+		else:
+			if os.path.exists(os.path.join(data_path, config.alg, 'current')):
+				shutil.rmtree(os.path.join(data_path, config.alg, 'current'))
+			shutil.copytree(os.path.join(data_path, config.alg, config.version), os.path.join(data_path, config.alg, 'current'))
+			logs.clear()
+			logs.append("3D representation is ready!")
+			logs.append("Copied path to CLIPBOARD.")
+			logs.append("Just paste it in the browser!")
+			clipboard.copy(os.path.join(host_path, 'demo', config.alg, 'index.html'))
 
 def setDefaults(iters, savf, maxwall, nagents, h):
 	global iterations, savefreq, max_wall, numAgents, health

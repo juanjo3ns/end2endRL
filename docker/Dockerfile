@@ -5,7 +5,8 @@ RUN apt update -y; apt install -y \
 	libxext6 \
 	libxrender-dev \
 	python3 \
-	python3-pip
+	python3-pip \
+	xsel
 
 RUN python3 -m pip install --upgrade pip
 
