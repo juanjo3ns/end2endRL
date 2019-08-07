@@ -11,6 +11,7 @@ import src.bridge as bdg
 import copy
 import shutil
 import clipboard
+import threading
 pygame.init()
 pygame.display.set_caption('End2EndRL')
 
@@ -117,6 +118,8 @@ def generalActions(args):
 				if e.txt == config.version:
 					exists = True
 					logs.append("Environment updated!")
+					if not e.hit:
+						e.hit = True
 			if not exists:
 				env_buttons.append(Button(screen, config.version, (env_x_files + 64, step_files*(counter_files+1) + env_y_files), loadEnv, size=(200,32), font_size=25))
 			counter_files += 1
@@ -128,9 +131,13 @@ def generalActions(args):
 		else:
 			logs.append("Copied {} to clipboard. Paste it in the browser to see the logs.".format("localhost:6006"))
 			clipboard.copy("localhost:6006")
+			logs.append("TRAINING IN BACKGROUND...")
 			conf = config.getJSONData()
 			new_dict = copy.deepcopy(conf)
-			bdg.train(new_dict)
+
+			thead = threading.Thread(target = bdg.train, args = (new_dict,))
+			thead.start()
+			# bdg.train(new_dict)
 	elif args == 'EVAL':
 		if os.path.exists(os.path.join(data_path, config.alg, config.version)):
 			logs.append("CSV files already exist for this experiment.")
@@ -187,11 +194,11 @@ def updateAlg(alg):
 	version.text = alg + '.' + version.text.split('.')[1] + '.' + version.text.split('.')[2]
 	version.txt_surface = version.font.render(version.text, True, version.color)
 	if alg == "DQN":
-		setDefaults(config.height*config.width*100, config.height*config.width*10, -1, 1, config.height*config.width/5)
+		setDefaults(config.height*config.width*100, config.height*config.width*10, -1.0, 1, config.height*config.width/5)
 		logs.clear()
 		logs.append("Default values set! Feel free to customize the environment and parameters.")
 	elif alg == "GA":
-		setDefaults(config.height*config.width*5, 20, -1, 100, 1)
+		setDefaults(config.height*config.width*5, 20, -1.0, 100, 1)
 		logs.clear()
 		logs.append("Do not forget to customize the number of agents, the percentage of selection and the variance.")
 	elif alg == "PGM" or alg == "A2C":
@@ -245,8 +252,8 @@ numwalls = InputBox(screen, xcol1, step*3 + 200, 50, step-10, "15")
 visibleRad = InputBox(screen, xcol1, step*4 + 200, 50, step-10, "1")
 savefreq = InputBox(screen, xcol1, step*6 + 200, 50, step-10, "1000")
 normal_reward = InputBox(screen, xcol1, step*7 + 200, 50, step-10, "-0.04")
-min_wall = InputBox(screen, xcol1, step*8 + 200, 50, step-10, "-1")
-max_wall = InputBox(screen, xcol1, step*9 + 200, 50, step-10, "0")
+min_wall = InputBox(screen, xcol1, step*8 + 200, 50, step-10, "-1.0")
+max_wall = InputBox(screen, xcol1, step*9 + 200, 50, step-10, "0.0")
 tensorboard = CheckBox(screen, (xcol1+20, step*2+205))
 saveweights = CheckBox(screen, (xcol1+20, step*5+205))
 tensorboard.hit = True
