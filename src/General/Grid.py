@@ -26,11 +26,16 @@ class Grid:
 		self.padded_x = self.height +2*self.visibleRad
 		self.padded_y = self.width +2*self.visibleRad
 		self.grid = np.zeros((self.padded_x, self.padded_y))
-
-		self.walls = self.formatWalls(data['walls'])
-		self.finalstate = self.formatStates(data['finalstate'])
-		self.initstate = self.formatStates(data['initstate'])
-		self.walls_values = data['walls_values']
+		if data['alg']=="PGM" or data['alg']=="A2C":
+			self.walls = []
+			self.finalstate = []
+			self.initstate = [int(self.padded_x/2), int(self.padded_y/2)]
+			self.walls_values = []
+		else:
+			self.walls = self.formatWalls(data['walls'])
+			self.finalstate = self.formatStates(data['finalstate'])
+			self.initstate = self.formatStates(data['initstate'])
+			self.walls_values = data['walls_values']
 
 
 	def formatWalls(self, walls):
@@ -60,7 +65,7 @@ class Grid:
 			 	(self.visibleRad,self.padded_y-self.visibleRad-1),
 				(self.padded_x-self.visibleRad-1, self.visibleRad),
 				(self.padded_x-self.visibleRad-1,self.padded_y-self.visibleRad-1)])
-			self.finalstate = finalstate
+			self.finalstate = final_state
 		self.grid[self.finalstate[0],self.finalstate[1]] = self.done_reward
 
 	def setWalls(self):

@@ -9,7 +9,7 @@ var environment;
 agents.name = "agents";
 var intervalID;
 var env = {};
-
+var counter = 0;
 var cells;
 var cell_dimension = 10;
 var ini_x,ini_z, height, width;

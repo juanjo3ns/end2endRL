@@ -108,7 +108,7 @@ class Config():
         data['variance'] = float(self.variance)
         data['pos'] = float(self.pos)
         data['walls'] = self.walls
-        data['numwalls'] = self.numwalls
+        data['numwalls'] = int(self.numwalls)
         data['walls_values'] = self.walls_values
         data['finalstate'] = self.finalstate
         data['initstate'] = self.initstate
@@ -141,7 +141,7 @@ class Config():
         self.pos = str(data['pos'])
         self.walls = data['walls']
         self.walls_values = data['walls_values']
-        self.numwalls = data['numwalls']
+        self.numwalls = str(data['numwalls'])
         self.finalstate = data['finalstate']
         self.initstate = data['initstate']
         self.height = data['height']
