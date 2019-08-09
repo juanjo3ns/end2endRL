@@ -108,6 +108,10 @@ def clearGrid(args):
 	initstate = []
 	finalstate = []
 
+def trainCallBack(data, version):
+	bdg.train(data)
+	logs.append("TRAINING {} FINISHED!".format(version))
+
 def generalActions(args):
 	global counter_files
 	if args == 'SAVE':
@@ -128,6 +132,9 @@ def generalActions(args):
 			logs.append("Weights already exist for this experiment.")
 		elif config.tensorboard and os.path.exists(os.path.join(tensor_path, config.alg, config.version)):
 			logs.append("Tensorboard logs already exist for this experiment.")
+		elif threading.active_count()>1:
+			logs.append("There is an experiment already running.")
+			logs.append("Wait until it finishes. Meanwhile you can create or evaluate other environments.")
 		else:
 			logs.append("Copied {} to clipboard. Paste it in the browser to see the logs.".format("localhost:6006"))
 			clipboard.copy("localhost:6006")
@@ -135,7 +142,7 @@ def generalActions(args):
 			conf = config.getJSONData()
 			new_dict = copy.deepcopy(conf)
 
-			thead = threading.Thread(target = bdg.train, args = (new_dict,))
+			thead = threading.Thread(target = trainCallBack, args = [new_dict,config.version])
 			thead.start()
 			# bdg.train(new_dict)
 	elif args == 'EVAL':
