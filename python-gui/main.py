@@ -180,13 +180,14 @@ def generalActions(args):
 			logs.append("Just paste it in the browser!")
 			clipboard.copy(os.path.join(host_path, 'demo', config.alg, 'index.html'))
 
-def setDefaults(iters, savf, maxwall, nagents, h):
-	global iterations, savefreq, max_wall, numAgents, health
+def setDefaults(iters, savf, maxwall, nagents, h, paob):
+	global iterations, savefreq, max_wall, numAgents, health, po
 	iterations.text = str(iters)
 	savefreq.text = str(savf)
 	max_wall.text = str(maxwall)
 	numAgents.text = str(nagents)
 	health.text = str(h)
+	po.hit = paob
 	for t in [iterations, savefreq, max_wall, numAgents, health]:
 		t.txt_surface = t.font.render(t.text, True, t.color)
 
@@ -194,15 +195,15 @@ def updateAlg(alg):
 	version.text = alg + '.' + version.text.split('.')[1] + '.' + version.text.split('.')[2]
 	version.txt_surface = version.font.render(version.text, True, version.color)
 	if alg == "DQN":
-		setDefaults(config.height*config.width*100, config.height*config.width*10, -1.0, 1, config.height*config.width/5)
+		setDefaults(config.height*config.width*100, config.height*config.width*10, -1.0, 1, config.height*config.width/5, False)
 		logs.clear()
 		logs.append("Default values set! Feel free to customize the environment and parameters.")
 	elif alg == "GA":
-		setDefaults(config.height*config.width*5, 20, -1.0, 100, 1)
+		setDefaults(config.height*config.width*5, 20, -1.0, 100, 1, False)
 		logs.clear()
 		logs.append("Do not forget to customize the number of agents, the percentage of selection and the variance.")
 	elif alg == "PGM" or alg == "A2C":
-		setDefaults(300000, 10000, 0, 1, 1)
+		setDefaults(300000, 10000, 0.5, 1, 1, True)
 		logs.append("With this algorithm you cannot select the values neither the positions of the walls!")
 		logs.append("It is possible to teach an agent to perform in any environment.")
 		logs.append("The init state is in the middle of the grid and the final state is in a random corner.")

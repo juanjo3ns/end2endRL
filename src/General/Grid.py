@@ -70,11 +70,16 @@ class Grid:
 
 	def setWalls(self):
 		if self.alg == 'PGM' or self.alg == 'A2C':
+			self.walls.clear()
+			self.walls_values.clear()
 			for i in range(self.numwalls):
 				pos = [randint(self.visibleRad, self.padded_x-self.visibleRad-1),
 						randint(self.visibleRad, self.padded_x-self.visibleRad-1)]
-				if not pos == self.initstate and not pos == self.finalstate:
-					self.grid[pos[0], pos[1]] = random()*(self.max_wall-self.min_wall) + self.min_wall
+				if not pos == self.initstate and not pos == list(self.finalstate):
+					value = random()*(self.max_wall-self.min_wall) + self.min_wall
+					self.grid[pos[0], pos[1]] = value
+					self.walls.append(pos)
+					self.walls_values.append(value)
 		else:
 			for i, w in enumerate(self.walls):
 				self.grid[w[0],w[1]] = self.walls_values[i]
