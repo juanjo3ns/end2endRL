@@ -148,7 +148,7 @@ class Environment:
 				self.writer.add_scalar('Variance', self.ga.sigma, self.ga.mutation)
 				self.writer.add_scalar('Survivals', won/self.ga.numAgents, self.ga.mutation)
 				self.writer.add_scalar('Epsilon', self.getEps(it), self.ga.mutation)
-			elif self.alg=="PGM" or self.alg=="A2C":
+			elif self.alg=="RWB" or self.alg=="A2C":
 				self.writer.add_scalar('Fruits', self.agents[0].fruits, it)
 				self.writer.add_scalar('Loss', self.agents[0].loss, it)
 				self.writer.add_scalar('Movements', self.agents[0].movements, it)
@@ -207,7 +207,7 @@ class Environment:
 					reward = self.takeActionGA(agent, action)
 
 				# REINFORCE WITH BASELINE
-				elif self.alg=="PGM":
+				elif self.alg=="RWB":
 					action, log_action, value = self.reinforce.selectAction(output)
 					reward = self.takeAction(agent, self.actions[int(action)])
 					self.reinforce.append(agent, value, log_action, reward)
@@ -265,7 +265,7 @@ class Environment:
 		value = self.grid.grid[nextState[0],nextState[1]]
 		if value != self.grid.edge_value and value != self.grid.done_reward and value > 0:
 			self.grid.grid[nextState[0],nextState[1]] = 0
-		if self.alg == "A2C" or self.alg == "PGM":
+		if self.alg == "A2C" or self.alg == "RWB":
 			self.grid.grid[nextState[0],nextState[1]] = 0
 		agent.health += self.grid.normal_reward
 		agent.health += value
@@ -286,7 +286,7 @@ class Environment:
 		elif lost: reward = -1
 		else:
 			reward = value
-			if value == 0 and not self.alg=="PGM" and not self.alg=="A2C":
+			if value == 0 and not self.alg=="RWB" and not self.alg=="A2C":
 				reward = self.grid.normal_reward
 
 		agent.totalreward += reward
@@ -345,7 +345,7 @@ class Environment:
 	def evalStep(self, agent):
 		env = self.grid.getEnvironment(agent.state).astype(np.float32)
 		output = agent.forward(env)
-		if self.alg=="PGM":
+		if self.alg=="RWB":
 			act, log_action, value = self.reinforce.selectAction(output)
 			action = self.actions[int(act)]
 		else:

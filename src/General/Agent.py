@@ -91,7 +91,7 @@ class Agent:
 			self.loss_fn = torch.nn.MSELoss()
 		if self.alg=="GA":
 			self.nn = QNet(self.channels, h, w)
-		if self.alg=="PGM":
+		if self.alg=="RWB":
 			self.nn = PolicyNet(h, w)
 			self.optim = torch.optim.Adam(self.nn.parameters(), lr=self.alpha_nn, weight_decay=self.weight_decay)
 			self.loss_fn = torch.nn.MSELoss()
@@ -123,7 +123,7 @@ class Agent:
 		self.fruits = 0
 
 	def forward(self, env, it=0):
-		if self.alg=="PGM" or self.alg=="A2C":
+		if self.alg=="RWB" or self.alg=="A2C":
 			x = (self.state[0] - self.visibleRad) / self.height
 			y = (self.state[1] - self.visibleRad) / self.width
 			env = env.flatten()

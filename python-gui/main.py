@@ -209,7 +209,7 @@ def updateAlg(alg):
 		setDefaults(config.height*config.width*5, 20, -1.0, 100, 1, False)
 		logs.clear()
 		logs.append("Do not forget to customize the number of agents, the percentage of selection and the variance.")
-	elif alg == "PGM" or alg == "A2C":
+	elif alg == "RWB" or alg == "A2C":
 		setDefaults(300000, 10000, 0.5, 1, 1, True)
 		logs.append("With this algorithm you cannot select the values neither the positions of the walls!")
 		logs.append("It is possible to teach an agent to perform in any environment.")
@@ -231,7 +231,7 @@ wallb.hit = True
 
 dqn = Button(screen, "DQN", (x_alg, y_alg), updateAlg)
 ga = Button(screen, "GA", (x_alg+step, y_alg), updateAlg)
-rwb = Button(screen, "PGM", (x_alg+2*step, y_alg), updateAlg)
+rwb = Button(screen, "RWB", (x_alg+2*step, y_alg), updateAlg)
 a2c = Button(screen, "A2C", (x_alg+3*step, y_alg), updateAlg)
 algorithms = [dqn,ga, rwb, a2c]
 dqn.hit = True

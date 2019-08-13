@@ -12,4 +12,3 @@ RUN python3 -m pip install --upgrade pip
 
 ADD ./requirements.txt .
 RUN pip3 install -r requirements.txt
-RUN pip3 install tqdm

@@ -9,7 +9,7 @@ from src.General.Grid import Grid
 
 DQN = "DQN"
 GA = "GA"
-PGM = "PGM"
+RWB = "RWB"
 
 def initializeEnv(data):
 	grid = Grid(data)
@@ -50,7 +50,7 @@ def train(data):
 		elif data['alg']==GA:
 			env.env_geneticalgorithms(it)
 
-		elif data['alg']==PGM:
+		elif data['alg']==RWB:
 			rewards, won = env.env_reinforce()
 
 		env.logs(it)

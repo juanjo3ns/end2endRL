@@ -26,7 +26,7 @@ class Grid:
 		self.padded_x = self.height +2*self.visibleRad
 		self.padded_y = self.width +2*self.visibleRad
 		self.grid = np.zeros((self.padded_x, self.padded_y))
-		if data['alg']=="PGM" or data['alg']=="A2C":
+		if data['alg']=="RWB" or data['alg']=="A2C":
 			self.walls = []
 			self.finalstate = []
 			self.initstate = [int(self.padded_x/2), int(self.padded_y/2)]

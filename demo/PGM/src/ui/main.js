@@ -2,7 +2,7 @@ var renderer, scene, camera;
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
 var root;
-var algorithm = "PGM";
+var algorithm = "RWB";
 var environment;
 var laststep;
 var intervalID;
