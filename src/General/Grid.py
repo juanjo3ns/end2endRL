@@ -60,7 +60,7 @@ class Grid:
 
 
 	def setFinalState(self):
-		if self.alg == 'PGM' or self.alg == 'A2C':
+		if self.alg == 'RWB' or self.alg == 'A2C':
 			final_state = choice([(self.visibleRad, self.visibleRad),
 			 	(self.visibleRad,self.padded_y-self.visibleRad-1),
 				(self.padded_x-self.visibleRad-1, self.visibleRad),
@@ -69,7 +69,7 @@ class Grid:
 		self.grid[self.finalstate[0],self.finalstate[1]] = self.done_reward
 
 	def setWalls(self):
-		if self.alg == 'PGM' or self.alg == 'A2C':
+		if self.alg == 'RWB' or self.alg == 'A2C':
 			self.walls.clear()
 			self.walls_values.clear()
 			for i in range(self.numwalls):

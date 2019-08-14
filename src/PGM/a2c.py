@@ -44,7 +44,7 @@ optimPolicy = torch.optim.Adam(Policy.parameters(), lr=board.alpha_actor)
 optimV = torch.optim.Adam(V.parameters(), lr=board.alpha_critic)
 loss_fn = torch.nn.MSELoss()
 
-path_out = "/data/src/tensorboard/PGM/" + board.version
+path_out = "/data/src/tensorboard/RWB/" + board.version
 configure(path_out, flush_secs=5)
 
 # Folder to store weights, if it doesn't exists create it

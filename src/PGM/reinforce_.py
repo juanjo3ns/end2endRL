@@ -43,7 +43,7 @@ optimPolicy = torch.optim.Adam(Policy.parameters(), lr=board.alpha_nn)
 loss_fn = torch.nn.MSELoss()
 eps = np.finfo(np.float32).eps.item()
 
-path_out = "/data/src/tensorboard/PGM/" + board.version
+path_out = "/data/src/tensorboard/RWB/" + board.version
 configure(path_out, flush_secs=5)
 
 # Folder to store weights, if it doesn't exists create it

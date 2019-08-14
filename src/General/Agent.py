@@ -36,7 +36,7 @@ class Agent:
 		# CUSTOM PARAMETERS
 		self.visibleRad = visibleRad
 		self.po = po
-		self.alg = alg # Indicates wether DQN, GA or PGM
+		self.alg = alg # Indicates wether DQN, GA or RWB
 		self.channels = channels
 		# Environment shape, useful for neural network
 		self.height = height
@@ -56,7 +56,7 @@ class Agent:
 		# BUFFER INITIALIZATION FOR DQN VARIANTS
 		self.buffer = Buffer(size=20000, batch_size=self.batch_size)
 
-		# LISTS INITIALIZATION FOR PGM
+		# LISTS INITIALIZATION FOR RWB
 		self.baselines = list()
 		self.rewards = list()
 		self.actions = list()

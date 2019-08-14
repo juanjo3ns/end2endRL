@@ -57,7 +57,9 @@ def eval():
 
 @app.route('/del')
 def delete():
-	return 0
+	version = request.args.get('version')
+	removeEnvironment(version)
+	return jsonify("All files related to {} deleted!".format(version))
 
 @app.route('/threed')
 def threed():
@@ -80,7 +82,7 @@ def showga():
 
 @app.route('/threedpgm')
 def showpgm():
-	return render_template('PGM/index.html', title='3D')
+	return render_template('RWB/index.html', title='3D')
 
 @app.route('/threedac')
 def showac():

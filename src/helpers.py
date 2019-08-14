@@ -2,6 +2,8 @@ import json
 import os
 from IPython import embed
 import copy
+import shutil
+
 
 envs_path = '/data/envs'
 data_path = '/data/src/templates/csvdata/'
@@ -72,7 +74,13 @@ def checkingEval(data):
 	return True, "Evaluation finished!"
 
 def checkingThreed(algorithm, version):
-	print(os.path.join(data_path, algorithm, version))
 	if not os.path.exists(os.path.join(data_path, algorithm, version)):
 		return False, "There are no CSV files stored. Make sure to evaluate the environment."
 	return True, "Openning new tab..."
+
+def removeEnvironment(version):
+	algorithm = version.split('.')[0]
+	os.remove(os.path.join('../envs', version + '.json'))
+	for path in [weights_path, tensor_path, data_path]:
+		if os.path.exists(os.path.join(path, algorithm, version)):
+			shutil.rmtree(os.path.join(path, algorithm, version))
