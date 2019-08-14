@@ -4,6 +4,9 @@ from IPython import embed
 import copy
 
 envs_path = '/data/envs'
+data_path = '/data/demo/csvdata/'
+weights_path = '/data/src/weights/'
+tensor_path = '/data/src/tensorboard/'
 
 def getData(version):
     with open(os.path.join(envs_path, version), 'r') as f:
@@ -14,20 +17,35 @@ def getDataTraining(version):
     with open(os.path.join(envs_path, version), 'r') as f:
         raw_data = json.load(f)
     data = copy.deepcopy(raw_data)
-    data['batch_size'] = data['batch_size']['value']
-    data['variance'] = data['variance']['value']
+    data['batch_size'] = int(data['batch_size']['value'])
+    data['variance'] = float(data['variance']['value'])
     data['po'] = data['po']['value']
-    data['numwalls'] = data['numwalls']['value']
+    data['numwalls'] = int(data['numwalls']['value'])
+    data['iterations'] = int(data['iterations'])
+    data['savefreq'] = int(data['savefreq'])
+    data['visibleRad'] = int(data['visibleRad'])
+    data['normal_reward'] = float(data['normal_reward'])
+    data['min_wall'] = float(data['min_wall'])
+    data['max_wall'] = float(data['max_wall'])
+    data['seed'] = int(data['seed'])
+    data['done_reward'] = int(data['done_reward'])
+    data['edge_value'] = int(data['edge_value'])
+    data['numAgents'] = int(data['numAgents'])
+    data['epsmax'] = float(data['epsmax'])
+    data['epsmin'] = float(data['epsmin'])
+    data['pos'] = float(data['pos']['value'])
+    data['health'] = int(data['health'])
+
     new_walls = []
+
     for walls in data['walls']:
         new_walls.append([int(walls.split('-')[0]),int(walls.split('-')[1])])
     data['walls'] = new_walls
     data['initstate'] = [int(data['initstate'][0].split('-')[0]), int(data['initstate'][0].split('-')[1])]
     data['finalstate'] = [int(data['finalstate'][0].split('-')[0]), int(data['finalstate'][0].split('-')[1])]
+    data['walls_values'] = [float(w) for w in data['walls_values']]
     data['height'] = data['height']
     data['width'] = data['width']
-
-    print(data)
     return data
 
 def saveData(data):
@@ -36,3 +54,19 @@ def saveData(data):
 
 def getVersions():
     return os.listdir(envs_path)
+
+def checkingTrain(active_threads, data):
+    if data['saveweights'] and os.path.exists(os.path.join(weights_path, data['alg'], data['version'])):
+        return False, "Weights already exist for this experiment."
+    elif data['tensorboard'] and os.path.exists(os.path.join(tensor_path, data['alg'], data['version'])):
+        return False, "Tensorboard logs already exist for this experiment."
+    elif active_threads > 3:
+        return False, "Someone is already training..."
+    return True, "Training started!"
+
+def checkingEval(data):
+    if os.path.exists(os.path.join(data_path, data['alg'], data['version'])):
+        return False, "CSV files already exist for this experiment."
+    elif not os.path.exists(os.path.join(weights_path, data['alg'], data['version'])):
+        return False, "There are no weights for this version! Make sure to save environment with save weights CheckBox and then train it."
+    return True, "Evaluation finished!"
