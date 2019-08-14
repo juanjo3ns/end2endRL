@@ -129,7 +129,7 @@ class Environment:
 				self.writer.add_scalar('Reward', self.agents[0].totalreward, it)
 				self.writer.add_scalar('Epsilon', self.getEps(it), it)
 				# self.writer.add_scalar('Fruits', self.agents[0].fruits, it)
-				self.addFigs(it, self.agents[0], 2000)
+				self.addFigs(it, self.agents[0], self.save_freq)
 			elif self.alg=="GA":
 				h = []
 				won=0

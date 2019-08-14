@@ -38,6 +38,7 @@ def add():
 def train():
 	version = request.args.get('version')
 	data = getDataTraining(version)
+	print(threading.active_count())
 	able, comment = checkingTrain(threading.active_count(), data)
 	if able:
 		thead = threading.Thread(target = bdg.train, args = (data,))
@@ -61,6 +62,14 @@ def delete():
 	removeEnvironment(version)
 	return jsonify("All files related to {} deleted!".format(version))
 
+@app.route('/threedlist')
+def threedlist():
+	versions = getVersions()
+	threelist = []
+	for v in versions:
+		threelist.append(os.path.exists(os.path.join(data_path, v.split('.')[0], v.split('.json')[0])))
+	return jsonify(threelist)
+	
 @app.route('/threed')
 def threed():
 	algorithm = request.args.get('algorithm')
@@ -70,7 +79,7 @@ def threed():
 		if os.path.exists(os.path.join(data_path, algorithm, 'current')):
 			shutil.rmtree(os.path.join(data_path, algorithm, 'current'))
 		shutil.copytree(os.path.join(data_path, algorithm, version), os.path.join(data_path, algorithm, 'current'))
-	return jsonify(comment)
+	return jsonify({'comment': comment, 'exists': able})
 
 @app.route('/threeddqn')
 def showdqn():
