@@ -18,8 +18,8 @@ class Grid:
 			self.edge_value = -10*data['health']
 
 		# GRID
-		self.height = data['width']
-		self.width = data['height']
+		self.height = data['height']
+		self.width = data['width']
 		self.numwalls = data['numwalls']
 
 		self.visibleRad = data['visibleRad']

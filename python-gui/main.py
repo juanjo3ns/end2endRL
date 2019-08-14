@@ -17,7 +17,7 @@ pygame.display.set_caption('End2EndRL')
 
 X = 1200  # screen width
 Y = 800  # screen height
-data_path = '/data/demo/csvdata/'
+data_path = '/data/src/templates/csvdata/'
 weights_path = '/data/src/weights/'
 tensor_path = '/data/src/tensorboard/'
 host_path = os.environ['HOST_PATH']

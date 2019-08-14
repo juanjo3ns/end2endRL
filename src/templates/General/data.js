@@ -6,7 +6,7 @@ function changeCSV(epoch) {
 }
 
 function getURL(algorithm, environment, agent, type, epoch) {
-	base = "../csvdata/".concat(algorithm).concat('/').concat(environment).concat('/');
+	base = "/path/templates/csvdata/".concat(algorithm).concat('/').concat(environment).concat('/');
 	return base.concat(agent).concat('/').concat(type).concat('/').concat(epoch).concat('.csv');
 }
 

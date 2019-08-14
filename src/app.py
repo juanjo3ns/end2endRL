@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, send_file
 import threading
 from helpers import *
 import bridge as bdg
@@ -10,15 +10,11 @@ import shutil
 app = Flask(__name__)
 
 envs_path = '/data/envs'
-data_path = '/data/demo/csvdata/'
+data_path = '/data/src/templates/csvdata/'
 weights_path = '/data/src/weights/'
 tensor_path = '/data/src/tensorboard/'
 
 cors = CORS(app)
-
-@app.route('/')
-def index():
-	return 'Index Page'
 
 
 @app.route('/envs', methods=['GET', 'POST', 'PUT'])
@@ -65,6 +61,34 @@ def delete():
 
 @app.route('/threed')
 def threed():
-	return 0
+	algorithm = request.args.get('algorithm')
+	version = request.args.get('version')
+	able, comment = checkingThreed(algorithm, version)
+	if able:
+		if os.path.exists(os.path.join(data_path, algorithm, 'current')):
+			shutil.rmtree(os.path.join(data_path, algorithm, 'current'))
+		shutil.copytree(os.path.join(data_path, algorithm, version), os.path.join(data_path, algorithm, 'current'))
+	return jsonify(comment)
+
+@app.route('/threeddqn')
+def showdqn():
+	return render_template('DQN/index.html', title='3D')
+
+@app.route('/threedga')
+def showga():
+	return render_template('GA/index.html', title='3D')
+
+@app.route('/threedpgm')
+def showpgm():
+	return render_template('PGM/index.html', title='3D')
+
+@app.route('/threedac')
+def showac():
+	return render_template('A2C/index.html', title='3D')
+
+@app.route('/path/<path:subpath>')
+def show_subpath(subpath):
+	return send_file(subpath)
+
 
 app.run(host='0.0.0.0', port=5000, debug=True)

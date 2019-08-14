@@ -3,7 +3,7 @@ import os
 
 class CSV:
 	def __init__(self,algorithm, env, agent, type, file):
-		self.path = '/data/demo/csvdata'
+		self.path = '/data/src/templates/csvdata'
 		if not os.path.exists(self.path):
 			os.mkdir(self.path)
 		if not os.path.exists(os.path.join(self.path, algorithm)):

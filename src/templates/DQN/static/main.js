@@ -17,7 +17,6 @@ var env_set = false;
 var epoch;
 
 
-
 init();
 animate();
 
