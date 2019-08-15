@@ -25,6 +25,19 @@ services:
     runtime: nvidia
     # command: flask run
     command: tail /dev/null -f
+  frontend:
+    image: react
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: ./Dockerfile_frontend
+    volumes:
+      - '../js-gui:/app'
+      - '/app/node_modules'
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
   tensorboard:
     image: tensorflow/tensorflow
     container_name: tensorboard
