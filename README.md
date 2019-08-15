@@ -13,5 +13,5 @@ This is the easiest framework to play with RL:
   7. Time to see the 3D representation! Just click the yellow 3D button an enjoy the learning process of your BB8.
 
 
-##  2. Algorithms
+## Algorithms
 Currently we have only 4 algorithms available: Double DQN, Custom Genetic Algorithm, REINFORCE w/baseline and Actor-Critic. Take in consideration that every algorithm requires different parameters. Take the default values as reference and then make all the desired changes.
