@@ -8,7 +8,7 @@ from flask_cors import CORS
 import shutil
 
 app = Flask(__name__)
-
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 envs_path = '/data/envs'
 data_path = '/data/src/templates/csvdata/'
 weights_path = '/data/src/weights/'
@@ -33,6 +33,17 @@ def add():
 		saveData(data)
 		return jsonify(getVersions())
 
+@app.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
 
 @app.route('/train')
 def train():
@@ -69,7 +80,7 @@ def threedlist():
 	for v in versions:
 		threelist.append(os.path.exists(os.path.join(data_path, v.split('.')[0], v.split('.json')[0])))
 	return jsonify(threelist)
-	
+
 @app.route('/threed')
 def threed():
 	algorithm = request.args.get('algorithm')

@@ -39,7 +39,7 @@ class Environments extends Component {
   renderItem(listitem, index){
     return(
       <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-        <div><span>{listitem}</span></div>
+        <div onClick={this.loadEnv.bind(this)}><span>{listitem}</span></div>
         {this.renderThreed(index)}
       </div>
     );
@@ -53,8 +53,7 @@ class Environments extends Component {
            <li
             key={listitem}
             className={"list-group-item"}
-            style={this.getStyle(listitem)}
-            onClick={this.loadEnv.bind(this)}>
+            style={this.getStyle(listitem)}>
              {this.renderItem(listitem,index)}
            </li>
          ))}
