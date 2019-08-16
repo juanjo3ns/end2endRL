@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 import toaster from 'toasted-notes';
 import 'toasted-notes/src/styles.css';
 import Parameters from './components/Parameters';
@@ -65,6 +66,21 @@ class App extends Component {
     this.checkActiveEnv(this.props.handleDel);
   }
 
+  renderProgress(){
+    const { training, progress, interval } = this.props;
+    if (100 === parseInt(progress)){
+        clearInterval(interval);
+    }
+    if (training){
+      return(
+        <div>
+          <span>{training} training...</span>
+          <ProgressBar animated now={progress} />
+        </div>
+      );
+    }
+  }
+
   render(){
     return (
       <div className="App" style={{ display: 'flex', justifyContent: 'space-around' }}>
@@ -90,8 +106,9 @@ class App extends Component {
           <Button variant="danger" onClick={this.onClickDel.bind(this)} size="lg">DELETE</Button>
         </ButtonToolbar>
         </div>
-        <div>
+        <div style={{ height: '100%', justifyContent: 'space-between' }}>
         <Environments/>
+        {this.renderProgress()}
         </div>
       </div>
       </div>
@@ -111,9 +128,9 @@ const Boxes = {
 }
 
 const mapStateToProps = ({ generalbuttons, formValues, environments }) => {
-  const { cell, walls, initstate, finalstate, walls_values } = generalbuttons;
+  const { cell, walls, initstate, finalstate, walls_values, training, progress, interval } = generalbuttons;
   const { activenv } = environments;
-  return { cell, formValues , walls, initstate, finalstate, walls_values, activenv };
+  return { cell, formValues , walls, initstate, finalstate, walls_values, activenv, training, progress, interval };
 }
 
 export default connect(mapStateToProps, {

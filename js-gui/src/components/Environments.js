@@ -65,7 +65,6 @@ class Environments extends Component {
 }
 
 const rootView = {
-  height: "900px",
   width: "400px",
   display: "flex",
   flexDirection: "column",

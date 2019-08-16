@@ -16,6 +16,15 @@ tensor_path = '/data/src/tensorboard/'
 
 cors = CORS(app)
 
+class Config:
+	def __init__(self):
+		self.counter = 0
+		self.thread = None
+	def reset(self):
+		self.counter = 0
+		self.thread = None
+
+config = Config()
 
 @app.route('/envs', methods=['GET', 'POST', 'PUT'])
 def add():
@@ -35,26 +44,43 @@ def add():
 
 @app.after_request
 def add_header(r):
-    """
-    Add headers to both force latest IE rendering engine or Chrome Frame,
-    and also to cache the rendered page for 10 minutes.
-    """
-    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    r.headers["Pragma"] = "no-cache"
-    r.headers["Expires"] = "0"
-    r.headers['Cache-Control'] = 'public, max-age=0'
-    return r
+	"""
+	Add headers to both force latest IE rendering engine or Chrome Frame,
+	and also to cache the rendered page for 10 minutes.
+	"""
+	r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+	r.headers["Pragma"] = "no-cache"
+	r.headers["Expires"] = "0"
+	r.headers['Cache-Control'] = 'public, max-age=0'
+	return r
+
+@app.route('/progress')
+def progress():
+	value = config.counter
+	if config.counter >= 100:
+		config.thread.join()
+		config.reset()
+	return jsonify(value)
+
+@app.route('/kill')
+def kill():
+	comment = 'No training in progress!'
+	if not config.thread is None:
+		config.thread.raise_exception()
+		config.thread.join()
+		comment = 'Training stopped!'
+	return jsonify(comment)
 
 @app.route('/train')
 def train():
 	version = request.args.get('version')
 	data = getDataTraining(version)
-	print(threading.active_count())
 	able, comment = checkingTrain(threading.active_count(), data)
 	if able:
-		thead = threading.Thread(target = bdg.train, args = (data,))
-		thead.start()
-	return jsonify(comment)
+		config.thread = threading.Thread(target = bdg.train, args = [data, config])
+		config.thread.start()
+
+	return jsonify({'comment': comment, 'training': able})
 
 
 @app.route('/eval')

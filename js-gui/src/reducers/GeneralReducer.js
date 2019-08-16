@@ -3,7 +3,10 @@ import {
     UPDATE_CELL_VALUES,
     RESET_CELL_VALUES,
     MOUSE_OVER,
-    LOAD_WALLS
+    LOAD_WALLS,
+    TRAINING_SUCCESS,
+    SET_INTERVAL,
+    PROGRESS_UPDATE
  } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -12,7 +15,10 @@ const INITIAL_STATE = {
   initstate: [],
   finalstate: [],
   walls_values: [],
-  clicked: false
+  clicked: false,
+  training: '',
+  interval: null,
+  progress: 0
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -26,7 +32,13 @@ export default (state = INITIAL_STATE, action) => {
         case MOUSE_OVER:
             return { ...state, clicked: action.payload }
         case LOAD_WALLS:
-            return { ...state, ...action.payload }
+            return { ...state, ...action.payload };
+        case TRAINING_SUCCESS:
+            return { ...state, training: action.payload };
+        case SET_INTERVAL:
+            return { ...state, interval: action.payload };
+        case PROGRESS_UPDATE:
+            return { ...state, progress: action.payload };
         default:
             return state;
     }

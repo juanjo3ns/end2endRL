@@ -18,3 +18,7 @@ export const RESET_FORM = "reset_form";
 
 export const CHANGE_ACTIVE_ENV = "change_active_env";
 export const MOUSE_OVER = "mouse_over";
+
+export const TRAINING_SUCCESS = 'training_success';
+export const SET_INTERVAL = 'set_interval';
+export const PROGRESS_UPDATE = 'progress_update';

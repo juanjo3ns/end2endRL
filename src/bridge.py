@@ -35,7 +35,7 @@ def initializeEnv(data):
 	return env
 
 
-def train(data):
+def train(data, config):
 	setSeed(data['seed'])
 	env = initializeEnv(data)
 	for it in tqdm(range(data['iterations'])):
@@ -54,6 +54,8 @@ def train(data):
 			rewards, won = env.env_reinforce()
 
 		env.logs(it)
+
+		config.counter = int(100*it/data['iterations'])
 
 	if env.tbX:
 		env.writer.close()

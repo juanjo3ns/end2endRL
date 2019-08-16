@@ -283,7 +283,6 @@ class Environment:
 
 		if won:
 			reward = 1
-			print("won!")
 		elif lost: reward = -1
 		else:
 			reward = value

@@ -7,7 +7,10 @@ import {
 	RESET_FORM,
 	FETCH_ENVS_SUCCES,
 	CHANGE_ACTIVE_ENV,
-	MOUSE_OVER
+	MOUSE_OVER,
+	TRAINING_SUCCESS,
+	SET_INTERVAL,
+	PROGRESS_UPDATE
 } from './types';
 import toaster from 'toasted-notes';
 import 'toasted-notes/src/styles.css';
@@ -83,6 +86,16 @@ export const saveEnv = (formValues, walls, initstate, finalstate, walls_values) 
   }
 };
 
+const requestProgress = () => (dispatch) => {
+	axios.get("http://localhost:5000/progress")
+	.then((response) => {
+		dispatch({
+			type: PROGRESS_UPDATE,
+			payload: response.data
+		});
+	});
+}
+
 export const handleTrain = (version) => (dispatch) => {
 	version = version.concat('.json');
 	axios.get("http://localhost:5000/train", {
@@ -93,14 +106,28 @@ export const handleTrain = (version) => (dispatch) => {
 	.then((response) => {
 	  toaster.notify(() => {
 		return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
-		  <span style={{ fontSize: "20px" }}>{response.data}</span>
+		  <span style={{ fontSize: "20px" }}>{response.data.comment}</span>
 		</div>
 	  )});
 	  toaster.notify(() => {
 		return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
-		  <span style={{ fontSize: "20px" }}>{response.data}</span>
+		  <span style={{ fontSize: "20px" }}>{response.data.comment}</span>
 		</div>
 	  )});
+
+		if (response.data.training){
+			dispatch({
+				type: TRAINING_SUCCESS,
+				payload: version
+			});
+			const interval = setInterval(() => {
+      	requestProgress();
+    	}, 10000);
+			dispatch({
+				type: SET_INTERVAL,
+				payload: interval
+			});
+		}
 
 	});
 }
