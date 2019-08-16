@@ -19,12 +19,13 @@ import {
   handleEval,
   handleThreed,
   handleDel,
-  trainFinished
+  handleStop,
+  trainFinished,
+  requestProgress
 } from './actions';
 
 
 class App extends Component {
-
   onButtonPress() {
       this.props.saveEnv();
   }
@@ -39,7 +40,7 @@ class App extends Component {
     this.props.saveEnv(formValues, walls, initstate, finalstate, walls_values);
   }
   checkActiveEnv(callback){
-    if (this.props.activenv === ''){
+    if (!this.props.activenv){
       toaster.notify(() => {
         return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
           <span style={{ fontSize: "20px" }}>Select environment!</span>
@@ -66,13 +67,16 @@ class App extends Component {
   onClickDel(e){
     this.checkActiveEnv(this.props.handleDel);
   }
-
+  onClickStop(e){
+    this.props.handleStop();
+    this.props.trainFinished();
+    clearInterval(this.props.intervalID)
+  }
   renderProgress(){
     const { training, progress, interval } = this.props;
-    console.log(progress);
     if (100 === parseInt(progress)){
-        clearInterval(interval);
         this.props.trainFinished();
+        clearInterval(this.props.intervalID)
     }
     if (training){
       return(
@@ -112,6 +116,7 @@ class App extends Component {
           <Button variant="primary" onClick={this.onClickTrain.bind(this)} size="lg">TRAIN</Button>
           <Button variant="primary" onClick={this.onClickEval.bind(this)} size="lg">EVAL</Button>
           <Button variant="warning" onClick={this.onClickThreed.bind(this)} size="lg">3D</Button>
+          <Button variant="danger" onClick={this.onClickStop.bind(this)} size="lg">STOP</Button>
           <Button variant="danger" onClick={this.onClickDel.bind(this)} size="lg">DELETE</Button>
         </ButtonToolbar>
         </div>
@@ -146,9 +151,9 @@ const TrainMessage = {
 }
 
 const mapStateToProps = ({ generalbuttons, formValues, environments }) => {
-  const { cell, walls, initstate, finalstate, walls_values, training, progress, interval } = generalbuttons;
+  const { cell, walls, initstate, finalstate, walls_values, training, progress, intervalID } = generalbuttons;
   const { activenv } = environments;
-  return { cell, formValues , walls, initstate, finalstate, walls_values, activenv, training, progress, interval };
+  return { cell, formValues , walls, initstate, finalstate, walls_values, activenv, training, progress, intervalID };
 }
 
 export default connect(mapStateToProps, {
@@ -159,5 +164,7 @@ export default connect(mapStateToProps, {
   handleEval,
   handleThreed,
   handleDel,
-  trainFinished
+  handleStop,
+  trainFinished,
+  requestProgress
 } )(App);

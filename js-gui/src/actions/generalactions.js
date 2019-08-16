@@ -94,7 +94,7 @@ export const trainFinished = () => {
 	}
 }
 
-const requestProgress = (dispatch) => {
+export const requestProgress = (dispatch) => {
 	axios.get("http://localhost:5000/progress")
 	.then((response) => {
 		dispatch({
@@ -117,25 +117,37 @@ export const handleTrain = (version) => (dispatch) => {
 		  <span style={{ fontSize: "20px" }}>{response.data.comment}</span>
 		</div>
 	  )});
-	  toaster.notify(() => {
-		return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
-		  <span style={{ fontSize: "20px" }}>{response.data.comment}</span>
-		</div>
-	  )});
 
 		if (response.data.training){
 			dispatch({
 				type: TRAINING_SUCCESS,
 				payload: version
 			});
-			const interval = setInterval(() => {
+			const intervalID = setInterval(() => {
       	requestProgress(dispatch);
     	}, 5000);
 			dispatch({
 				type: SET_INTERVAL,
-				payload: interval
+				payload: intervalID
 			});
 		}
+
+	});
+}
+
+export const handleStop = () => dispatch => {
+	axios.get("http://localhost:5000/kill")
+	.then((response) => {
+		toaster.notify(() => {
+		return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
+			<span style={{ fontSize: "20px" }}>{response.data}</span>
+		</div>
+		)});
+		toaster.notify(() => {
+		return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
+			<span style={{ fontSize: "20px" }}>{response.data}</span>
+		</div>
+		)});
 
 	});
 }

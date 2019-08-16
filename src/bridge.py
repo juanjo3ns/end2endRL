@@ -57,8 +57,11 @@ def train(data, config):
 
 		config.counter = int(100*(it+1)/data['iterations'])
 
+		if config.stop:
+			break
 	if env.tbX:
 		env.writer.close()
+
 
 def eval(data):
 	setSeed(data['seed'])

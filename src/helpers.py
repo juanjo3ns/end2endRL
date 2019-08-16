@@ -57,12 +57,12 @@ def saveData(data):
 def getVersions():
 	return os.listdir(envs_path)
 
-def checkingTrain(active_threads, data):
+def checkingTrain(config, data):
 	if data['saveweights'] and os.path.exists(os.path.join(weights_path, data['alg'], data['version'])):
 		return False, "Weights already exist for this experiment."
 	elif data['tensorboard'] and os.path.exists(os.path.join(tensor_path, data['alg'], data['version'])):
 		return False, "Tensorboard logs already exist for this experiment."
-	elif active_threads > 3:
+	elif not config.thread is None:
 		return False, "Someone is already training..."
 	return True, "Training started!"
 

@@ -18,7 +18,7 @@ const INITIAL_STATE = {
   walls_values: [],
   clicked: false,
   training: '',
-  interval: null,
+  intervalID: null,
   progress: 0
 };
 
@@ -37,7 +37,7 @@ export default (state = INITIAL_STATE, action) => {
         case TRAINING_SUCCESS:
             return { ...state, training: action.payload };
         case SET_INTERVAL:
-            return { ...state, interval: action.payload };
+            return { ...state, intervalID: action.payload };
         case PROGRESS_UPDATE:
             return { ...state, progress: action.payload };
         case TRAIN_FINISHED:

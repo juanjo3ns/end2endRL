@@ -20,11 +20,22 @@ class Config:
 	def __init__(self):
 		self.counter = 0
 		self.thread = None
+		self.stop = False
 	def reset(self):
 		self.counter = 0
 		self.thread = None
+		self.stop = False
+
 
 config = Config()
+
+@app.after_request
+def add_header(r):
+	r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+	r.headers["Pragma"] = "no-cache"
+	r.headers["Expires"] = "0"
+	r.headers['Cache-Control'] = 'public, max-age=0'
+	return r
 
 @app.route('/envs', methods=['GET', 'POST', 'PUT'])
 def add():
@@ -33,26 +44,12 @@ def add():
 			version = request.args.get('version')
 			return jsonify(getData(version))
 		else:
-			# response = flask.jsonify(getVersions())
-			# response.headers.add('Access-Control-Allow-Origin', '*')
 			return jsonify(getVersions())
-			# return response
 	elif request.method == 'POST' or request.method == 'PUT':
 		data = request.get_json()
 		saveData(data)
 		return jsonify(getVersions())
 
-@app.after_request
-def add_header(r):
-	"""
-	Add headers to both force latest IE rendering engine or Chrome Frame,
-	and also to cache the rendered page for 10 minutes.
-	"""
-	r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-	r.headers["Pragma"] = "no-cache"
-	r.headers["Expires"] = "0"
-	r.headers['Cache-Control'] = 'public, max-age=0'
-	return r
 
 @app.route('/progress')
 def progress():
@@ -66,22 +63,21 @@ def progress():
 def kill():
 	comment = 'No training in progress!'
 	if not config.thread is None:
-		config.thread.raise_exception()
+		config.stop = True
 		config.thread.join()
 		comment = 'Training stopped!'
+		config.reset()
 	return jsonify(comment)
 
 @app.route('/train')
 def train():
 	version = request.args.get('version')
 	data = getDataTraining(version)
-	able, comment = checkingTrain(threading.active_count(), data)
+	able, comment = checkingTrain(config, data)
 	if able:
 		config.thread = threading.Thread(target = bdg.train, args = [data, config])
 		config.thread.start()
-
 	return jsonify({'comment': comment, 'training': able})
-
 
 @app.route('/eval')
 def eval():
