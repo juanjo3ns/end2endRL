@@ -22,7 +22,6 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
     ports:
       - "5000:5000"
-      - "2282:22"
     runtime: nvidia
     # command: flask run
     command: tail /dev/null -f
@@ -37,7 +36,6 @@ services:
       - '/app/node_modules'
     ports:
       - '3000:3000'
-      - '2292:22'
     environment:
       - NODE_ENV=development
   tensorboard:
