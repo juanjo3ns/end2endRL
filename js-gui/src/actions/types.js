@@ -22,3 +22,4 @@ export const MOUSE_OVER = "mouse_over";
 export const TRAINING_SUCCESS = 'training_success';
 export const SET_INTERVAL = 'set_interval';
 export const PROGRESS_UPDATE = 'progress_update';
+export const TRAIN_FINISHED = 'train_finished';

@@ -18,7 +18,8 @@ import {
   handleTrain,
   handleEval,
   handleThreed,
-  handleDel
+  handleDel,
+  trainFinished
 } from './actions';
 
 
@@ -68,14 +69,22 @@ class App extends Component {
 
   renderProgress(){
     const { training, progress, interval } = this.props;
+    console.log(progress);
     if (100 === parseInt(progress)){
         clearInterval(interval);
+        this.props.trainFinished();
     }
     if (training){
       return(
-        <div>
+        <div style={TrainMessage}>
           <span>{training} training...</span>
           <ProgressBar animated now={progress} />
+        </div>
+      );
+    }else{
+      return(
+        <div style={TrainMessage}>
+          <span>Nothing currently training!</span>
         </div>
       );
     }
@@ -106,9 +115,9 @@ class App extends Component {
           <Button variant="danger" onClick={this.onClickDel.bind(this)} size="lg">DELETE</Button>
         </ButtonToolbar>
         </div>
-        <div style={{ height: '100%', justifyContent: 'space-between' }}>
-        <Environments/>
-        {this.renderProgress()}
+        <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', padding: '5px' }}>
+          <Environments/>
+          {this.renderProgress()}
         </div>
       </div>
       </div>
@@ -127,6 +136,15 @@ const Boxes = {
   padding: "2px",
 }
 
+const TrainMessage = {
+  fontSize: "15px",
+  fontWeight: "bold",
+  boxSizing: "border-box",
+  borderRadius: "10px",
+  padding: "5px",
+  backgroundColor: "rgb(233, 243, 255)"
+}
+
 const mapStateToProps = ({ generalbuttons, formValues, environments }) => {
   const { cell, walls, initstate, finalstate, walls_values, training, progress, interval } = generalbuttons;
   const { activenv } = environments;
@@ -140,5 +158,6 @@ export default connect(mapStateToProps, {
   handleTrain,
   handleEval,
   handleThreed,
-  handleDel
+  handleDel,
+  trainFinished
 } )(App);

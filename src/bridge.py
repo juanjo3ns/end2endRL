@@ -55,7 +55,7 @@ def train(data, config):
 
 		env.logs(it)
 
-		config.counter = int(100*it/data['iterations'])
+		config.counter = int(100*(it+1)/data['iterations'])
 
 	if env.tbX:
 		env.writer.close()

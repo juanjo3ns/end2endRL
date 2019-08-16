@@ -6,7 +6,8 @@ import {
     LOAD_WALLS,
     TRAINING_SUCCESS,
     SET_INTERVAL,
-    PROGRESS_UPDATE
+    PROGRESS_UPDATE,
+    TRAIN_FINISHED
  } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -39,6 +40,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, interval: action.payload };
         case PROGRESS_UPDATE:
             return { ...state, progress: action.payload };
+        case TRAIN_FINISHED:
+            return { ...state, training: '' }
         default:
             return state;
     }

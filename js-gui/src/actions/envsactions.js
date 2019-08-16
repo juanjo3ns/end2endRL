@@ -9,7 +9,7 @@ import axios from 'axios';
 
 
 export const fetchEnvironments = () =>  (dispatch) => {
-    axios.get("136.206:19:100:5000/envs")
+    axios.get("http://localhost:5000/envs")
     .then((response) => {
       dispatch({ type: FETCH_ENVS_SUCCES, payload: response.data });
     });
@@ -19,7 +19,7 @@ export const fetchEnvironments = () =>  (dispatch) => {
     });
 };
 export const fetchSingleEnv = (version) => (dispatch) => {
-    axios.get("136.206:19:100:5000/envs", {
+    axios.get("http://localhost:5000/envs", {
     params: {
       version: version
     }}).then((response) => {
