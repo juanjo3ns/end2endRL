@@ -17,6 +17,9 @@ import toaster from 'toasted-notes';
 import 'toasted-notes/src/styles.css';
 import axios from 'axios';
 
+const url = 'http://6c1ae0c5.eu.ngrok.io';
+
+
 const validateValues = (formValues, walls, walls_values, initstate, finalstate) => {
   Object.entries(formValues).map(([key, value]) => {
 	if (
@@ -62,7 +65,7 @@ export const saveEnv = (formValues, walls, initstate, finalstate, walls_values) 
   const comment = a[1];
   if (able){
 	const data = {...formValues, walls: walls, initstate: initstate, finalstate: finalstate, walls_values: walls_values};
-	axios.post("http://localhost:5000/envs", data)
+	axios.post(url.concat("/envs"), data)
 	.then((response) => {
 	  toaster.notify(() => {
 		return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
@@ -95,7 +98,7 @@ export const trainFinished = () => {
 }
 
 export const requestProgress = (dispatch) => {
-	axios.get("http://localhost:5000/progress")
+	axios.get(url.concat("/progress"))
 	.then((response) => {
 		dispatch({
 			type: PROGRESS_UPDATE,
@@ -106,7 +109,7 @@ export const requestProgress = (dispatch) => {
 
 export const handleTrain = (version) => (dispatch) => {
 	version = version.concat('.json');
-	axios.get("http://localhost:5000/train", {
+	axios.get(url.concat("/train"), {
 	  params: {
 		version: version
 	  }
@@ -136,7 +139,7 @@ export const handleTrain = (version) => (dispatch) => {
 }
 
 export const handleStop = () => dispatch => {
-	axios.get("http://localhost:5000/kill")
+	axios.get(url.concat("/kill"))
 	.then((response) => {
 		toaster.notify(() => {
 		return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
@@ -154,7 +157,7 @@ export const handleStop = () => dispatch => {
 
 export const handleEval = (version) => (dispatch) => {
 	version = version.concat('.json');
-	axios.get("http://localhost:5000/eval", {
+	axios.get(url.concat("/eval"), {
 	  params: {
 		version: version
 	  }
@@ -175,7 +178,7 @@ export const handleEval = (version) => (dispatch) => {
 }
 
 export const handleDel = (version) => (dispatch) => {
-	axios.get("http://localhost:5000/del", {
+	axios.get(url.concat("/del"), {
 	  params: {
 		version: version
 	  }
@@ -192,7 +195,7 @@ export const handleDel = (version) => (dispatch) => {
 		</div>
 	  )});
 	});
-	axios.get("http://localhost:5000/envs")
+	axios.get(url.concat("/envs"))
 	.then((response) => {
 	  dispatch({ type: FETCH_ENVS_SUCCES, payload: response.data });
 	});
@@ -213,7 +216,7 @@ export const handleDel = (version) => (dispatch) => {
 export const handleThreed = (version) => (dispatch) => {
 	version = version
 	const algorithm = version.split('.')[0];
-	axios.get("http://localhost:5000/threed", {
+	axios.get(url.concat("/threed"), {
 	  params: {
 		version: version,
 		algorithm: algorithm
@@ -232,13 +235,13 @@ export const handleThreed = (version) => (dispatch) => {
 	  )});
 		if (response.data.exists){
 			if (algorithm==="DQN"){
-				window.open('http://localhost:5000/threeddqn', "_blank");
+				window.open(url.concat('/threeddqn'), "_blank");
 			}else if (algorithm==="GA"){
-				window.open('http://localhost:5000/threedga', "_blank");
+				window.open(url.concat('/threedga'), "_blank");
 			}else if (algorithm==="RWB"){
-				window.open('http://localhost:5000/threedpgm', "_blank");
+				window.open(url.concat('/threedpgm'), "_blank");
 			}else if (algorithm==="A2C"){
-				window.open('http://localhost:5000/threedac', "_blank");
+				window.open(url.concat('/threedac'), "_blank");
 			}
 		}
 

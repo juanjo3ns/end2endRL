@@ -7,19 +7,20 @@ import {
 } from './types';
 import axios from 'axios';
 
+const url = 'http://6c1ae0c5.eu.ngrok.io';
 
 export const fetchEnvironments = () =>  (dispatch) => {
-    axios.get("http://localhost:5000/envs")
+    axios.get(url.concat("/envs"))
     .then((response) => {
       dispatch({ type: FETCH_ENVS_SUCCES, payload: response.data });
     });
-    axios.get("http://localhost:5000/threedlist")
+    axios.get(url.concat("/threedlist"))
     .then((response) => {
       dispatch({ type: FETCH_THREED_SUCCES, payload: response.data });
     });
 };
 export const fetchSingleEnv = (version) => (dispatch) => {
-    axios.get("http://localhost:5000/envs", {
+    axios.get(url.concat("/envs"), {
     params: {
       version: version
     }}).then((response) => {
