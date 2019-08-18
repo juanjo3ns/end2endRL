@@ -87,11 +87,12 @@ class App extends Component {
                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center' }}>
                       <Button id={envlist[key].version} onClick={this.handleThreed.bind(this)} style={{ height: "40px", width: "50px" }} variant="warning">3D</Button>
                       <div style={{ overflow: 'hidden', borderRadius: '12px' }}>
+                        <a target="_blank" href={"http://localhost:6006/#scalars&_smoothingWeight=0.93&regexInput=".concat(key)}>
                         <Image
                         src={tensorboard}
                         width={50}
                         height={50}
-                        />
+                        /></a>
                       </div>
                     </div>
 

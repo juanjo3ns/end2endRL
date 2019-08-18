@@ -70,6 +70,7 @@ export const loadEnvsAction = () => dispatch => {
 	});
 }
 
+
 export const enableModal = version => {
 	return{
 		type: ENABLE_MODAL,
