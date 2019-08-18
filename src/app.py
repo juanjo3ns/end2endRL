@@ -50,6 +50,15 @@ def add():
 		saveData(data)
 		return jsonify(getVersions())
 
+@app.route('/allenvs', methods=['GET'])
+def getallEnvs():
+	if request.method == 'GET':
+		envs = {}
+		for i, v in enumerate(getVersions()):
+			data = getData(v)
+			envs[data['version']] = data
+		return jsonify(envs)
+
 
 @app.route('/progress')
 def progress():

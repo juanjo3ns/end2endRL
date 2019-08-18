@@ -1,170 +1,125 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { connect } from 'react-redux';
+import CardColumns from 'react-bootstrap/CardColumns';
+import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import ProgressBar from 'react-bootstrap/ProgressBar';
-import toaster from 'toasted-notes';
-import 'toasted-notes/src/styles.css';
-import Parameters from './components/Parameters';
+import Modal from 'react-bootstrap/Modal';
 import Grid from './components/Grid';
-import Environments from './components/Environments';
+import Parameters from './components/Parameters';
+import Image from 'react-image-resizer';
+import { useState } from 'react';
+import { connect } from 'react-redux';
+import tensorboard from './img/tflogo.jpg';
 import {
-  saveEnv,
-  handleClick,
-  handleReset,
-  handleTrain,
-  handleEval,
+  loadEnvsAction,
   handleThreed,
-  handleDel,
-  handleStop,
-  trainFinished,
-  requestProgress
+  enableModal,
+  updateForm
 } from './actions';
 
 
 class App extends Component {
-  onButtonPress() {
-      this.props.saveEnv();
+
+  componentDidMount(){
+    this.props.loadEnvsAction();
   }
-  handleClick(e){
-    this.props.handleClick(e.target.id);
+
+  handleThreed(e){
+    const id = e.target.id;
+    this.props.handleThreed(id);
   }
-  handleReset(e){
-    this.props.handleReset();
+  enableModal(e){
+    const id = e.target.id;
+    this.props.enableModal(id);
   }
-  onClickSave(e){
-    const { formValues, walls, initstate, finalstate, walls_values } = this.props;
-    this.props.saveEnv(formValues, walls, initstate, finalstate, walls_values);
-  }
-  checkActiveEnv(callback){
-    if (!this.props.activenv){
-      toaster.notify(() => {
-        return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
-          <span style={{ fontSize: "20px" }}>Select environment!</span>
-        </div>
-      )});
-      toaster.notify(() => {
-        return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
-          <span style={{ fontSize: "20px" }}>Select environment!</span>
-        </div>
-      )});
-    }else{
-      callback(this.props.activenv);
-    }
-  }
-  onClickTrain(e){
-    this.checkActiveEnv(this.props.handleTrain);
-  }
-  onClickEval(e){
-    this.checkActiveEnv(this.props.handleEval);
-  }
-  onClickThreed(e){
-    this.checkActiveEnv(this.props.handleThreed);
-  }
-  onClickDel(e){
-    this.checkActiveEnv(this.props.handleDel);
-  }
-  onClickStop(e){
-    this.props.handleStop();
-    this.props.trainFinished();
-    clearInterval(this.props.intervalID)
-  }
-  renderProgress(){
-    const { training, progress, interval } = this.props;
-    if (100 === parseInt(progress)){
-        this.props.trainFinished();
-        clearInterval(this.props.intervalID)
-    }
-    if (training){
-      return(
-        <div style={TrainMessage}>
-          <span>{training} training...</span>
-          <ProgressBar animated now={progress} />
-        </div>
-      );
-    }else{
-      return(
-        <div style={TrainMessage}>
-          <span>Nothing currently training!</span>
-        </div>
-      );
+  showEnvironment(){
+    const { envlist, showenv } = this.props;
+    if (showenv){
+      this.props.updateForm(envlist[showenv]);
+      return (
+        <Modal
+        size='xl'
+        show={true}
+        aria-labelledby="example-modal-sizes-title-lg"
+        onHide={()=>this.props.enableModal('')}
+        animation={false}
+        >
+        <Modal.Header closeButton>
+        <Modal.Title id="example-modal-sizes-title-lg">
+        {showenv}
+        </Modal.Title>
+        </Modal.Header>
+        <Parameters/>
+        </Modal>
+      )
     }
   }
 
   render(){
+    const { envlist } = this.props;
+    const keys = Object.keys(envlist);
     return (
-      <div className="App" style={{ display: 'flex', justifyContent: 'space-around' }}>
-      <div style={Boxes}>
-        <div>
-        <Parameters />
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-          <Button onClick={this.handleReset.bind(this)} variant="danger">Reset</Button>
-          <ButtonGroup aria-label="Basic example">
-            <Button id="walls" active={this.props.cell==="walls" ? true : false} onClick={this.handleClick.bind(this)} variant="secondary">Walls</Button>
-            <Button id="initstate" active={this.props.cell==="initstate" ? true : false} onClick={this.handleClick.bind(this)} variant="secondary">Init state</Button>
-            <Button id="finalstate" active={this.props.cell==="finalstate" ? true : false} onClick={this.handleClick.bind(this)} variant="secondary">Final state</Button>
-          </ButtonGroup>
-          </div>
-        <Grid />
-        <ButtonToolbar style={{ width: "100%", justifyContent: "space-around" }}>
-          <Button variant="primary" onClick={this.onClickSave.bind(this)} size="lg">SAVE</Button>
-          <Button variant="primary" onClick={this.onClickTrain.bind(this)} size="lg">TRAIN</Button>
-          <Button variant="primary" onClick={this.onClickEval.bind(this)} size="lg">EVAL</Button>
-          <Button variant="warning" onClick={this.onClickThreed.bind(this)} size="lg">3D</Button>
-          <Button variant="danger" onClick={this.onClickStop.bind(this)} size="lg">STOP</Button>
-          <Button variant="danger" onClick={this.onClickDel.bind(this)} size="lg">DELETE</Button>
-        </ButtonToolbar>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'column', padding: '5px' }}>
-          <Environments/>
-          {this.renderProgress()}
-        </div>
+      <div style={{ padding: '20px' }}>
+      <CardColumns >
+        {
+          keys.map(key => {
+            return (
+              <Card key={key}>
+                <Card.Header >
+                  <div style={{ display: 'flex', justifyContent:'center' }}>
+                  <Grid
+                    preview={true}
+                    height={envlist[key].height}
+                    width={envlist[key].width}
+                    height={envlist[key].height}
+                    walls={envlist[key].walls}
+                    initstate={envlist[key].initstate}
+                    finalstate={envlist[key].finalstate}
+                    />
+                  </div>
+                </Card.Header>
+                <Card.Body>
+                  <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <div>
+                      <Card.Title style={{ fontWeight: 'bold', fontSize: '26px' }}>{key}</Card.Title>
+                      <Button id={key} onClick={this.enableModal.bind(this)} variant="info">Show params</Button>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center' }}>
+                      <Button id={envlist[key].version} onClick={this.handleThreed.bind(this)} style={{ height: "40px", width: "50px" }} variant="warning">3D</Button>
+                      <div style={{ overflow: 'hidden', borderRadius: '12px' }}>
+                        <Image
+                        src={tensorboard}
+                        width={50}
+                        height={50}
+                        />
+                      </div>
+                    </div>
+
+                  </div>
+
+                </Card.Body>
+                <Card.Footer className="text-muted">By admin</Card.Footer>
+              </Card>
+            )}
+          )}
+      </CardColumns>
+      <div style={{ height: '50px', width: '100%', textAlign: 'center', marginTop: '20px' }}>
+        <Button style={{ height: '100%', width: '100%', fontSize: '25px' }} variant="success">Create your own environment</Button>
       </div>
+      {this.showEnvironment()}
       </div>
     );
   }
-
 }
 
-const Boxes = {
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "stretch",
-  justifyContent: "space-around",
-  width: "100%",
-  height: "100%",
-  padding: "2px",
-}
-
-const TrainMessage = {
-  fontSize: "15px",
-  fontWeight: "bold",
-  boxSizing: "border-box",
-  borderRadius: "10px",
-  padding: "5px",
-  backgroundColor: "rgb(233, 243, 255)"
-}
-
-const mapStateToProps = ({ generalbuttons, formValues, environments }) => {
-  const { cell, walls, initstate, finalstate, walls_values, training, progress, intervalID } = generalbuttons;
-  const { activenv } = environments;
-  return { cell, formValues , walls, initstate, finalstate, walls_values, activenv, training, progress, intervalID };
+const mapStateToProps = ({ generalbuttons }) => {
+  const { envlist, showenv } = generalbuttons;
+  return { envlist, showenv };
 }
 
 export default connect(mapStateToProps, {
-  saveEnv,
-  handleClick,
-  handleReset,
-  handleTrain,
-  handleEval,
+  loadEnvsAction,
   handleThreed,
-  handleDel,
-  handleStop,
-  trainFinished,
-  requestProgress
+  enableModal,
+  updateForm
 } )(App);

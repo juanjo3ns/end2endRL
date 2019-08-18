@@ -1,3 +1,8 @@
+export const LOAD_ENVS_SUCCESS = "load_envs_success";
+export const ENABLE_MODAL = "enable_modal";
+export const UPDATE_SUCCESS = 'update_succes';
+
+
 export const CHANGE_BUTTON_CELL = "change_button_cell";
 
 export const SLIDER_X_CHANGED = 'slider_x_changed';

@@ -28,11 +28,11 @@ class Parameters extends Component {
   widthChanged(value) {
     this.props.widthSlider(value);
   }
-  componentDidMount() {
-      this.props.heightSlider();
-      this.props.widthSlider();
-      this.props.changeAlgorithm();
-   }
+  // componentDidMount() {
+  //     this.props.heightSlider();
+  //     this.props.widthSlider();
+  //     this.props.changeAlgorithm();
+  //  }
    changeAlgorithm(event){
      const target = event.target;
      this.props.changeAlgorithm(target.textContent);
@@ -59,6 +59,7 @@ class Parameters extends Component {
    }
 
   render(){
+    console.log(this.props);
     return (
       <div>
         <Container style={Formulari}>
@@ -258,11 +259,7 @@ class Parameters extends Component {
 }
 
 const Formulari = {
-  width: "450px",
-  height: "100%",
-  backgroundColor: "rgb(233, 243, 255)",
-  boxSizing: "border-box",
-  borderRadius: "25px",
+  width: "100%",
   padding: "30px",
 }
 

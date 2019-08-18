@@ -12,7 +12,8 @@ function colorTransform(value){
   if (unit!==0){
     norm = (value - env["min_wall"])/unit;
   }
-  return [1-norm, norm]
+  
+  return [1-norm ? norm < 0.75 : 0.25, norm ? norm > 0.25 : 0.25]
 }
 
 function resetColours(){
@@ -32,7 +33,7 @@ function getWallMaterial(index) {
     var cell = new THREE.BoxGeometry(size,size,size);
 
     var material = new THREE.MeshPhongMaterial({
-        color: new THREE.Color( colorTransform(value)[0], colorTransform(value)[1], 0 )
+        color: new THREE.Color( colorTransform(value)[0], colorTransform(value)[1], 0.25 )
     });
     return [cell, material]
 }

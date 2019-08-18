@@ -1,4 +1,6 @@
 import {
+    LOAD_ENVS_SUCCESS,
+    ENABLE_MODAL,
     CHANGE_BUTTON_CELL,
     UPDATE_CELL_VALUES,
     RESET_CELL_VALUES,
@@ -11,6 +13,8 @@ import {
  } from '../actions/types';
 
 const INITIAL_STATE = {
+  envlist: [],
+  showenv: '',
   cell: "walls",
   walls: [],
   initstate: [],
@@ -24,6 +28,10 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
+        case LOAD_ENVS_SUCCESS:
+            return { ...state, envlist: action.payload };
+        case ENABLE_MODAL:
+            return { ...state, showenv: action.payload };
         case CHANGE_BUTTON_CELL:
             return {...state, cell: action.payload};
         case UPDATE_CELL_VALUES:
@@ -41,7 +49,7 @@ export default (state = INITIAL_STATE, action) => {
         case PROGRESS_UPDATE:
             return { ...state, progress: action.payload };
         case TRAIN_FINISHED:
-            return { ...state, training: '' }
+            return { ...state, training: '' };
         default:
             return state;
     }

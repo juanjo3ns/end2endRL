@@ -47,7 +47,7 @@ class Environments extends Component {
 
   render(){
     return (
-      <div style={rootView}>
+      <div>
       <ul className="list-group" style={{ overflow: 'auto', height: '600px',  borderRadius: '10px' }}>
          {this.props.envs.map((listitem, index) => (
            <li

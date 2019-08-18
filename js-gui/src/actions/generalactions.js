@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+	LOAD_ENVS_SUCCESS,
 	CHANGE_BUTTON_CELL,
 	UPDATE_CELL_VALUES,
 	RESET_CELL_VALUES,
@@ -11,11 +12,16 @@ import {
 	TRAINING_SUCCESS,
 	SET_INTERVAL,
 	PROGRESS_UPDATE,
-	TRAIN_FINISHED
+	TRAIN_FINISHED,
+	ENABLE_MODAL,
+	UPDATE_SUCCESS
 } from './types';
+import loadEnvs from '../requests/envs';
 import toaster from 'toasted-notes';
 import 'toasted-notes/src/styles.css';
 import axios from 'axios';
+import base_url from '../requests/base_url';
+
 
 const validateValues = (formValues, walls, walls_values, initstate, finalstate) => {
   Object.entries(formValues).map(([key, value]) => {
@@ -54,6 +60,29 @@ const validateValues = (formValues, walls, walls_values, initstate, finalstate) 
   return [true, ''];
 }
 
+export const loadEnvsAction = () => dispatch => {
+	base_url.get('/allenvs')
+	.then((response) => {
+		dispatch({
+			type: LOAD_ENVS_SUCCESS,
+			payload: response.data
+		});
+	});
+}
+
+export const enableModal = version => {
+	return{
+		type: ENABLE_MODAL,
+		payload: version
+	}
+}
+
+export const updateForm = values => {
+	return {
+		type: UPDATE_SUCCESS,
+		payload: values
+	}
+}
 
 
 export const saveEnv = (formValues, walls, initstate, finalstate, walls_values) => dispatch => {

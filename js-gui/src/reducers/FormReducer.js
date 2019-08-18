@@ -1,4 +1,5 @@
 import {
+  UPDATE_SUCCESS,
   SLIDER_X_CHANGED,
   SLIDER_Y_CHANGED,
   ALGORITHM_CHANGED,
@@ -9,8 +10,8 @@ import {
  } from '../actions/types';
 
 const INITIAL_STATE = {
-  height: 10,
-  width: 10,
+  height: 7,
+  width: 7,
   alg: "DQN",
   version: "DQN.test.0",
   tensorboard: true,
@@ -135,6 +136,8 @@ const DEFAULTS = { "DQN": DQN_DEFAULTS, "GA": GA_DEFAULTS, "RWB": RWB_DEFAULTS, 
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
+        case UPDATE_SUCCESS:
+            return {  ...state, ...action.payload };
         case SLIDER_X_CHANGED:
             return { ...state, height: action.payload };
         case SLIDER_Y_CHANGED:

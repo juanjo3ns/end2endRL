@@ -30,11 +30,12 @@ class Grid extends Component {
 
   }
   renderCell(cell, i, j){
-    const { height, width} = this.props;
+    const { height, width, preview } = this.props;
     const x = height;
     const y = width;
-    const h = (810-(x-1)*7)/x;
-    const w = (810-(y-1)*7)/y;
+    const box = preview ? 300 : 700;
+    const h = (box-(x-1)*3)/x;
+    const w = (box-(y-1)*3)/y;
     return (
       <div
       id={i.concat("-").concat(j)}
@@ -54,31 +55,33 @@ class Grid extends Component {
   }
 
   render(){
+    const { preview, walls, initstate, finalstate, height, width } = this.props;
+    const box = preview ? 300 : 700;
+    var arrX = [...Array(height).keys()];
+    var arrY = [...Array(width).keys()];
+    var gridObject = _.zipObject(arrX, _.map(arrX, function(){ return _.zipObject(arrY, _.map(arrY, function(){ return {"type":"cell"} }))}));
     return (
-      <div style={rootView}>
-      {_.map(this.props.gridObject, (t, i) => this.renderRow(t, i)) }
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: box,
+        width: box,
+        justifyContent: 'space-between',
+        pointerEvents: preview ? 'none' : 'auto'
+       }}>
+      {_.map(gridObject, (t, i) => this.renderRow(t, i)) }
       </div>
 
     );
   }
 }
 
-const rootView = {
-  height: "810px",
-  width: "810px",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between"
-}
-
 
 const mapStateToProps = ({ formValues, generalbuttons }) => {
-  const { cell, walls, initstate, finalstate, clicked, walls_values } = generalbuttons;
-  const { height, width, min_wall, max_wall } = formValues;
-  var arrX = [...Array(height).keys()];
-  var arrY = [...Array(width).keys()];
-  var gridObject = _.zipObject(arrX, _.map(arrX, function(){ return _.zipObject(arrY, _.map(arrY, function(){ return {"type":"cell"} }))}));
-  return { gridObject, height, width, cell, walls, initstate, finalstate, clicked, walls_values, min_wall, max_wall };
+  const { cell, clicked, walls_values } = generalbuttons;
+  const { min_wall, max_wall } = formValues;
+
+  return { cell, clicked, walls_values, min_wall, max_wall };
 };
 
 export default connect(mapStateToProps, { handleCell })(Grid);

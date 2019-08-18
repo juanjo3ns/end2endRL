@@ -55,7 +55,9 @@ def saveData(data):
 		json.dump(data, f)
 
 def getVersions():
-	return os.listdir(envs_path)
+	list = os.listdir(envs_path)
+	list.sort()
+	return list
 
 def checkingTrain(config, data):
 	if data['saveweights'] and os.path.exists(os.path.join(weights_path, data['alg'], data['version'])):
@@ -75,7 +77,7 @@ def checkingEval(data):
 
 def checkingThreed(algorithm, version):
 	if not os.path.exists(os.path.join(data_path, algorithm, version)):
-		return False, "There are no CSV files stored. Make sure to evaluate the environment."
+		return False, "Environment comming soon!"
 	return True, "Openning new tab..."
 
 def removeEnvironment(version):
