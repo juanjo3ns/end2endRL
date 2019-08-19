@@ -17,7 +17,7 @@ import toaster from 'toasted-notes';
 import 'toasted-notes/src/styles.css';
 import axios from 'axios';
 
-const url = 'http://6c1ae0c5.eu.ngrok.io';
+const url = 'http://localhost:5000';
 
 
 const validateValues = (formValues, walls, walls_values, initstate, finalstate) => {

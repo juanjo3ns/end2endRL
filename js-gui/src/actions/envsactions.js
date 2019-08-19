@@ -7,7 +7,7 @@ import {
 } from './types';
 import axios from 'axios';
 
-const url = 'http://6c1ae0c5.eu.ngrok.io';
+const url = 'http://localhost:5000';
 
 export const fetchEnvironments = () =>  (dispatch) => {
     axios.get(url.concat("/envs"))
