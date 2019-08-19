@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
+import { connect } from 'react-redux';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import CardColumns from 'react-bootstrap/CardColumns';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Image from 'react-image-resizer';
 import Grid from './components/Grid';
 import Parameters from './components/Parameters';
-import Image from 'react-image-resizer';
+import Creation from './components/Creation';
 import { useState } from 'react';
-import { connect } from 'react-redux';
 import tensorboard from './img/tflogo.jpg';
 import {
   loadEnvsAction,
@@ -71,7 +73,6 @@ class App extends Component {
                     preview={true}
                     height={envlist[key].height}
                     width={envlist[key].width}
-                    height={envlist[key].height}
                     walls={envlist[key].walls}
                     initstate={envlist[key].initstate}
                     finalstate={envlist[key].finalstate}
@@ -105,7 +106,7 @@ class App extends Component {
           )}
       </CardColumns>
       <div style={{ height: '50px', width: '100%', textAlign: 'center', marginTop: '20px' }}>
-        <Button style={{ height: '100%', width: '100%', fontSize: '25px' }} variant="success">Create your own environment</Button>
+      <Button style={{ height: '100%', width: '100%', fontSize: '25px' }} variant="success">Create your own environment</Button>
       </div>
       {this.showEnvironment()}
       </div>
