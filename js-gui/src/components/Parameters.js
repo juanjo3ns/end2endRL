@@ -147,7 +147,7 @@ class Parameters extends Component {
             <Col>
             <Form.Group controlId="numwalls">
               <Form.Label>Num. Walls</Form.Label>
-              <Form.Control type="text" disabled={this.props.numwalls.disabled} onChange={this.handleInputs.bind(this)} placeholder="15" value={this.props.numwalls.value}/>
+              <Form.Control type="text" disabled={this.props.numwalls.disabled} onChange={this.handleInputsDisabled.bind(this)} placeholder="15" value={this.props.numwalls.value}/>
             </Form.Group>
             </Col>
             <Col>
