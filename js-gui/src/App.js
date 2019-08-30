@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import CardColumns from 'react-bootstrap/CardColumns';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import { Link } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
 import Image from 'react-image-resizer';
 import Grid from './components/Grid';
 import Parameters from './components/Parameters';
 import Creation from './components/Creation';
-import withFirebaseAuth from 'react-with-firebase-auth'
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
 import { useState } from 'react';
 import tensorboard from './img/tflogo.jpg';
 import {
@@ -27,13 +24,6 @@ class App extends Component {
 
   componentDidMount(){
     this.props.loadEnvsAction();
-    const firebaseApp = firebase.initializeApp({
-        apiKey: process.env.REACT_APP_API_KEY,
-        authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-        databaseURL: process.env.REACT_APP_DATABASE_URL,
-        projectId: process.env.REACT_APP_PROJECT_ID,
-        messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID
-    });
   }
 
   handleThreed(e){
@@ -68,16 +58,8 @@ class App extends Component {
   }
 
   render(){
-    const firebaseAppAuth = firebaseApp.auth();
-    const providers = {
-      googleProvider: new firebase.auth.GoogleAuthProvider(),
-    };
     const { envlist } = this.props;
-    const {
-      user,
-      signOut,
-      signInWithGoogle,
-    } = this.props;
+
     const keys = Object.keys(envlist);
     return (
       <div style={{ padding: '20px' }}>
@@ -125,22 +107,8 @@ class App extends Component {
           )}
       </CardColumns>
       <div style={{ height: '50px', width: '100%', textAlign: 'center', marginTop: '20px' }}>
-      <Button style={{ height: '100%', width: '100%', fontSize: '25px' }} variant="success">Create your own environment</Button>
-      </div>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          {
-            user
-              ? <p>Hello, {user.displayName}</p>
-              : <p>Please sign in.</p>
-          }
-          {
-            user
-              ? <button onClick={signOut}>Sign out</button>
-              : <button onClick={signInWithGoogle}>Sign in with Google</button>
-          }
-        </header>
+      // <Button style={{ height: '100%', width: '100%', fontSize: '25px' }} variant="success">Create your own environment</Button>
+      <Link to="/creation">Create your own environment</Link>
       </div>
       {this.showEnvironment()}
       </div>
@@ -154,14 +122,9 @@ const mapStateToProps = ({ generalbuttons }) => {
 }
 
 
-export default withFirebaseAuth({
-  providers,
-  firebaseAppAuth,
-})(App);
-
-// export default connect(mapStateToProps, {
-//   loadEnvsAction,
-//   handleThreed,
-//   enableModal,
-//   updateForm
-// } )(App);
+export default connect(mapStateToProps, {
+  loadEnvsAction,
+  handleThreed,
+  enableModal,
+  updateForm
+} )(App);
