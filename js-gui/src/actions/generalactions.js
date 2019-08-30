@@ -21,6 +21,7 @@ import toaster from 'toasted-notes';
 import 'toasted-notes/src/styles.css';
 import axios from 'axios';
 import base_url from '../requests/base_url';
+import db from '../config';
 
 
 const validateValues = (formValues, walls, walls_values, initstate, finalstate) => {
@@ -59,6 +60,14 @@ const validateValues = (formValues, walls, walls_values, initstate, finalstate) 
   }
   return [true, ''];
 }
+
+
+export const loadEnvsFirebase = () => dispatch => {
+	db.collection("envs").doc("1xrCYPCUrzwPTHOwjoJe").onSnapshot(doc => {
+    dispatch({ type: LOAD_ENVS_SUCCESS, payload: doc.data() });
+  });
+}
+
 
 export const loadEnvsAction = () => dispatch => {
 	base_url.get('/allenvs')

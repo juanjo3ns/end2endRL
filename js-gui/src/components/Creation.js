@@ -10,10 +10,10 @@ class Creation extends Component {
   render(){
 
     return (
-      <div style={{ display:'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+      <div style={{ display:'flex', flexDirection: 'row', justifyContent: 'space-around', padding: '30px' }}>
         <Parameters/>
         <Grid
-          preview={true}
+          preview={false}
           height={10}
           width={10}
           walls={[]}

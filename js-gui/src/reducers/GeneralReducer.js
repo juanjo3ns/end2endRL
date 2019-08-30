@@ -11,7 +11,7 @@ import {
     PROGRESS_UPDATE,
     TRAIN_FINISHED
  } from '../actions/types';
-
+ 
 const INITIAL_STATE = {
   envlist: [],
   showenv: '',

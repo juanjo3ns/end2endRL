@@ -14,6 +14,7 @@ import { useState } from 'react';
 import tensorboard from './img/tflogo.jpg';
 import {
   loadEnvsAction,
+  loadEnvsFirebase,
   handleThreed,
   enableModal,
   updateForm
@@ -23,7 +24,7 @@ import {
 class App extends Component {
 
   componentDidMount(){
-    this.props.loadEnvsAction();
+    this.props.loadEnvsFirebase();
   }
 
   handleThreed(e){
@@ -107,8 +108,13 @@ class App extends Component {
           )}
       </CardColumns>
       <div style={{ height: '50px', width: '100%', textAlign: 'center', marginTop: '20px' }}>
-      // <Button style={{ height: '100%', width: '100%', fontSize: '25px' }} variant="success">Create your own environment</Button>
-      <Link to="/creation">Create your own environment</Link>
+      <Link to="/creation">
+        <Button
+          style={{ height: '100%', width: '100%', fontSize: '25px' }}
+          variant="success">
+          Create your own environment
+        </Button>
+      </Link>
       </div>
       {this.showEnvironment()}
       </div>
@@ -124,6 +130,7 @@ const mapStateToProps = ({ generalbuttons }) => {
 
 export default connect(mapStateToProps, {
   loadEnvsAction,
+  loadEnvsFirebase,
   handleThreed,
   enableModal,
   updateForm
