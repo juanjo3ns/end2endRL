@@ -72,7 +72,7 @@ class App extends Component {
                 <Card.Header >
                   <div style={{ display: 'flex', justifyContent:'center' }}>
                   <Grid
-                    preview={true}
+                    preview={300}
                     height={envlist[key].height}
                     width={envlist[key].width}
                     walls={envlist[key].walls}

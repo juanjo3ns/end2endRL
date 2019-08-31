@@ -33,9 +33,8 @@ class Grid extends Component {
     const { height, width, preview } = this.props;
     const x = height;
     const y = width;
-    const box = preview ? 300 : 700;
-    const h = (box-(x-1)*3)/x;
-    const w = (box-(y-1)*3)/y;
+    const h = (preview-(x-1)*3)/x;
+    const w = (preview-(y-1)*3)/y;
     return (
       <div
       id={i.concat("-").concat(j)}
@@ -56,7 +55,6 @@ class Grid extends Component {
 
   render(){
     const { preview, walls, initstate, finalstate, height, width } = this.props;
-    const box = preview ? 300 : 700;
     var arrX = [...Array(height).keys()];
     var arrY = [...Array(width).keys()];
     var gridObject = _.zipObject(arrX, _.map(arrX, function(){ return _.zipObject(arrY, _.map(arrY, function(){ return {"type":"cell"} }))}));
@@ -64,10 +62,10 @@ class Grid extends Component {
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        height: box,
-        width: box,
+        height: preview,
+        width: preview,
         justifyContent: 'space-between',
-        pointerEvents: preview ? 'none' : 'auto'
+        pointerEvents: preview===300 ? 'none' : 'auto'
        }}>
       {_.map(gridObject, (t, i) => this.renderRow(t, i)) }
       </div>
