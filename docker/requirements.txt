@@ -16,3 +16,4 @@ clipboard
 Flask
 flask_cors
 tqdm
+firebase_admin
