@@ -35,6 +35,7 @@ class Grid extends Component {
     const y = width;
     const h = (preview-(x-1)*3)/x;
     const w = (preview-(y-1)*3)/y;
+    console.log(h,w);
     return (
       <div
       id={i.concat("-").concat(j)}
@@ -55,6 +56,7 @@ class Grid extends Component {
 
   render(){
     const { preview, walls, initstate, finalstate, height, width } = this.props;
+    console.log("preview: ", preview);
     var arrX = [...Array(height).keys()];
     var arrY = [...Array(width).keys()];
     var gridObject = _.zipObject(arrX, _.map(arrX, function(){ return _.zipObject(arrY, _.map(arrY, function(){ return {"type":"cell"} }))}));
@@ -76,10 +78,10 @@ class Grid extends Component {
 
 
 const mapStateToProps = ({ formValues, generalbuttons }) => {
-  const { cell, clicked, walls_values } = generalbuttons;
-  const { min_wall, max_wall } = formValues;
+  const { cell, walls, initstate, finalstate, clicked, walls_values } = generalbuttons;
+  const { height, width, min_wall, max_wall } = formValues;
 
-  return { cell, clicked, walls_values, min_wall, max_wall };
+  return { height, width, cell, walls, initstate, finalstate, clicked, walls_values, min_wall, max_wall };
 };
 
 export default connect(mapStateToProps, { handleCell })(Grid);

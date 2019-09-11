@@ -36,10 +36,10 @@ class Creation extends Component {
       <div style={{ display:'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'stretch', padding: '12px' }}>
         <BreakpointProvider>
           <Breakpoint medium down>
-            <div style={{ display:'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'stretch', padding: '5px' }}>
+            <div style={{ display:'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', padding: '5px' }}>
               <Parameters/>
               <Grid
-              preview={this.state.width}
+              preview={this.state.width-50}
               height={10}
               width={10}
               walls={[]}
