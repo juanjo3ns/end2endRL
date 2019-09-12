@@ -73,11 +73,11 @@ class App extends Component {
                   <div style={{ display: 'flex', justifyContent:'center' }}>
                   <Grid
                     preview={300}
-                    height={envlist[key].height}
-                    width={envlist[key].width}
-                    walls={envlist[key].walls}
-                    initstate={envlist[key].initstate}
-                    finalstate={envlist[key].finalstate}
+                    pheight={envlist[key].height}
+                    pwidth={envlist[key].width}
+                    pwalls={envlist[key].walls}
+                    pinitstate={envlist[key].initstate}
+                    pfinalstate={envlist[key].finalstate}
                     />
                   </div>
                 </Card.Header>
@@ -110,7 +110,7 @@ class App extends Component {
       <div style={{ height: '50px', width: '100%', textAlign: 'center', marginTop: '20px' }}>
       <Link to="/creation">
         <Button
-          style={{ height: '100%', width: '100%', fontSize: '25px' }}
+          style={{ height: '100%', width: '100%', fontSize: '20px' }}
           variant="success">
           Create your own environment
         </Button>

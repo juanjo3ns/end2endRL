@@ -16,7 +16,12 @@ class Grid extends Component {
   }
 
   getCellStyle(i,j,h,w){
-    const { walls, finalstate, initstate } = this.props;
+    let { preview, walls, initstate, finalstate, pwalls, pinitstate, pfinalstate } = this.props;
+    if (preview===300){
+      walls = pwalls;
+      finalstate = pfinalstate;
+      initstate = pinitstate;
+    }
     const id = i.concat("-").concat(j);
     if (walls.indexOf(id)!==-1){
       return {backgroundColor: '#E5A5A5',height: h, width: w,borderRadius: "5px"};
@@ -29,16 +34,20 @@ class Grid extends Component {
     }
 
   }
+
   renderCell(cell, i, j){
-    const { height, width, preview } = this.props;
+    let { preview, height, width, pheight, pwidth } = this.props;
+    if (preview===300){
+      height = pheight;
+      width = pwidth;
+    }
     const x = height;
     const y = width;
     const h = (preview-(x-1)*3)/x;
     const w = (preview-(y-1)*3)/y;
-    console.log(h,w);
     return (
       <div
-      id={i.concat("-").concat(j)}
+      key={i.concat("-").concat(j)}
       className="cell"
       style={this.getCellStyle(i,j,h,w)}
       onClick={this.handleCell.bind(this)}
@@ -46,6 +55,7 @@ class Grid extends Component {
       />
     );
   }
+
   renderRow(row, i){
     return (
       <div key={"row".concat(i)} style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
@@ -55,8 +65,11 @@ class Grid extends Component {
   }
 
   render(){
-    const { preview, walls, initstate, finalstate, height, width } = this.props;
-    console.log("preview: ", preview);
+    let { preview, height, width, pheight, pwidth } = this.props;
+    if (preview===300){
+      height = pheight;
+      width = pwidth;
+    }
     var arrX = [...Array(height).keys()];
     var arrY = [...Array(width).keys()];
     var gridObject = _.zipObject(arrX, _.map(arrX, function(){ return _.zipObject(arrY, _.map(arrY, function(){ return {"type":"cell"} }))}));
