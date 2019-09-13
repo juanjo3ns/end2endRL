@@ -47,6 +47,7 @@ class Grid extends Component {
     const w = (preview-(y-1)*3)/y;
     return (
       <div
+      id={i.concat("-").concat(j)}
       key={i.concat("-").concat(j)}
       className="cell"
       style={this.getCellStyle(i,j,h,w)}
@@ -93,7 +94,6 @@ class Grid extends Component {
 const mapStateToProps = ({ formValues, generalbuttons }) => {
   const { cell, walls, initstate, finalstate, clicked, walls_values } = generalbuttons;
   const { height, width, min_wall, max_wall } = formValues;
-
   return { height, width, cell, walls, initstate, finalstate, clicked, walls_values, min_wall, max_wall };
 };
 

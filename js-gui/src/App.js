@@ -52,7 +52,7 @@ class App extends Component {
         {showenv}
         </Modal.Title>
         </Modal.Header>
-        <Parameters/>
+        <Parameters preview={true}/>
         </Modal>
       )
     }

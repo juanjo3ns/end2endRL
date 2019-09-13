@@ -9,6 +9,7 @@ import Grid from './Grid';
 import Parameters from './Parameters';
 import {
   handleClick,
+  handleTrain,
   handleReset,
 } from '../actions';
 
@@ -29,6 +30,10 @@ class Creation extends Component {
 
     componentWillMount(){
       this.setState({width: window.innerWidth});
+    }
+    clickTrain(){
+      const { formValues, walls, initstate, finalstate, walls_values } = this.props;
+      this.props.handleTrain(formValues, walls, initstate, finalstate, walls_values);
     }
 
     backHome(){
@@ -62,6 +67,7 @@ class Creation extends Component {
           <div>
             <Link to="/">
               <Button
+                onClick={this.clickTrain.bind(this)}
                 style={{ fontSize: '20px' }}
                 variant="success">
                   TRAIN
@@ -78,7 +84,7 @@ class Creation extends Component {
         <BreakpointProvider>
           <Breakpoint medium down>
             <div style={{ display:'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center' }}>
-              <Parameters/>
+              <Parameters preview={false}/>
               <Grid
               preview={this.state.width-50}
               height={10}
@@ -92,7 +98,7 @@ class Creation extends Component {
           </Breakpoint>
           <Breakpoint large up>
             <div style={{ display:'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'stretch'}}>
-              <Parameters/>
+              <Parameters preview={false}/>
               <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
                 <Grid
                 preview={700}
@@ -120,4 +126,5 @@ const mapStateToProps = ({ generalbuttons, formValues }) => {
 export default connect(mapStateToProps, {
   handleClick,
   handleReset,
+  handleTrain
 } )(Creation);

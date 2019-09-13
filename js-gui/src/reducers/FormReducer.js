@@ -13,7 +13,8 @@ const INITIAL_STATE = {
   height: 7,
   width: 7,
   alg: "DQN",
-  version: "DQN.test.0",
+  version: "",
+  version_placeholder: "DQN.test.0",
   tensorboard: true,
   saveweights: true,
   savefreq: 1000,
@@ -39,7 +40,8 @@ const INITIAL_STATE = {
 };
 
 const DQN_DEFAULTS = {
-  version: "DQN.test.0",
+  version: "",
+  version_placeholder: "DQN.test.0",
   tensorboard: true,
   saveweights: true,
   savefreq: 1000,
@@ -63,7 +65,8 @@ const DQN_DEFAULTS = {
 }
 
 const GA_DEFAULTS = {
-  version: "GA.test.0",
+  version: "",
+  version_placeholder: "GA.test.0",
   tensorboard: true,
   saveweights: true,
   savefreq: 20,
@@ -86,7 +89,8 @@ const GA_DEFAULTS = {
   po: { value: false, disabled: true}
 }
 const RWB_DEFAULTS = {
-  version: "RWB.test.0",
+  version: "",
+  version_placeholder: "RWB.test.0",
   tensorboard: true,
   saveweights: true,
   savefreq: 10000,
@@ -109,7 +113,8 @@ const RWB_DEFAULTS = {
   po: { value: true, disabled: false}
 }
 const AC_DEFAULTS = {
-  version: "A2C.test.0",
+  version: "",
+  version_placeholder: "A2C.test.0",
   tensorboard: true,
   saveweights: true,
   savefreq: 10000,

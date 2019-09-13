@@ -181,229 +181,41 @@ export const saveEnv = (formValues, walls, initstate, finalstate, walls_values) 
   }
 };
 
-export const trainFinished = () => {
-  return {
-    type: TRAIN_FINISHED,
-    payload: ''
+
+export const handleTrain = (formValues, walls, initstate, finalstate, walls_values) => (dispatch) => {
+  const a = validateValues(formValues, walls, walls_values, initstate, finalstate);
+  const able = a[0];
+  const comment = a[1];
+  if (able) {
+    const data = {
+      ...formValues,
+      walls: walls,
+      initstate: initstate,
+      finalstate: finalstate,
+      walls_values: walls_values
+    };
+    db.collection('train').doc(formValues['version']).set(data);
+    toaster.notify(() => {
+  	  return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
+  		<span style={{ fontSize: "20px" }}>Environment added to train buffer!</span>
+  	  </div>
+  	)});
+    this.handleReset();
+  }else{
+
+  	toaster.notify(() => {
+  	  return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
+  		<span style={{ fontSize: "20px" }}>{comment}</span>
+  	  </div>
+  	)});
+  	toaster.notify(() => {
+  	  return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
+  		<span style={{ fontSize: "20px" }}>{comment}</span>
+  	  </div>
+  	)});
   }
 }
 
-export const requestProgress = (dispatch) => {
-  axios.get("http://localhost:5000/progress")
-    .then((response) => {
-      dispatch({
-        type: PROGRESS_UPDATE,
-        payload: response.data
-      });
-    });
-}
-
-export const handleTrain = (version) => (dispatch) => {
-  version = version.concat('.json');
-  axios.get("http://localhost:5000/train", {
-      params: {
-        version: version
-      }
-    })
-    .then((response) => {
-      toaster.notify(() => {
-        return ( < div style = {
-            {
-              backgroundColor: 'white',
-              padding: "10px",
-              borderRadius: "10px"
-            }
-          } >
-          <
-          span style = {
-            {
-              fontSize: "20px"
-            }
-          } > {
-            response.data.comment
-          } < /span> <
-          /div>
-        )
-      });
-
-      if (response.data.training) {
-        dispatch({
-          type: TRAINING_SUCCESS,
-          payload: version
-        });
-        const intervalID = setInterval(() => {
-          requestProgress(dispatch);
-        }, 5000);
-        dispatch({
-          type: SET_INTERVAL,
-          payload: intervalID
-        });
-      }
-
-    });
-}
-
-export const handleStop = () => dispatch => {
-  axios.get("http://localhost:5000/kill")
-    .then((response) => {
-      toaster.notify(() => {
-        return ( < div style = {
-            {
-              backgroundColor: 'white',
-              padding: "10px",
-              borderRadius: "10px"
-            }
-          } >
-          <
-          span style = {
-            {
-              fontSize: "20px"
-            }
-          } > {
-            response.data
-          } < /span> <
-          /div>
-        )
-      });
-      toaster.notify(() => {
-        return ( < div style = {
-            {
-              backgroundColor: 'white',
-              padding: "10px",
-              borderRadius: "10px"
-            }
-          } >
-          <
-          span style = {
-            {
-              fontSize: "20px"
-            }
-          } > {
-            response.data
-          } < /span> <
-          /div>
-        )
-      });
-
-    });
-}
-
-export const handleEval = (version) => (dispatch) => {
-  version = version.concat('.json');
-  axios.get("http://localhost:5000/eval", {
-      params: {
-        version: version
-      }
-    })
-    .then((response) => {
-      toaster.notify(() => {
-        return ( < div style = {
-            {
-              backgroundColor: 'white',
-              padding: "10px",
-              borderRadius: "10px"
-            }
-          } >
-          <
-          span style = {
-            {
-              fontSize: "20px"
-            }
-          } > {
-            response.data
-          } < /span> <
-          /div>
-        )
-      });
-      toaster.notify(() => {
-        return ( < div style = {
-            {
-              backgroundColor: 'white',
-              padding: "10px",
-              borderRadius: "10px"
-            }
-          } >
-          <
-          span style = {
-            {
-              fontSize: "20px"
-            }
-          } > {
-            response.data
-          } < /span> <
-          /div>
-        )
-      });
-
-    });
-}
-
-export const handleDel = (version) => (dispatch) => {
-  axios.get("http://localhost:5000/del", {
-      params: {
-        version: version
-      }
-    })
-    .then((response) => {
-      toaster.notify(() => {
-        return ( < div style = {
-            {
-              backgroundColor: 'white',
-              padding: "10px",
-              borderRadius: "10px"
-            }
-          } >
-          <
-          span style = {
-            {
-              fontSize: "20px"
-            }
-          } > {
-            response.data
-          } < /span> <
-          /div>
-        )
-      });
-      toaster.notify(() => {
-        return ( < div style = {
-            {
-              backgroundColor: 'white',
-              padding: "10px",
-              borderRadius: "10px"
-            }
-          } >
-          <
-          span style = {
-            {
-              fontSize: "20px"
-            }
-          } > {
-            response.data
-          } < /span> <
-          /div>
-        )
-      });
-    });
-  axios.get("http://localhost:5000/envs")
-    .then((response) => {
-      dispatch({
-        type: FETCH_ENVS_SUCCES,
-        payload: response.data
-      });
-    });
-  dispatch({
-    type: RESET_CELL_VALUES,
-    payload: "reset"
-  });
-  dispatch({
-    type: RESET_ENV,
-    payload: "reset"
-  });
-  dispatch({
-    type: RESET_FORM,
-    payload: "reset"
-  });
-}
 
 export const handleThreed = (version) => (dispatch) => {
   version = version

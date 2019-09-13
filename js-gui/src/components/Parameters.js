@@ -28,11 +28,7 @@ class Parameters extends Component {
   widthChanged(value) {
     this.props.widthSlider(value);
   }
-  // componentDidMount() {
-  //     this.props.heightSlider();
-  //     this.props.widthSlider();
-  //     this.props.changeAlgorithm();
-  //  }
+
    changeAlgorithm(event){
      const target = event.target;
      this.props.changeAlgorithm(target.textContent);
@@ -59,33 +55,26 @@ class Parameters extends Component {
    }
 
   render(){
-    console.log(this.props);
+    const { preview } = this.props;
     return (
-      <div>
+      <div style={{ pointerEvents: preview ? 'none' : 'auto' }}>
         <Container style={Formulari}>
 
           <Form>
             <Row>
             <Col>
-              <Slider
-                min={3}
-                max={20}
-                defaultValue={10}
-                value={this.props.height}
-                onChange={this.heightChanged.bind(this)}/>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Form.Group controlId="version">
+              <Form.Label style={{ fontSize: "30px" }}>Version Name</Form.Label>
+              <Form.Control type="text" placeholder={this.props.version_placeholder} onChange={this.handleInputs.bind(this)} value={this.props.version}/>
+            </Form.Group>
+            </div>
             </Col>
-            <Col>
-            <Slider
-              min={3}
-              max={20}
-              defaultValue={10}
-              value={this.props.width}
-              onChange={this.widthChanged.bind(this)}/>
-            </Col>
+
             </Row>
             <Row>
             <Col>
-            <div style={{ marginTop: "20px" }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <DropdownButton id="dropdown-algorithm" variant='success' title={this.props.alg}>
               <Dropdown.Item key={"DQN"} active={this.props.alg==="DQN" ? true : false}  onClick={this.changeAlgorithm.bind(this)}>DQN</Dropdown.Item>
               <Dropdown.Item key={"GA"} active={this.props.alg==="GA" ? true : false}  onClick={this.changeAlgorithm.bind(this)}>GA</Dropdown.Item>
@@ -95,10 +84,22 @@ class Parameters extends Component {
             </div>
             </Col>
             <Col>
-            <Form.Group controlId="version">
-              <Form.Label>Version Name</Form.Label>
-              <Form.Control type="text" placeholder="DQN.test.0" onChange={this.handleInputs.bind(this)} value={this.props.version}/>
-            </Form.Group>
+            <div style={{ padding: "10px" }}>
+            <Slider
+              min={3}
+              max={20}
+              defaultValue={10}
+              value={this.props.width}
+              onChange={this.widthChanged.bind(this)}/>
+            </div>
+            <div style={{ padding: "10px" }}>
+              <Slider
+                min={3}
+                max={20}
+                defaultValue={10}
+                value={this.props.height}
+                onChange={this.heightChanged.bind(this)}/>
+            </div>
             </Col>
             </Row>
             <Row>
@@ -275,12 +276,12 @@ const mapStateToProps = ({ formValues }) => {
     max_wall, seed, done_reward,
     edge_value, numAgents,
     epsmax, epsmin, health, batch_size,
-    pos, variance, po, comments
+    pos, variance, po, comments, version_placeholder
     } = formValues;
   return { height, width, alg, version, tensorboard, saveweights,
   savefreq, iterations, numwalls, visibleRad, normal_reward, min_wall,
   max_wall, seed, done_reward, edge_value, numAgents, epsmax, epsmin,
-  health, batch_size, pos, variance, po, comments };
+  health, batch_size, pos, variance, po, comments, version_placeholder };
 };
 
 export default connect(mapStateToProps, {
