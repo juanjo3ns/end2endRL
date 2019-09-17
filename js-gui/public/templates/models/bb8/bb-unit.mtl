@@ -1,0 +1,37 @@
+# Blender MTL File: 'None'
+# Material Count: 3
+
+newmtl Body_DiffuseMaterial
+Ns 92.156863
+Ka 0.000000 0.000000 0.000000
+Kd 0.690196 0.690196 0.690196
+Ks 0.001176 0.001176 0.001176
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd Body_Diffuse.jpg
+map_Bump Body_Illumination.jpg
+map_Ke Body_Illumination.jpg
+
+newmtl Head_DiffuseMaterial
+Ns 92.156863
+Ka 0.000000 0.000000 0.000000
+Kd 0.690196 0.690196 0.690196
+Ks 0.001176 0.001176 0.001176
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd Head_Diffuse.jpg
+map_Ke Head_Reflection.jpg
+
+newmtl b0b0b0
+Ns 92.156863
+Ka 0.000000 0.000000 0.000000
+Kd 0.690196 0.690196 0.690196
+Ks 0.009961 0.009961 0.009961
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2

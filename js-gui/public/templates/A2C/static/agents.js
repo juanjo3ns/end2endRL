@@ -5,9 +5,9 @@ function removeAgent(){
 async function createAgent(callback) {
 
   const objLoader = new THREE.OBJLoader2();
-  objLoader.loadMtl('/path/templates/models/bb8/bb-unit.mtl', null, (materials) => {
+  objLoader.loadMtl('/templates/models/bb8/bb-unit.mtl', null, (materials) => {
     objLoader.setMaterials(materials);
-    objLoader.load('/path/templates/models/bb8/bb-unit.obj', (event) => {
+    objLoader.load('/templates/models/bb8/bb-unit.obj', (event) => {
       const root = event.detail.loaderRootNode;
       root.scale.set(2.4, 2.4, 2.4);
 			root.name = 'agent';

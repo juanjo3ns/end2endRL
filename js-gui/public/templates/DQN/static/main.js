@@ -62,8 +62,14 @@ function init() {
   startExperiment();
 
   document.addEventListener('click', onDocumentMouseDown, false);
+  window.addEventListener('message', onMessageReceived, false);
+
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   window.addEventListener('resize', onWindowResize, false);
+}
+
+function onMessageReceived(event) {
+  console.log('received response:  ',event.data);
 }
 
 function onWindowResize() {

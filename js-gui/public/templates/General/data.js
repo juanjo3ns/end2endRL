@@ -6,10 +6,10 @@ function changeCSV(epoch) {
 }
 
 function getURL(algorithm, environment, agent, type, epoch) {
-	base = "/path/templates/csvdata/".concat(algorithm).concat('/').concat(environment).concat('/');
-	return base.concat(agent).concat('/').concat(type).concat('/').concat(epoch).concat('.csv');
+	var storage = "https://firebasestorage.googleapis.com/v0/b/end2endrl.appspot.com/o/";
+	base = storage.concat(algorithm).concat('%2F').concat(environment).concat('%2F');
+	return base.concat(agent).concat('%2F').concat(type).concat('%2F').concat(epoch).concat('.csv').concat('?alt=media');
 }
-
 function getData(csv_file) {
 	var url = csv_file;
 	var request = new XMLHttpRequest();

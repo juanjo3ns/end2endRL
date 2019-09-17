@@ -218,10 +218,9 @@ export const handleTrain = (formValues, walls, initstate, finalstate, walls_valu
 
 
 export const handleThreed = (version) => (dispatch) => {
-  version = version
   const algorithm = version.split('.')[0];
-  window.open('/templates/'.concat(algorithm).concat('/index.html'), "_blank");
-
+  var newwindow = window.open('/templates/'.concat(algorithm).concat('/index.html'), "_blank");
+  newwindow.postMessage(version, "https://localhost");
 
 
 }
