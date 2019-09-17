@@ -41,11 +41,13 @@ class App extends Component {
       this.props.updateForm(envlist[showenv]);
       return (
         <Modal
-        size='xl'
+        size='lg'
         show={true}
         aria-labelledby="example-modal-sizes-title-lg"
         onHide={()=>this.props.enableModal('')}
         animation={false}
+        backdrop={true}
+        animation={true}
         >
         <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
