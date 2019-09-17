@@ -220,64 +220,8 @@ export const handleTrain = (formValues, walls, initstate, finalstate, walls_valu
 export const handleThreed = (version) => (dispatch) => {
   version = version
   const algorithm = version.split('.')[0];
-  axios.get("http://localhost:5000/threed", {
-      params: {
-        version: version,
-        algorithm: algorithm
-      }
-    })
-    .then((response) => {
-      toaster.notify(() => {
-        return ( < div style = {
-            {
-              backgroundColor: 'white',
-              padding: "10px",
-              borderRadius: "10px"
-            }
-          } >
-          <
-          span style = {
-            {
-              fontSize: "20px"
-            }
-          } > {
-            response.data.comment
-          } < /span> <
-          /div>
-        )
-      });
-      toaster.notify(() => {
-        return ( < div style = {
-            {
-              backgroundColor: 'white',
-              padding: "10px",
-              borderRadius: "10px"
-            }
-          } >
-          <
-          span style = {
-            {
-              fontSize: "20px"
-            }
-          } > {
-            response.data.comment
-          } < /span> <
-          /div>
-        )
-      });
-      if (response.data.exists) {
-        if (algorithm === "DQN") {
-          window.open('http://localhost:5000/threeddqn', "_blank");
-        } else if (algorithm === "GA") {
-          window.open('http://localhost:5000/threedga', "_blank");
-        } else if (algorithm === "RWB") {
-          window.open('http://localhost:5000/threedpgm', "_blank");
-        } else if (algorithm === "A2C") {
-          window.open('http://localhost:5000/threedac', "_blank");
-        }
-      }
+  window.open('/templates/'.concat(algorithm).concat('/index.html'), "_blank");
 
-    });
 
 
 }

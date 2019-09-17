@@ -38,11 +38,13 @@ class Creation extends Component {
 
     backHome(){
       return(
-        <div style={{ padding: "5px" }}>
+        <div style={{ padding: '5px' }}>
         <Link to="/">
           <Button
+            onClick={this.handleReset.bind(this)}
+            style={{ fontSize: '20px' }}
             variant="info">
-            Home
+            HOME
           </Button>
         </Link>
         </div>
@@ -52,7 +54,7 @@ class Creation extends Component {
       return(
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: 'center' }}>
           <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around", padding: "10px" }}>
-            {this.backHome()}
+
             <div style={{ padding: "5px" }}>
             <Button onClick={this.handleReset.bind(this)} variant="danger">Reset</Button>
             </div>
@@ -64,7 +66,9 @@ class Creation extends Component {
             </ButtonGroup>
             </div>
           </div>
-          <div>
+          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+          {this.backHome()}
+          <div style={{ padding: '5px' }}>
             <Link to="/">
               <Button
                 onClick={this.clickTrain.bind(this)}
@@ -73,6 +77,7 @@ class Creation extends Component {
                   TRAIN
               </Button>
             </Link>
+          </div>
           </div>
         </div>
       )
