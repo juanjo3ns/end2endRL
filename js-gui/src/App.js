@@ -110,7 +110,7 @@ class App extends Component {
           )}
       </CardColumns>
       <div style={{ height: '50px', width: '100%', textAlign: 'center', marginTop: '20px' }}>
-      <Link to="/creation">
+      <Link to="/join">
         <Button
           style={{ height: '100%', width: '100%', fontSize: '20px' }}
           variant="success">

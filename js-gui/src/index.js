@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import Creation from './components/Creation';
+import Login from './components/Login';
+import Join from './components/Join';
 import { HashRouter as Router, Route } from "react-router-dom";
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
@@ -12,18 +14,30 @@ import reducers from './reducers';
 
 const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
-ReactDOM.render(
+export const AuthContext = React.createContext(null);
 
+
+function Main() {
+  const [isLoggedIn, setLoggedIn] = useState(false);
+
+  return (
+    <AuthContext.Provider value={{ isLoggedIn, setLoggedIn }}>
+      Is logged in? {JSON.stringify(isLoggedIn)}
+      <div className="App">
       <Provider store={store}>
         <Router>
           <div>
             <Route path="/" exact component={App} />
+            <Route path="/login" component={Login} />
+            <Route path="/join" component={Join} />
             <Route path="/creation" component={Creation} />
           </div>
         </Router>
-      </Provider>, document.getElementById('root'));
+      </Provider>
+      </div>
+    </AuthContext.Provider>
+  );
+}
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const rootElement = document.getElementById("root");
+ReactDOM.render(<Main />, rootElement);
