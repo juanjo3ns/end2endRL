@@ -22,11 +22,9 @@ function Main() {
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, setLoggedIn }}>
-      Is logged in? {JSON.stringify(isLoggedIn)}
-      <div className="App">
       <Provider store={store}>
         <Router>
-          <div>
+          <div id="routes">
             <Route path="/" exact component={App} />
             <Route path="/login" component={Login} />
             <Route path="/join" component={Join} />
@@ -34,7 +32,6 @@ function Main() {
           </div>
         </Router>
       </Provider>
-      </div>
     </AuthContext.Provider>
   );
 }
