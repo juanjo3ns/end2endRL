@@ -15,6 +15,7 @@ var ini_x,ini_z, height, width;
 
 var env_set = false;
 var epoch;
+var version;
 
 
 init();
@@ -28,6 +29,10 @@ function sleep(ms) {
 
 
 function init() {
+  var url_string = window.location.href;
+  var url = new URL(url_string);
+  version = url.searchParams.get("version");
+  console.log(version);
   renderer = new THREE.WebGLRenderer({
     antialias: true
   });
@@ -53,7 +58,7 @@ function init() {
   scene.add(light, light_two, lightAmbient);
 
   // OBJECTS
-  loadEnvironment(algorithm, "current", counter);
+  loadEnvironment(algorithm, version, counter);
   createAgent();
 
   generateBoard();
@@ -62,15 +67,14 @@ function init() {
   startExperiment();
 
   document.addEventListener('click', onDocumentMouseDown, false);
-  window.addEventListener('message', onMessageReceived, false);
+
+
 
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   window.addEventListener('resize', onWindowResize, false);
 }
 
-function onMessageReceived(event) {
-  console.log('received response:  ',event.data);
-}
+
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;

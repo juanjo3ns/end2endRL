@@ -107,7 +107,7 @@ function iterations() {
 		if (scene.getObjectByName("cells")) {
 			scene.remove(scene.getObjectByName("cells"));
 		}
-		loadEnvironment(algorithm, "current", epoch);
+		loadEnvironment(algorithm, version, epoch);
 		showBoard();
 		changeCSV(epoch.toString());
 	}else{

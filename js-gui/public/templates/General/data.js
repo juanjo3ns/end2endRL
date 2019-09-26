@@ -1,6 +1,6 @@
 function changeCSV(epoch) {
 	clearInterval(intervalID);
-	csvfile = getURL(algorithm, "current","0", "coords", epoch);
+	csvfile = getURL(algorithm, version, "0", "coords", epoch);
 	csvData = getData(csvfile);
 	intervalID = setInterval(runEvaluations, velocity, csvData, epoch);
 }

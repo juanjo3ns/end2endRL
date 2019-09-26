@@ -16,7 +16,7 @@ var hist = new Array();
 
 var env_set = false;
 var epoch;
-
+var version;
 
 
 init();
@@ -29,6 +29,10 @@ function sleep(ms) {
 
 
 function init() {
+  var url_string = window.location.href;
+  var url = new URL(url_string);
+  version = url.searchParams.get("version");
+  console.log(version);
   renderer = new THREE.WebGLRenderer({
     antialias: true
   });
@@ -54,7 +58,7 @@ function init() {
   scene.add(light, light_two, lightAmbient);
 
   // OBJECTS
-  loadEnvironment(algorithm, "current", counter);
+  loadEnvironment(algorithm, version, counter);
   createAgent();
   generateBoard();
   stringVelocity();
