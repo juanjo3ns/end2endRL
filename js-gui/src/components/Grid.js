@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {isMobile} from 'react-device-detect';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { handleCell } from '../actions';
@@ -6,15 +7,13 @@ import { handleCell } from '../actions';
 
 class Grid extends Component {
 
+
   handleCell(e){
     const { cell, walls, initstate, finalstate, clicked, walls_values, min_wall, max_wall } = this.props;
-    if (e.type === "touchstart"){
-      this.props.handleCell(cell, e.target.id, walls, initstate, finalstate, walls_values, e.type, false, min_wall, max_wall);
-      console.log("touch screen");
-    }else if (e.type === "mouseover" && clicked && cell=== "walls"){
-      this.props.handleCell(cell, e.target.id, walls, initstate, finalstate, walls_values, e.type, clicked, min_wall, max_wall);
+    if (e.type === "mouseover" && clicked && cell=== "walls"){
+      this.props.handleCell(cell, e.target.id, walls, initstate, finalstate, walls_values, e.type, clicked, min_wall, max_wall, isMobile);
     }else if (e.type === "click"){
-      this.props.handleCell(cell, e.target.id, walls, initstate, finalstate, walls_values, e.type, clicked, min_wall, max_wall);
+      this.props.handleCell(cell, e.target.id, walls, initstate, finalstate, walls_values, e.type, clicked, min_wall, max_wall, isMobile);
     }
   }
 

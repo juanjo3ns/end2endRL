@@ -228,12 +228,14 @@ export const handleClick = (id) => {
   };
 };
 
-export const handleCell = (cell, id, walls, initstate, finalstate, walls_values, type, clicked, min_wall, max_wall) => dispatch => {
-  if (type === "click" && cell === "walls") {
-    dispatch({
-      type: MOUSE_OVER,
-      payload: !clicked
-    });
+export const handleCell = (cell, id, walls, initstate, finalstate, walls_values, type, clicked, min_wall, max_wall, isMobile) => dispatch => {
+  if (!isMobile){
+    if (type === "click" && cell === "walls") {
+      dispatch({
+        type: MOUSE_OVER,
+        payload: !clicked
+      });
+    }
   }
   if (walls.indexOf(id) !== -1) {
     const index = walls.indexOf(id);
