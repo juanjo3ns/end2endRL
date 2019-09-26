@@ -3,7 +3,6 @@ import  { Breakpoint, BreakpointProvider } from 'react-socks';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
-import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Grid from './Grid';
 import Parameters from './Parameters';

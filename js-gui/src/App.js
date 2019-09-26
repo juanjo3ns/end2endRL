@@ -3,6 +3,7 @@ import './App.css';
 import { connect } from 'react-redux';
 import CardColumns from 'react-bootstrap/CardColumns';
 import Card from 'react-bootstrap/Card';
+import { AuthContext } from "./index";
 import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
@@ -10,7 +11,6 @@ import Image from 'react-image-resizer';
 import Grid from './components/Grid';
 import Parameters from './components/Parameters';
 import Creation from './components/Creation';
-import { useState } from 'react';
 import tensorboard from './img/tflogo.jpg';
 import {
   loadEnvsAction,
@@ -60,12 +60,41 @@ class App extends Component {
     }
   }
 
+  privateSession(){
+    return (
+      <AuthContext.Consumer>
+        {props => {
+          if (props.isLoggedIn){
+            var path = '/creation';
+          }else{
+            var path = '/login';
+          }
+          return (
+            <div style={{ height: '50px', width: '100%', textAlign: 'center', marginTop: '20px' }}>
+            <Link to={path}>
+              <Button
+                style={{ height: '100%', width: '100%', fontSize: '20px' }}
+                variant="success">
+                Create your own environment
+              </Button>
+            </Link>
+            </div>
+          )
+        }}
+      </AuthContext.Consumer>
+
+    )
+
+  }
+
   render(){
     const { envlist } = this.props;
 
     const keys = Object.keys(envlist);
     return (
-      <div style={{ padding: '20px' }}>
+      <div style={{
+        background: "linear-gradient(to bottom, #49537A, #C5CCE8)",
+        padding: '20px' }}>
       <CardColumns >
         {
           keys.map(key => {
@@ -109,15 +138,8 @@ class App extends Component {
             )}
           )}
       </CardColumns>
-      <div style={{ height: '50px', width: '100%', textAlign: 'center', marginTop: '20px' }}>
-      <Link to="/join">
-        <Button
-          style={{ height: '100%', width: '100%', fontSize: '20px' }}
-          variant="success">
-          Create your own environment
-        </Button>
-      </Link>
-      </div>
+      {this.privateSession()}
+
       {this.showEnvironment()}
       </div>
     );

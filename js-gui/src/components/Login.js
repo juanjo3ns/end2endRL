@@ -3,7 +3,6 @@ import { AuthContext } from "../index";
 import * as firebase from 'firebase';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
-import { TransitionMotion, spring } from "react-motion";
 import "./Login.css";
 
 const Login = ({history}) => {
@@ -65,6 +64,7 @@ const Login = ({history}) => {
     <div
     id="login_form"
     style={{
+      background: "linear-gradient(to bottom, #00334D, #673ab7)",
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
@@ -72,7 +72,14 @@ const Login = ({history}) => {
       justifyContent: 'center',
       alignItems: 'center'  }}>
 
-      <h1 style={{ fontWeight: "bold", color: "#198CFF", fontSize: "50px" }}>Login</h1>
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1
+          onClick={() => history.push('/join')}
+          style={{ color: "#198CFF", fontSize: "30px" }}>
+          Join
+        </h1>
+        <h1 style={{ fontWeight: "bold", color: "#198CFF", fontSize: "50px" }}>Login</h1>
+      </div>
       <form onSubmit={e => handleForm(e)}>
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <div style={{ padding: '10px' }}>
@@ -97,7 +104,7 @@ const Login = ({history}) => {
 
           <input
             id={2}
-            type="text"
+            type="password"
             value={password}
             placeholder={"Password"}
             onChange={e => setPassword(e.target.value)}
@@ -131,7 +138,6 @@ const Login = ({history}) => {
 
         </Button>
 
-        <span>{error}</span>
         </div>
       </form>
     </div>
