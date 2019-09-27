@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import reducers from './reducers';
+import history from './history';
 
 const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
@@ -23,7 +24,7 @@ function Main() {
   return (
     <AuthContext.Provider value={{ isLoggedIn, setLoggedIn }}>
       <Provider store={store}>
-        <Router>
+        <Router history={history}>
           <div id="routes">
             <Route path="/" exact component={App} />
             <Route path="/login" component={Login} />
