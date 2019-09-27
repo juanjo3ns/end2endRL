@@ -18,11 +18,14 @@ import 'toasted-notes/src/styles.css';
 import axios from 'axios';
 import base_url from '../requests/base_url';
 import db from '../config';
+import history from '../history'
 
 
 const validateValues = (formValues, walls, walls_values, initstate, finalstate) => {
+  let response = [true, ''];
   Object.entries(formValues).map(([key, value]) => {
     if (
+      key === "version" ||
       key === "savefreq" ||
       key === "iterations" ||
       key === "visibleRad" ||
@@ -38,7 +41,9 @@ const validateValues = (formValues, walls, walls_values, initstate, finalstate) 
       key === "health"
     ) {
       if (isNaN(value)) {
-        return [false, 'Incorrect values!'];
+        response = [false, 'Incorrect values!'];
+      }else if (value === ""){
+        response = [false, 'Fill all the paremeters!'];
       }
     } else if (
       key === "numwalls" ||
@@ -47,14 +52,14 @@ const validateValues = (formValues, walls, walls_values, initstate, finalstate) 
       key === "variance"
     ) {
       if (isNaN(value.value)) {
-        return [false, 'Incorrect values!'];
+        response = [false, 'Incorrect values!'];
       }
     }
   });
   if ((initstate.length === 0 || finalstate.length === 0) && (formValues.alg === "DQN" || formValues.alg === "GA")) {
-    return [false, 'Add initial and final state!']
+    response = [false, 'Add initial and final state!']
   }
-  return [true, ''];
+  return response;
 }
 
 
@@ -178,7 +183,7 @@ export const saveEnv = (formValues, walls, initstate, finalstate, walls_values) 
 };
 
 
-export const handleTrain = (formValues, walls, initstate, finalstate, walls_values) => (dispatch) => {
+export const handleTrain = ( formValues, walls, initstate, finalstate, walls_values) => (dispatch) => {
   const a = validateValues(formValues, walls, walls_values, initstate, finalstate);
   const able = a[0];
   const comment = a[1];
@@ -197,6 +202,7 @@ export const handleTrain = (formValues, walls, initstate, finalstate, walls_valu
   	  </div>
   	)});
     this.handleReset();
+    // history.push('/');
   }else{
 
   	toaster.notify(() => {

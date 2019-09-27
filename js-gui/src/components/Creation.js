@@ -68,14 +68,12 @@ class Creation extends Component {
           <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
           {this.backHome()}
           <div style={{ padding: '5px' }}>
-            <Link to="/">
               <Button
                 onClick={this.clickTrain.bind(this)}
                 style={{ fontSize: '20px' }}
                 variant="success">
                   TRAIN
               </Button>
-            </Link>
           </div>
           </div>
         </div>
