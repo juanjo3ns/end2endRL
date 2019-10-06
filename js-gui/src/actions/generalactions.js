@@ -10,11 +10,10 @@ import {
   CHANGE_ACTIVE_ENV,
   MOUSE_OVER,
   ENABLE_MODAL,
-  UPDATE_SUCCESS
+  UPDATE_SUCCESS,
+  UPDATE_SNACKBAR
 } from './types';
 import loadEnvs from '../requests/envs';
-import toaster from 'toasted-notes';
-import 'toasted-notes/src/styles.css';
 import axios from 'axios';
 import base_url from '../requests/base_url';
 import db from '../config';
@@ -25,7 +24,6 @@ const validateValues = (formValues, walls, walls_values, initstate, finalstate) 
   let response = [true, ''];
   Object.entries(formValues).map(([key, value]) => {
     if (
-      key === "version" ||
       key === "savefreq" ||
       key === "iterations" ||
       key === "visibleRad" ||
@@ -54,6 +52,10 @@ const validateValues = (formValues, walls, walls_values, initstate, finalstate) 
       if (isNaN(value.value)) {
         response = [false, 'Incorrect values!'];
       }
+    } else if (key === "version"){
+      if(value === ""){
+        response = [false, 'Fill all the paremeters!'];
+      }
     }
   });
   if ((initstate.length === 0 || finalstate.length === 0) && (formValues.alg === "DQN" || formValues.alg === "GA")) {
@@ -64,10 +66,14 @@ const validateValues = (formValues, walls, walls_values, initstate, finalstate) 
 
 
 export const loadEnvsFirebase = () => dispatch => {
-  db.collection("envs").doc("1xrCYPCUrzwPTHOwjoJe").onSnapshot(doc => {
+  db.collection("envs").get().then(snapshot => {
+    let data = {};
+    snapshot.forEach(doc => {
+      data[doc.id] = doc.data();
+    });
     dispatch({
       type: LOAD_ENVS_SUCCESS,
-      payload: doc.data()
+      payload: data
     });
   });
 }
@@ -113,23 +119,6 @@ export const saveEnv = (formValues, walls, initstate, finalstate, walls_values) 
     };
     axios.post("http://localhost:5000/envs", data)
       .then((response) => {
-        toaster.notify(() => {
-          return ( < div style = {
-              {
-                backgroundColor: 'white',
-                padding: "10px",
-                borderRadius: "10px"
-              }
-            } >
-            <
-            span style = {
-              {
-                fontSize: "20px"
-              }
-            } > Environment saved! < /span> <
-            /div>
-          )
-        });
         dispatch({
           type: CHANGE_ACTIVE_ENV,
           payload: formValues.version
@@ -139,49 +128,23 @@ export const saveEnv = (formValues, walls, initstate, finalstate, walls_values) 
           payload: response.data
         });
       });
-  } else {
-
-    toaster.notify(() => {
-      return ( < div style = {
-          {
-            backgroundColor: 'white',
-            padding: "10px",
-            borderRadius: "10px"
-          }
-        } >
-        <
-        span style = {
-          {
-            fontSize: "20px"
-          }
-        } > {
-          comment
-        } < /span> <
-        /div>
-      )
-    });
-    toaster.notify(() => {
-      return ( < div style = {
-          {
-            backgroundColor: 'white',
-            padding: "10px",
-            borderRadius: "10px"
-          }
-        } >
-        <
-        span style = {
-          {
-            fontSize: "20px"
-          }
-        } > {
-          comment
-        } < /span> <
-        /div>
-      )
-    });
   }
 };
 
+export const handleReset = () => (dispatch) => {
+  dispatch({
+    type: RESET_CELL_VALUES,
+    payload: "reset"
+  });
+  dispatch({
+    type: RESET_ENV,
+    payload: "reset"
+  });
+  dispatch({
+    type: RESET_FORM,
+    payload: "reset"
+  });
+};
 
 export const handleTrain = ( formValues, walls, initstate, finalstate, walls_values) => (dispatch) => {
   const a = validateValues(formValues, walls, walls_values, initstate, finalstate);
@@ -196,26 +159,31 @@ export const handleTrain = ( formValues, walls, initstate, finalstate, walls_val
       walls_values: walls_values
     };
     db.collection('train').doc(formValues['version']).set(data);
-    toaster.notify(() => {
-  	  return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
-  		<span style={{ fontSize: "20px" }}>Environment added to train buffer!</span>
-  	  </div>
-  	)});
-    this.handleReset();
-    // history.push('/');
+    dispatch({
+      type: UPDATE_SNACKBAR,
+      payload: {
+        snackopen: true,
+        snackvariant: 'success',
+        snackmessage: 'Environment added to training buffer!'
+      }
+    });
   }else{
-
-  	toaster.notify(() => {
-  	  return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
-  		<span style={{ fontSize: "20px" }}>{comment}</span>
-  	  </div>
-  	)});
-  	toaster.notify(() => {
-  	  return(<div style={{ backgroundColor: 'white', padding: "10px", borderRadius: "10px" }}>
-  		<span style={{ fontSize: "20px" }}>{comment}</span>
-  	  </div>
-  	)});
+    dispatch({
+      type: UPDATE_SNACKBAR,
+      payload: {
+        snackopen: true,
+        snackvariant: 'error',
+        snackmessage: comment
+      }
+    });
   }
+}
+
+export const handleSnackClose = () => (dispatch) => {
+  dispatch({
+    type: UPDATE_SNACKBAR,
+    payload: { snackopen: false }
+  });
 }
 
 
@@ -291,19 +259,4 @@ export const handleCell = (cell, id, walls, initstate, finalstate, walls_values,
       }
     });
   }
-};
-
-export const handleReset = () => (dispatch) => {
-  dispatch({
-    type: RESET_CELL_VALUES,
-    payload: "reset"
-  });
-  dispatch({
-    type: RESET_ENV,
-    payload: "reset"
-  });
-  dispatch({
-    type: RESET_FORM,
-    payload: "reset"
-  });
 };

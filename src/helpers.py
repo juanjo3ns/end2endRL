@@ -15,10 +15,9 @@ def getData(version):
 		data = json.load(f)
 	return data
 
-def getDataTraining(version):
-	with open(os.path.join(envs_path, version), 'r') as f:
-		raw_data = json.load(f)
-	data = copy.deepcopy(raw_data)
+def getDataTraining(data):
+
+	data = copy.deepcopy(data)
 	data['batch_size'] = int(data['batch_size']['value'])
 	data['variance'] = float(data['variance']['value'])
 	data['po'] = data['po']['value']
@@ -49,6 +48,7 @@ def getDataTraining(version):
 	data['height'] = data['height']
 	data['width'] = data['width']
 	return data
+
 
 def saveData(data):
 	with open(os.path.join(envs_path, data['version'] + '.json'), 'w') as f:

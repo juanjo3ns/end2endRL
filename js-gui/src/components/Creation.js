@@ -5,11 +5,14 @@ import { Link } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Grid from './Grid';
+import Snackbar from '@material-ui/core/Snackbar';
+import MySnackbarContentWrapper from './WrapperSnackBar';
 import Parameters from './Parameters';
 import {
   handleClick,
   handleTrain,
   handleReset,
+  handleSnackClose
 } from '../actions';
 
 
@@ -33,6 +36,30 @@ class Creation extends Component {
     clickTrain(){
       const { formValues, walls, initstate, finalstate, walls_values } = this.props;
       this.props.handleTrain(formValues, walls, initstate, finalstate, walls_values);
+    }
+    handleClose(){
+      this.props.handleSnackClose();
+    }
+
+    renderSnackBar(){
+      const { snackopen, snackvariant, snackmessage } = this.props;
+      return (
+        <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={snackopen}
+        autoHideDuration={6000}
+        onClose={this.handleClose.bind(this)}
+      >
+        <MySnackbarContentWrapper
+          onClose={this.handleClose.bind(this)}
+          variant={snackvariant}
+          message={snackmessage}
+        />
+      </Snackbar>
+      )
     }
 
     backHome(){
@@ -115,18 +142,20 @@ class Creation extends Component {
             </div>
           </Breakpoint>
         </BreakpointProvider>
+        {this.renderSnackBar()}
       </div>
     );
   }
 }
 
 const mapStateToProps = ({ generalbuttons, formValues }) => {
-  const { cell, walls, initstate, finalstate, walls_values } = generalbuttons;
-  return { cell, formValues , walls, initstate, finalstate, walls_values };
+  const { cell, walls, initstate, finalstate, walls_values, snackopen, snackvariant, snackmessage } = generalbuttons;
+  return { cell, formValues , walls, initstate, finalstate, walls_values, snackopen, snackvariant, snackmessage };
 }
 
 export default connect(mapStateToProps, {
   handleClick,
   handleReset,
-  handleTrain
+  handleTrain,
+  handleSnackClose
 } )(Creation);

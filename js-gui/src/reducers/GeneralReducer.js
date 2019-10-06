@@ -9,9 +9,10 @@ import {
     TRAINING_SUCCESS,
     SET_INTERVAL,
     PROGRESS_UPDATE,
-    TRAIN_FINISHED
+    TRAIN_FINISHED,
+    UPDATE_SNACKBAR
  } from '../actions/types';
- 
+
 const INITIAL_STATE = {
   envlist: [],
   showenv: '',
@@ -23,7 +24,10 @@ const INITIAL_STATE = {
   clicked: false,
   training: '',
   intervalID: null,
-  progress: 0
+  progress: 0,
+  snackopen: false,
+  snackvariant: 'success',
+  snackmessage: ''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -50,6 +54,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, progress: action.payload };
         case TRAIN_FINISHED:
             return { ...state, training: '' };
+        case UPDATE_SNACKBAR:
+            return { ...state, ...action.payload };
         default:
             return state;
     }
