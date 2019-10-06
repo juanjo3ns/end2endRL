@@ -24,7 +24,7 @@ while True:
 		data = doc.to_dict()
 		print(u'{} => {}'.format(exp, data))
 		cleanData = getDataTraining(data)
-		train(data)
+		train(cleanData)
 		docs = db.collection(u'train').document(u'{}'.format(exp)).delete()
 		db.collection(u'envs').document(data['version']).set(data)
 		break

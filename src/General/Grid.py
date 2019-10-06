@@ -1,6 +1,7 @@
 from IPython import embed
 from random import randint, choice, random
 import numpy as np
+from IPython import embed
 
 class Grid:
 	def __init__(self, data):
