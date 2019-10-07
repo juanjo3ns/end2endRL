@@ -8,12 +8,13 @@ from firebase_admin import firestore
 from firebase_admin import storage
 from helpers import *
 import bridge
+import pysftp
 
 
 
 cred = credentials.Certificate("../service-account.json")
 firebase_admin.initialize_app(cred, {
-    'storageBucket': 'end2endrl.appspot.com'
+	'storageBucket': 'end2endrl.appspot.com'
 })
 
 db = firestore.client()
@@ -30,6 +31,12 @@ def uploadFiles(alg, version):
 				print("blob: ", blob)
 				blob.upload_from_filename(os.path.join(path, alg, version, agent, folder, file))
 
+def uploadLogs(alg, version):
+	sftp = pysftp.Connection('', username='ubuntu', private_key="./data/tensorboard.pem")
+	with sftp.cd(''):
+		sftp.put_d('/data/src/tensorboard/{}/{}/'.format(alg, version))
+	sftp.close()
+
 
 
 while True:
@@ -43,6 +50,7 @@ while True:
 		bridge.train(cleanData)
 		bridge.eval(cleanData)
 		uploadFiles(data['alg'], data['version'])
+		# uploadLogs(data['alg'], data['version'])
 		docs = db.collection(u'train').document(u'{}'.format(exp)).delete()
 		db.collection(u'envs').document(data['version']).set(data)
 		break
