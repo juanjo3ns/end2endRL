@@ -17,6 +17,7 @@ services:
       - FLASK_APP=/data/src/app.py
       - LC_ALL=C.UTF-8
       - LANG=C.UTF-8
+      - AWS_IP=18.191.153.175
     volumes:
       - ../:/data
       - /tmp/.X11-unix:/tmp/.X11-unix

@@ -11,7 +11,6 @@ import bridge
 import pysftp
 
 
-
 cred = credentials.Certificate("../service-account.json")
 firebase_admin.initialize_app(cred, {
 	'storageBucket': 'end2endrl.appspot.com'
@@ -20,28 +19,32 @@ firebase_admin.initialize_app(cred, {
 db = firestore.client()
 bucket = storage.bucket()
 
-path = '/data/src/templates/csvdata/'
+path_container = '/data/src/templates/csvdata/'
+path_aws = '/home/ubuntu/tensorboard/logs/'
+path_tensorboard = '/data/src/tensorboard/'
 
 def uploadFiles(alg, version):
-	for agent in os.listdir(os.path.join(path, alg, version)):
-		for folder in os.listdir(os.path.join(path, alg, version, agent)):
-			for file in os.listdir(os.path.join(path, alg, version, agent, folder)):
-				print(os.path.join(path, alg, version, agent, folder, file))
+	for agent in os.listdir(os.path.join(path_container, alg, version)):
+		for folder in os.listdir(os.path.join(path_container, alg, version, agent)):
+			for file in os.listdir(os.path.join(path_container, alg, version, agent, folder)):
+				print(os.path.join(path_container, alg, version, agent, folder, file))
 				blob = bucket.blob(os.path.join(alg, version, agent, folder, file))
 				print("blob: ", blob)
-				blob.upload_from_filename(os.path.join(path, alg, version, agent, folder, file))
+				blob.upload_from_filename(os.path.join(path_container, alg, version, agent, folder, file))
 
 def uploadLogs(alg, version):
-	sftp = pysftp.Connection('', username='ubuntu', private_key="./data/tensorboard.pem")
-	with sftp.cd(''):
-		sftp.put_d('/data/src/tensorboard/{}/{}/'.format(alg, version))
+	cnopts = pysftp.CnOpts()
+	cnopts.hostkeys = None
+	sftp = pysftp.Connection(os.environ['AWS_IP'], username='ubuntu', private_key="/data/tensorboard.pem", cnopts=cnopts)
+	sftp.mkdir(os.path.join(path_aws,'{}'.format(alg), '{}'.format(version)))
+	with sftp.cd(os.path.join(path_aws,'{}'.format(alg), '{}'.format(version))):
+		sftp.put_r(os.path.join(path_tensorboard, '{}'.format(alg), '{}'.format(version)), './')
 	sftp.close()
 
 
 
 while True:
 	docs = db.collection(u'train').stream()
-
 	for doc in docs:
 		exp = doc.id
 		data = doc.to_dict()
@@ -50,7 +53,7 @@ while True:
 		bridge.train(cleanData)
 		bridge.eval(cleanData)
 		uploadFiles(data['alg'], data['version'])
-		# uploadLogs(data['alg'], data['version'])
+		uploadLogs(data['alg'], data['version'])
 		docs = db.collection(u'train').document(u'{}'.format(exp)).delete()
 		db.collection(u'envs').document(data['version']).set(data)
 		break

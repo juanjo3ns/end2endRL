@@ -6,7 +6,7 @@ torch==1.1.0
 torchvision==0.3.0
 numba
 matplotlib
-tensorflow
+tensorflow==1.13.2
 tensorboard-logger
 imageio
 pandas
