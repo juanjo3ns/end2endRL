@@ -9,6 +9,7 @@ from firebase_admin import storage
 from helpers import *
 import bridge
 import pysftp
+import copy
 
 
 cred = credentials.Certificate("../service-account.json")
@@ -50,10 +51,10 @@ while True:
 		data = doc.to_dict()
 		print(u'{} => {}'.format(exp, data))
 		cleanData = getDataTraining(data)
-		bridge.train(cleanData)
-		bridge.eval(cleanData)
+		bridge.train(copy.deepcopy(cleanData))
+		bridge.eval(copy.deepcopy(cleanData))
 		uploadFiles(data['alg'], data['version'])
-		uploadLogs(data['alg'], data['version'])
+		# uploadLogs(data['alg'], data['version'])
 		docs = db.collection(u'train').document(u'{}'.format(exp)).delete()
 		db.collection(u'envs').document(data['version']).set(data)
 		break
