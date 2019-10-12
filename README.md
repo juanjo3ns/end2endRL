@@ -5,7 +5,7 @@ The common problem of maze solving is used in this framework. Where an agent has
 
 ## How to use
   1. First, go to [DEMO](end2endrl.web.app). 
-  2. Enjoy the already pretrained weights.
+  2. Enjoy the already pretrained environments.
   3. Check the parameters, the 3D representations and the logs of the different environments.
   4. Try it out and create your own environment!
   5. Log in.
