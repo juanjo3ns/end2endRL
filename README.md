@@ -1,3 +1,4 @@
+![Hits](https://hitcounter.pythonanywhere.com/count/tag.svg?url=https%3A%2F%2Fgithub.com%2Fjuanjo3ns%2Fend2endRL)
 # End2End GUI for Reinforcement Learning - [DEMO](end2endrl.web.app)
 
 The common problem of maze solving is used in this framework. Where an agent has to learn to avoid the bad cells and reach the final state.
