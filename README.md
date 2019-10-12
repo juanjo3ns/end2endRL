@@ -3,7 +3,7 @@
 
 The common problem of maze solving is used in this framework. Where an agent has to learn to avoid the bad cells and reach the final state.
 
-## How to use
+## How to use (Deployed version - redesign branch)
   1. First, go to [DEMO](end2endrl.web.app). 
   2. Enjoy the already pretrained environments.
   3. Check the parameters, the 3D representations and the logs of the different environments.
