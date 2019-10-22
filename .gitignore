@@ -9,6 +9,10 @@ __pycache__/
 # CSV files
 *.csv
 
+# Credentials
+service-account.json
+tensorboard.pem
+
 # Tensorboard events
 tensorboard/
 
