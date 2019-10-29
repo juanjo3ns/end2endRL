@@ -42,8 +42,9 @@ def getDataTraining(data):
 	for walls in data['walls']:
 		new_walls.append([int(walls.split('-')[0]),int(walls.split('-')[1])])
 	data['walls'] = new_walls
-	data['initstate'] = [int(data['initstate'][0].split('-')[0]), int(data['initstate'][0].split('-')[1])]
-	data['finalstate'] = [int(data['finalstate'][0].split('-')[0]), int(data['finalstate'][0].split('-')[1])]
+	if data['initstate']:
+		data['initstate'] = [int(data['initstate'][0].split('-')[0]), int(data['initstate'][0].split('-')[1])]
+		data['finalstate'] = [int(data['finalstate'][0].split('-')[0]), int(data['finalstate'][0].split('-')[1])]
 	data['walls_values'] = [float(w) for w in data['walls_values']]
 	data['height'] = data['height']
 	data['width'] = data['width']
