@@ -54,6 +54,15 @@ function rotateSteps(time) {
 		.start();
 
 }
+function rotateAgents(x, y, z, agent, time) {
+	y_ = (scene.getObjectByName("agents").getObjectByName(agent.toString()).rotation.y + y)
+	// console.log("rotate",y_);
+	new TWEEN.Tween(scene.getObjectByName("agents").getObjectByName(agent.toString()).rotation)
+		.to({ y: y_ }, time)
+		.easing(TWEEN.Easing.Quadratic.Out)
+		.start();
+
+}
 function rotateAgent(x, y, z, time) {
 	y_ = (scene.getObjectByName("agent").rotation.y + y)
 	// console.log("rotate",y_);

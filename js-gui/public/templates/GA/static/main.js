@@ -17,10 +17,9 @@ var ini_x,ini_z, height, width;
 var env_set = false;
 var intervals = {};
 var deads;
-var counter;
 var epoch;
 var version;
-
+var orientations;
 
 init();
 animate();
