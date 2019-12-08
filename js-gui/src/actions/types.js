@@ -30,3 +30,6 @@ export const PROGRESS_UPDATE = 'progress_update';
 export const TRAIN_FINISHED = 'train_finished';
 
 export const UPDATE_SNACKBAR = 'update_snackbar';
+
+export const SIGN_IN = "sign_in";
+export const SIGN_OUT = "sign_out";

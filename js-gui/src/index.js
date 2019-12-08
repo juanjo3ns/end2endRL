@@ -5,6 +5,7 @@ import App from './App';
 import Creation from './components/Creation';
 import Login from './components/Login';
 import Join from './components/Join';
+import Header from './components/Header';
 import { HashRouter as Router, Route } from "react-router-dom";
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
@@ -25,7 +26,8 @@ function Main() {
     <AuthContext.Provider value={{ isLoggedIn, setLoggedIn }}>
       <Provider store={store}>
         <Router history={history}>
-          <div id="routes">
+          <div style={{ background: "linear-gradient(to bottom, #d5dCf1, #49537A)" }} id="routes">
+            <Header />
             <Route path="/" exact component={App} />
             <Route path="/login" component={Login} />
             <Route path="/join" component={Join} />
