@@ -12,6 +12,7 @@ var env = {};
 
 var agent_orientation = 1;
 var hist = new Array();
+var velocity = 150;
 
 
 var env_set = false;
@@ -61,8 +62,8 @@ function init() {
   loadEnvironment(algorithm, version, counter);
   createAgent();
   generateBoard();
-  stringVelocity();
-  createVelocityBar();
+  // stringVelocity();
+  // createVelocityBar();
   startExperiment();
 
 

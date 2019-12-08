@@ -12,6 +12,8 @@ import Grid from './components/Grid';
 import Parameters from './components/Parameters';
 import Creation from './components/Creation';
 import tensorboard from './img/tflogo.jpg';
+import insight from './img/insight_logo.png';
+import sfi from './img/sfi_logo.png';
 import {
   loadEnvsAction,
   loadEnvsFirebase,
@@ -93,8 +95,22 @@ class App extends Component {
     const keys = Object.keys(envlist);
     return (
       <div style={{
-        background: "linear-gradient(to bottom, #49537A, #C5CCE8)",
-        padding: '20px' }}>
+        background: "linear-gradient(to bottom, #d5dCf1, #49537A)",
+        paddingLeft: '20px',
+        paddingRight: '20px',
+        paddingBottom: '20px'}}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+          <Image
+          src={insight}
+          width={250}
+          height={250}
+          />
+          <Image
+          src={sfi}
+          width={250}
+          height={250}
+          />
+        </div>
       <CardColumns >
         {
           keys.map(key => {
@@ -133,7 +149,7 @@ class App extends Component {
                   </div>
 
                 </Card.Body>
-                <Card.Footer className="text-muted">By admin</Card.Footer>
+                {/*<Card.Footer className="text-muted">By admin</Card.Footer>*/}
               </Card>
             )}
           )}

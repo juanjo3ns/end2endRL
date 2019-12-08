@@ -13,6 +13,7 @@ var counter = 0;
 var cells;
 var cell_dimension = 10;
 var ini_x,ini_z, height, width;
+var velocity = 150;
 
 var env_set = false;
 var intervals = {};
@@ -60,8 +61,8 @@ function init() {
 		intervals[environment] = new Array(env["numAgents"]);
 	}
   generateBoard();
-  stringVelocity();
-  createVelocityBar();
+  // stringVelocity();
+  // createVelocityBar();
   counter = 1;
   createAgents(iterations);
 

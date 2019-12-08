@@ -38,10 +38,10 @@ function checkAgentOrientation(state, prevstate, i){
 function runEvaluations(csvData, i, epoch) {
 	if (counter[i] >= csvData.length - 2) {
 		deads[i]=1;
-		// scene.getObjectByName("agents").getObjectByName(i.toString()).material.color = new THREE.Color(0xff0000);
+		scene.getObjectByName("agents").getObjectByName(i.toString()).material.color = new THREE.Color(0xff0000);
 		if (!deads.includes(0)){
 			clearInterval(intervals[environment][i]);
-			// clearAgents();
+			clearAgents();
 			iterations();
 		}else{
 			clearInterval(intervals[environment][i]);

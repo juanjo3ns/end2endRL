@@ -29,6 +29,7 @@ try:
 	  blob.delete()
 	print("CSV data deleted from firebase storage...")
 except:
+	print("Failed removing csv data from firebase storage.")
 	pass
 
 # DELETE JSON ENVIRONMENTS FROM FIREBASE
@@ -36,6 +37,7 @@ try:
 	docs = db.collection(u'envs').document(u'{}'.format(version)).delete()
 	print("JSON envs deleted from firestore...")
 except:
+	print("Failed removing json env from firestore.")
 	pass
 
 path_container = '/data/src/templates/csvdata/'
@@ -50,4 +52,5 @@ try:
 	shutil.rmtree(os.path.join(path_weights, alg, version))
 	print("Deleted files from local server...")
 except:
+	print("Failed removing files from local server.")
 	pass

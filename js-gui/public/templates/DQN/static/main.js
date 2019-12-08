@@ -12,6 +12,7 @@ var hist = new Array();
 var cells;
 var cell_dimension = 10;
 var ini_x,ini_z, height, width;
+var velocity = 150;
 
 var env_set = false;
 var epoch;
@@ -62,8 +63,8 @@ function init() {
   createAgent();
 
   generateBoard();
-  stringVelocity();
-  createVelocityBar();
+  // stringVelocity();
+  // createVelocityBar();
   startExperiment();
 
   document.addEventListener('click', onDocumentMouseDown, false);

@@ -9,6 +9,7 @@ var intervalID;
 var counter = 0;
 var controls;
 var env = {};
+var velocity = 150;
 
 var agent_orientation = 1;
 var hist = new Array();
@@ -62,8 +63,8 @@ function init() {
   loadEnvironment(algorithm, version, counter);
   createAgent();
   generateBoard();
-  stringVelocity();
-  createVelocityBar();
+  // stringVelocity();
+  // createVelocityBar();
   startExperiment();
 
 
