@@ -146,13 +146,16 @@ export const handleReset = () => (dispatch) => {
   });
 };
 
-export const handleTrain = ( formValues, walls, initstate, finalstate, walls_values) => (dispatch) => {
+export const handleTrain = ( formValues, walls, initstate, finalstate, walls_values, auth) => (dispatch) => {
   const a = validateValues(formValues, walls, walls_values, initstate, finalstate);
   const able = a[0];
   const comment = a[1];
   if (able) {
     const data = {
       ...formValues,
+      name: auth.name,
+      email: auth.email,
+      uid: auth.uid,
       walls: walls,
       initstate: initstate,
       finalstate: finalstate,

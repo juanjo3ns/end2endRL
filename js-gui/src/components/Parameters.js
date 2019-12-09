@@ -105,7 +105,7 @@ class Parameters extends Component {
             <Row>
             <Col>
             <Form.Group controlId="tensorboard">
-              <Form.Check type="checkbox" label="Tensorboard" inline="true" onClick={this.handleChecks.bind(this)} checked={this.props.tensorboard}/>
+              <Form.Check type="checkbox" label="Tensorboard" inline="true" onChange={this.handleChecks.bind(this)} onClick={this.handleChecks.bind(this)} checked={this.props.tensorboard}/>
             </Form.Group>
             </Col>
             <Col>
@@ -119,7 +119,7 @@ class Parameters extends Component {
             <Row>
             <Col>
             <Form.Group controlId="saveweights">
-              <Form.Check type="checkbox" label="Save Weights" inline="true" onClick={this.handleChecks.bind(this)} checked={this.props.saveweights}/>
+              <Form.Check type="checkbox" label="Save Weights" inline="true" onChange={this.handleChecks.bind(this)} onClick={this.handleChecks.bind(this)} checked={this.props.saveweights}/>
             </Form.Group>
             </Col>
             <Col>

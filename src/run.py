@@ -54,7 +54,7 @@ while True:
 		bridge.train(copy.deepcopy(cleanData))
 		bridge.eval(copy.deepcopy(cleanData))
 		uploadFiles(data['alg'], data['version'])
-		#uploadLogs(data['alg'], data['version'])
+		uploadLogs(data['alg'], data['version'])
 		docs = db.collection(u'train').document(u'{}'.format(exp)).delete()
 		db.collection(u'envs').document(data['version']).set(data)
 		break

@@ -60,11 +60,11 @@ function init() {
 
   // OBJECTS
   loadEnvironment(algorithm, version, counter);
-  createAgent();
+  createAgent(startExperiment);
   generateBoard();
   // stringVelocity();
   // createVelocityBar();
-  startExperiment();
+  // startExperiment();
 
 
   document.addEventListener('click', onDocumentMouseDown, false);
@@ -90,8 +90,7 @@ function resetEnvironment(){
   scene.getObjectByName("agent").visible = false;
 }
 
-async function startExperiment(){
-  await sleep(1000);
+function startExperiment(){
   epoch = 0;
   agent_orientation=1;
   scene.getObjectByName("agent").visible = true;

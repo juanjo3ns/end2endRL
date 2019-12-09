@@ -3,7 +3,6 @@ import './App.css';
 import { connect } from 'react-redux';
 import CardColumns from 'react-bootstrap/CardColumns';
 import Card from 'react-bootstrap/Card';
-import { AuthContext } from "./index";
 import Button from 'react-bootstrap/Button';
 import { Link } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
@@ -11,6 +10,8 @@ import Image from 'react-image-resizer';
 import Grid from './components/Grid';
 import Parameters from './components/Parameters';
 import Creation from './components/Creation';
+import insight from './img/insight_logo.png';
+import sfi from './img/sfi_logo.png';
 import tensorboard from './img/tflogo.jpg';
 import {
   loadEnvsAction,
@@ -61,30 +62,23 @@ class App extends Component {
   }
 
   privateSession(){
+    if (this.props.isSignedIn){
+      var path = '/creation';
+    }else{
+      var path = '/login';
+    }
+
     return (
-      <AuthContext.Consumer>
-        {props => {
-          if (props.isLoggedIn){
-            var path = '/creation';
-          }else{
-            var path = '/login';
-          }
-          return (
-            <div style={{ height: '50px', width: '100%', textAlign: 'center', marginTop: '20px' }}>
-            <Link to={path}>
-              <Button
-                style={{ height: '100%', width: '100%', fontSize: '20px' }}
-                variant="success">
-                Create your own environment
-              </Button>
-            </Link>
-            </div>
-          )
-        }}
-      </AuthContext.Consumer>
-
-    )
-
+      <div style={{ height: '50px', width: '100%', textAlign: 'center', marginTop: '20px' }}>
+        <Link to={path}>
+          <Button
+            style={{ height: '100%', width: '100%', fontSize: '20px' }}
+            variant="success">
+            Create your own environment
+          </Button>
+        </Link>
+      </div>
+      )
   }
 
   render(){
@@ -124,7 +118,7 @@ class App extends Component {
                     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', alignItems: 'center' }}>
                       <Button id={envlist[key].version} onClick={this.handleThreed.bind(this)} style={{ height: "40px", width: "50px" }} variant="warning">3D</Button>
                       <div style={{ overflow: 'hidden', borderRadius: '12px' }}>
-                        <a target="_blank" href={"http://localhost:6006/#scalars&_smoothingWeight=0.93&regexInput=".concat(key)}>
+                        <a target="_blank" href={"http://18.222.37.215:6006/#scalars&_smoothingWeight=0.93&regexInput=".concat(key)}>
                         <Image
                         src={tensorboard}
                         width={50}
@@ -144,14 +138,27 @@ class App extends Component {
       {this.privateSession()}
 
       {this.showEnvironment()}
+        <div style={{ paddingLeft: "10px", display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+          <Image
+          src={insight}
+          width={155}
+          height={155}
+          />
+          <Image
+          src={sfi}
+          width={155}
+          height={155}
+          />
+        </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ generalbuttons }) => {
+const mapStateToProps = ({ generalbuttons, auth }) => {
   const { envlist, showenv } = generalbuttons;
-  return { envlist, showenv };
+  const { isSignedIn } = auth;
+  return { envlist, showenv, isSignedIn };
 }
 
 

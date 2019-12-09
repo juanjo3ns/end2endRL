@@ -15,6 +15,7 @@ async function createAgent(callback) {
       root.position.set(45, -50, 200);
       root.rotation.y=0;
 			scene.add(root);
+      callback();
     });
   });
 }

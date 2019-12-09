@@ -34,8 +34,8 @@ class Creation extends Component {
       this.setState({width: window.innerWidth});
     }
     clickTrain(){
-      const { formValues, walls, initstate, finalstate, walls_values } = this.props;
-      this.props.handleTrain(formValues, walls, initstate, finalstate, walls_values);
+      const { formValues, walls, initstate, finalstate, walls_values, auth } = this.props;
+      this.props.handleTrain(formValues, walls, initstate, finalstate, walls_values, auth);
     }
     handleClose(){
       this.props.handleSnackClose();
@@ -148,9 +148,9 @@ class Creation extends Component {
   }
 }
 
-const mapStateToProps = ({ generalbuttons, formValues }) => {
+const mapStateToProps = ({ generalbuttons, formValues, auth }) => {
   const { cell, walls, initstate, finalstate, walls_values, snackopen, snackvariant, snackmessage } = generalbuttons;
-  return { cell, formValues , walls, initstate, finalstate, walls_values, snackopen, snackvariant, snackmessage };
+  return { auth, cell, formValues , walls, initstate, finalstate, walls_values, snackopen, snackvariant, snackmessage };
 }
 
 export default connect(mapStateToProps, {

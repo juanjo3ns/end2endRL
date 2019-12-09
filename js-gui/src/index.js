@@ -3,39 +3,38 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import Creation from './components/Creation';
-import Login from './components/Login';
-import Join from './components/Join';
+import FirebaseAuth from './components/FirebaseAuth';
 import Header from './components/Header';
-import { HashRouter as Router, Route } from "react-router-dom";
+import { Router, Route } from "react-router-dom";
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import reducers from './reducers';
 import history from './history';
 
-const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
-export const AuthContext = React.createContext(null);
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(
+  reducers,
+  {},
+  composeEnhancers(applyMiddleware(ReduxThunk)));
 
 
 function Main() {
-  const [isLoggedIn, setLoggedIn] = useState(false);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setLoggedIn }}>
-      <Provider store={store}>
-        <Router history={history}>
-          <div style={{ background: "linear-gradient(to bottom, #d5dCf1, #49537A)" }} id="routes">
-            <Header />
-            <Route path="/" exact component={App} />
-            <Route path="/login" component={Login} />
-            <Route path="/join" component={Join} />
-            <Route path="/creation" component={Creation} />
-          </div>
-        </Router>
-      </Provider>
-    </AuthContext.Provider>
+    <Provider store={store}>
+      <Router history={history}>
+        <div style={{ background: "linear-gradient(to bottom,  #CAF0E2,#d5dCf1)" }} id="routes">
+          <Header />
+          <Route path="/" exact component={App} />
+          <Route path="/login" render={(props) => <FirebaseAuth {...props} mainLogin={true} />} />
+          <Route path="/creation" component={Creation} />
+        </div>
+      </Router>
+    </Provider>
   );
 }
 
