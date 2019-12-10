@@ -33,14 +33,14 @@ def uploadFiles(alg, version):
 				print("blob: ", blob)
 				blob.upload_from_filename(os.path.join(path_container, alg, version, agent, folder, file))
 
-def uploadLogs(alg, version):
-	cnopts = pysftp.CnOpts()
-	cnopts.hostkeys = None
-	sftp = pysftp.Connection(os.environ['AWS_IP'], username='ubuntu', private_key="/data/tensorboard.pem", cnopts=cnopts)
-	sftp.mkdir(os.path.join(path_aws,'{}'.format(alg), '{}'.format(version)))
-	with sftp.cd(os.path.join(path_aws,'{}'.format(alg), '{}'.format(version))):
-		sftp.put_r(os.path.join(path_tensorboard, '{}'.format(alg), '{}'.format(version)), './')
-	sftp.close()
+# def uploadLogs(alg, version):
+# 	cnopts = pysftp.CnOpts()
+# 	cnopts.hostkeys = None
+# 	sftp = pysftp.Connection(os.environ['AWS_IP'], username='ubuntu', private_key="/data/tensorboard.pem", cnopts=cnopts)
+# 	sftp.mkdir(os.path.join(path_aws,'{}'.format(alg), '{}'.format(version)))
+# 	with sftp.cd(os.path.join(path_aws,'{}'.format(alg), '{}'.format(version))):
+# 		sftp.put_r(os.path.join(path_tensorboard, '{}'.format(alg), '{}'.format(version)), './')
+# 	sftp.close()
 
 
 
@@ -54,7 +54,7 @@ while True:
 		bridge.train(copy.deepcopy(cleanData))
 		bridge.eval(copy.deepcopy(cleanData))
 		uploadFiles(data['alg'], data['version'])
-		uploadLogs(data['alg'], data['version'])
+		# uploadLogs(data['alg'], data['version'])
 		docs = db.collection(u'train').document(u'{}'.format(exp)).delete()
 		db.collection(u'envs').document(data['version']).set(data)
 		break
