@@ -5,7 +5,7 @@ Teach an agent to solve custom mazes using Reinforcement Learning!
 
 ### Warning! The code actually being used can be found at the redesign branch.
 
-## How it is everything working
+## How everything is working
 As you will notice this frankestein project is a clear example of a low cost project.
 We are using a gpu in a server of our university to carry out all the experiments. It is a basic GTX 1060 with 6gb of ram. All this code is done in python and the deep learning framework that we've been using is Pytorch!
 The frontend is deployed in firebase and for developing it we have used React. Firebase has been very helpful as well for authentication of users and also as a database.
